@@ -1,0 +1,29 @@
+.addProperty {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: orange;
+
+  margin-bottom: 3rem;
+  padding: 1rem 30%;
+}
+
+.addProperty input {
+  display: block;
+  width: 80%;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+option {
+  display: inline;
+}
+
+.addProperty select {
+  width: 80%;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}

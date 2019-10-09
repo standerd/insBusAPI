@@ -1,0 +1,36 @@
+.searchProperty {
+  width: 25%;
+  height: 65vh;
+  border: solid black 1px;
+  background-color: orange;
+  display: flex;
+  flex-direction: row;
+  margin-right: 1rem;
+}
+
+.form input {
+  display: block;
+  width: 80%;
+  margin: 1rem auto;
+  text-align: center;
+  font-size: 1.02rem;
+}
+
+.form label {
+  font-weight: bold;
+}
+
+.form {
+  text-align: center;
+  width: 90%;
+  margin: 1rem auto;
+  font-weight: 1.2rem;
+}
+
+.form button {
+  width: 35%;
+  height: 2rem;
+  background-color: yellow;
+  border-radius: 0.3rem;
+  font-weight: bold;
+}
