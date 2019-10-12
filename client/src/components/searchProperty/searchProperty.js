@@ -1,5 +1,5 @@
 import React from "react";
-import AutoComplete from "../googleSearch/googleSearch";
+import SearchBox from "../googleSearch/newSearch";
 import "./searchProperty.css";
 
 const searchProperty = props => {
@@ -15,12 +15,15 @@ const searchProperty = props => {
     <div className="searchProperty">
       <div className="form">
         <h3>Please Search Below</h3>
-        <label>Destination </label>
-        <AutoComplete
-          handleChange={props.handleChange}
-          address={props.city}
-          handleSelect={props.handleSelect}
-        />
+        <div className="searchBox">
+          <SearchBox
+            handleChange={props.handleChange}
+            address={props.city}
+            handleSelect={props.handleSelect}
+          />
+        </div>
+
+        <br></br>
         <label>Check In Date</label>
         <input onChange={props.changeHandler("dateIn")} type="date"></input>
         <label>Check Out Date </label>
@@ -32,7 +35,9 @@ const searchProperty = props => {
           onChange={props.changeHandler("noOfGuests")}
           type="number"
         ></input>
-        <button type="submit">Submit Search</button>
+        <button onClick={props.searchSubmit} type="submit">
+          Submit Search
+        </button>
       </div>
     </div>
   );

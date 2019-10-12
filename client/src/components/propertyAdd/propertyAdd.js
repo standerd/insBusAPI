@@ -8,6 +8,7 @@ class PropertyAdd extends Component {
     street: "",
     city: "",
     country: "",
+    suburb: "",
     postal: "",
     telNo: "",
     altNo: "",
@@ -18,22 +19,56 @@ class PropertyAdd extends Component {
     index: [false, false, false, false, false, false, false, false]
   };
 
+  // the change handler sets the state values of the input fields.
   changeHandler = name => event => {
     this.setState({ [name]: event.target.value });
     console.log(this.state);
   };
 
+  // The submithandler submits all the data that the entity entered for registration purposes.
+  // the Enity will now be require to login and will then be able to add images for the profile.
   onSubmitHandler = e => {
     e.preventDefault();
+    fetch("/entity/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: this.state.name,
+        entityType: this.state.entityType,
+        street: this.state.street,
+        suburb: this.state.suburb,
+        city: this.state.city,
+        country: this.state.country,
+        postalCode: this.state.postal,
+        telNo: this.state.telNo,
+        altNo: this.state.altNo,
+        email: this.state.email,
+        userName: this.state.userName,
+        password: this.state.password,
+        facilities: this.state.option
+      })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data.message))
+      .catch(err => console.log(err));
   };
 
+  // clicking on a checkbox adds the value, "service offered" to an array
+  // the array is then stored as an array in MongoDB.
   changeCheckHandler = e => {
+    // as state array values are not to be mutated, a new Array is created from
+    // the current array value stored inside state. This new array is then appended
+    // with the new value and then the new array is set as the new state value.
     let currentValue = e.target.name;
     let currentIndex = e.target.value;
     let oldValueArray = [...this.state.option];
     let indexArray = [...this.state.index];
     let indexOf = this.state.option.indexOf(currentValue);
 
+    // check if the input box is active or not, if it is, the value is removed from state
+    // else the value is appended to state.
     if (indexArray[currentIndex]) {
       indexArray[currentIndex] = false;
       oldValueArray.splice(indexOf, 1);
@@ -45,11 +80,6 @@ class PropertyAdd extends Component {
     }
   };
 
-  componentDidUpdate() {
-    console.log(this.state.index);
-    console.log(this.state.option);
-  }
-
   render() {
     return (
       <div className="addProperty">
@@ -58,13 +88,10 @@ class PropertyAdd extends Component {
           <input
             type="text"
             placeholder="Your Establishment Name"
-            defaultValue={this.state.name}
+            value={this.state.name}
             onChange={this.changeHandler("name")}
           />
-          <select
-            defaultValue={this.state.type}
-            onChange={this.changeHandler("type")}
-          >
+          <select value={this.state.type} onChange={this.changeHandler("type")}>
             <option value="">Please Select Establishment Type</option>
             <option value="Hotel">Hotel</option>
             <option value="Guest House">Guest House</option>
@@ -75,56 +102,62 @@ class PropertyAdd extends Component {
           <input
             type="text"
             placeholder="Street Name and Number"
-            defaultValue={this.state.street}
+            value={this.state.street}
             onChange={this.changeHandler("street")}
           />
           <input
             type="text"
+            placeholder="Suburb"
+            value={this.state.suburb}
+            onChange={this.changeHandler("suburb")}
+          />
+          <input
+            type="text"
             placeholder="City"
-            defaultValue={this.state.city}
+            value={this.state.city}
             onChange={this.changeHandler("city")}
           />
           <input
             type="text"
             placeholder="Country"
-            defaultValue={this.state.country}
+            value={this.state.country}
             onChange={this.changeHandler("country")}
           />
           <input
             type="text"
             placeholder="Postal Code"
-            defaultValue={this.state.postal}
+            value={this.state.postal}
             onChange={this.changeHandler("postal")}
           />
 
           <input
             type="text"
             placeholder="Telephone Number"
-            defaultValue={this.state.telNo}
+            value={this.state.telNo}
             onChange={this.changeHandler("telNo")}
           />
           <input
             type="text"
             placeholder="Alternative Number"
-            defaultValue={this.state.altNo}
+            value={this.state.altNo}
             onChange={this.changeHandler("altNo")}
           />
           <input
             type="email"
             placeholder="E-Mail Adress"
-            defaultValue={this.state.email}
+            value={this.state.email}
             onChange={this.changeHandler("email")}
           />
           <input
             type="text"
             placeholder="Admin Name"
-            defaultValue={this.state.adminName}
+            value={this.state.adminName}
             onChange={this.changeHandler("adminName")}
           />
           <input
             type="password"
             placeholder="Admin Password"
-            defaultValue={this.state.password}
+            value={this.state.password}
             onChange={this.changeHandler("password")}
           />
           <h2>Please Select Your Property Facilities From the Below Options</h2>
@@ -193,7 +226,7 @@ class PropertyAdd extends Component {
             onChange={this.changeCheckHandler}
           />
 
-          <button type="submit" onSubmit={this.onSubmitHandler}>
+          <button type="submit" onClick={this.onSubmitHandler}>
             Submit Form
           </button>
         </form>

@@ -1,11 +1,12 @@
 .searchProperty {
   width: 25%;
-  height: 65vh;
+  height: auto;
   border: solid black 1px;
   background-color: orange;
   display: flex;
   flex-direction: row;
   margin-right: 1rem;
+  margin-bottom: 1rem;
 }
 
 .form input {
@@ -33,4 +34,10 @@
   background-color: yellow;
   border-radius: 0.3rem;
   font-weight: bold;
+}
+
+.searchBox {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
 }
