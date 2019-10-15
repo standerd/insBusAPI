@@ -26,11 +26,20 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .propertyBlock {
-  height: 100px;
-  width: 33%;
+  height: auto;
+  max-width: 33%;
   box-sizing: border-box;
   border: 1px solid green;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+.propertyBlock img {
+  box-sizing: border-box;
+  width: 90%;
+  margin: 0.3rem;
 }

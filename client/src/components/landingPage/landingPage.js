@@ -1,48 +1,62 @@
 import React, { Component } from "react";
 import "./landingPage.css";
 import SearchProperty from "../searchProperty/searchProperty";
+import SearchResults from "../searchResults/searchResults";
 import Map from "../maps/map";
+import Modal from "react-modal";
+import PropDetails from "../propertyDetails/propertyDetails";
+import { withRouter } from "react-router-dom";
+
+Modal.setAppElement("#root");
 
 class LandingPage extends Component {
-  state = {
-    dateIn: "",
-    dateOut: "",
-    noOfGuests: "",
-    city: "",
-    lat: "",
-    zoomLevel: 3,
-    lng: "",
-    searchArray: [],
-    searching: false,
-    initialLat: -29.27076,
-    initialLng: 25.112268,
-    zoom: 5,
-    selected: false
-  };
+  constructor() {
+    super();
+    this.state = {
+      dateIn: "",
+      dateOut: "",
+      noOfGuests: "",
+      city: "",
+      lat: "",
+      zoomLevel: 3,
+      lng: "",
+      searchArray: [],
+      searching: false,
+      initialLat: -29.27076,
+      initialLng: 25.112268,
+      zoom: 5,
+      selected: false,
+      amendSearch: false,
+      modalIsOpen: false,
+      displayID: "",
+      booking: false
+    };
 
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  //search component change handler.
   changeHandler = name => e => {
-    this.setState({ [name]: e.target.value });
+    this.setState({ [name]: e.target.value, amendSearch: true });
   };
 
+  //google standalone searchbox change handler, received params from searchbox component
+  //params are then destructured and state is set with the values of the search.
   handleChange = address => {
     const [city, latLong] = address;
-    this.setState(
-      {
-        city: city,
-        initialLat: parseFloat(latLong[0]),
-        initialLng: parseFloat(latLong[1]),
-        selected: true,
-        zoom: 10
-      },
-      () =>
-        console.log(
-          "from the SearchBox: " + this.state.city + this.state.initialLat
-        )
-    );
+    this.setState({
+      city: city,
+      initialLat: parseFloat(latLong[0]),
+      initialLng: parseFloat(latLong[1]),
+      selected: true,
+      zoom: 10
+    });
   };
 
+  //search component on click handler, once the search details is submitted, the data is
+  //sent to the server as a POST request and the returned data is set to state.
   handleSearchSubmit = () => {
-    console.log("from the POST Fetch: " + this.state.city);
     fetch("/search/searchProperty", {
       method: "POST",
       headers: {
@@ -54,11 +68,36 @@ class LandingPage extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        this.setState({ searching: true, searchArray: result.results }, () =>
-          console.log(this.state.searchArray)
+        this.setState(
+          { searching: true, searchArray: result.results, amendSearch: false },
+          () => console.log(this.state.searchArray)
         );
       })
       .catch(err => console.log(err));
+  };
+
+  openModal = e => {
+    this.setState({ modalIsOpen: true, displayID: e.target.id });
+  };
+
+  closeModal() {
+    this.setState({ modalIsOpen: false });
+  }
+
+  makeBooking = () => {
+    this.setState({ booking: true, modalIsOpen: false }, () =>
+      console.log(this.state.modalIsOpen + "- " + this.state.booking)
+    );
+    this.props.history.push({
+      pathname: "/book",
+      state: {
+        id: this.state.displayID,
+        propertyDetails: this.state.searchArray[this.state.displayID],
+        checkIn: this.state.dateIn,
+        checkOut: this.state.dateOut,
+        occupants: this.state.noOfGuests
+      }
+    });
   };
 
   render() {
@@ -82,25 +121,24 @@ class LandingPage extends Component {
                 zoom={this.state.zoom}
                 selected={this.state.selected}
               />
+              <br></br>
             </div>
           </div>
         ))
       : (resultsScreen = (
-        <div className="searchResults">
-          <Map
-            markerArray={this.state.searchArray}
-            initialLat={this.state.initialLat}
-            initialLng={this.state.initialLng}
-            zoom={this.state.zoom}
-            selected={this.state.selected}
-          />
-          <div className="propertyRow">
-            <div className="propertyBlock">Name</div>
-            <div className="propertyBlock">Name</div>
-            <div className="propertyBlock">Name</div>
+          <div className="searchResults">
+            <SearchResults
+              markerArray={this.state.searchArray}
+              initialLat={this.state.initialLat}
+              initialLng={this.state.initialLng}
+              zoom={this.state.zoom}
+              selected={this.state.selected}
+              dateIn={this.state.dateIn}
+              dateOut={this.state.dateOut}
+              amendSearch={this.state.amendSearch}
+              openModal={this.openModal}
+            />
           </div>
-        </div>
-          
         ));
 
     return (
@@ -115,9 +153,18 @@ class LandingPage extends Component {
           searchSubmit={this.handleSearchSubmit}
         />
         {resultsScreen}
+        <PropDetails
+          details={this.state.searchArray[this.state.displayID]}
+          modalIsOpen={this.state.modalIsOpen}
+          closeModal={this.closeModal}
+          makeBooking={this.makeBooking}
+          dateIn={this.state.dateIn}
+          dateOut={this.state.dateOut}
+          persons={this.state.noOfGuests}
+        />
       </div>
     );
   }
 }
 
-export default LandingPage;
+export default withRouter(LandingPage);

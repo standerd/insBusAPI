@@ -1,0 +1,53 @@
+.booking {
+  height: 80vh;
+  background-color: pink;
+  margin-bottom: 1rem;
+}
+
+.bookingPage {
+  background-color: orange;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.bookingDetails {
+  width: 38%;
+  background-color: yellow;
+  padding: 0.5%;
+  margin: 0.5%;
+  text-align: center;
+}
+
+.userDetails {
+  width: 57%;
+  background-color: green;
+  margin: 0.5%;
+  padding: 0.5%;
+  text-align: center;
+}
+
+.userDetails input {
+  width: 90%;
+  margin-top: 2%;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.userDetails button {
+  font-size: 1.2rem;
+  margin: 2%;
+}
+
+.userDetails button:hover {
+  cursor: pointer;
+}
+
+.bookingDetails table {
+  width: 90%;
+  margin: 4% 11%;
+}

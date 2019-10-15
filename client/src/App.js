@@ -3,7 +3,8 @@ import LandingPage from "./components/landingPage/landingPage";
 import NavBar from "./components/navbar/navBar";
 import Footer from "./components/footer/footer";
 import { LoadScript } from "@react-google-maps/api";
-import { Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
+import Booking from "../src/components/booking/booking";
 import AddProperty from "../src/components/propertyAdd/propertyAdd";
 import KEY from "./config/keys";
 import "./App.css";
@@ -18,8 +19,11 @@ class App extends Component {
           googleMapsApiKey={KEY.mapsKey}
         >
           <NavBar />
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/addproperty" component={AddProperty} />
+          <Switch>
+            <Route path="/" exact component={LandingPage} />
+            <Route path="/addproperty" component={AddProperty} />
+            <Route path="/book" component={Booking} />
+          </Switch>
           <Footer />
         </LoadScript>
       </div>

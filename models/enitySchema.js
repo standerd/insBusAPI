@@ -18,7 +18,9 @@ const entityReg = new Schema({
   password: { type: String, require: true },
   images: { type: Array },
   facilities: { type: Array },
-  availability: { type: Array }
+  availability: { type: Array },
+  offPeakRates: { type: String },
+  peakRates: { type: String }
 });
 
 module.exports = mongoose.model("Entity", entityReg);

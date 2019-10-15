@@ -6,6 +6,7 @@ const multer = require("multer");
 const PORT = process.env.PORT || 3001;
 const userSearchRoute = require("./routes/userRoutes/userSearch");
 const entityRegRoute = require("./routes/entityRoutes/entityReg");
+const userAccount = require("./routes/userRoutes/userAccount");
 const path = require("path");
 
 const app = express();
@@ -51,6 +52,7 @@ app.use((req, res, next) => {
 
 app.use("/entity", entityRegRoute);
 app.use("/search", userSearchRoute);
+app.use("/user", userAccount);
 
 mongoose.connect(
   KEYS.keys.mongoUri,
