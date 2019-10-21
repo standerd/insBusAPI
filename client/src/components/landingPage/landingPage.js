@@ -38,7 +38,13 @@ class LandingPage extends Component {
 
   //search component change handler.
   changeHandler = name => e => {
-    this.setState({ [name]: e.target.value, amendSearch: true });
+    this.setState({ [name]: e.target.value, amendSearch: true }, () => {
+      let dateIn = new Date(this.state.dateIn);
+      let dateOut = new Date(this.state.dateOut);
+      if (dateOut.getTime() < dateIn.getTime()) {
+        this.setState({ dateOut: "" });
+      }
+    });
   };
 
   //google standalone searchbox change handler, received params from searchbox component
@@ -68,26 +74,29 @@ class LandingPage extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        this.setState(
-          { searching: true, searchArray: result.results, amendSearch: false },
-          () => console.log(this.state.searchArray)
-        );
+        this.setState({
+          searching: true,
+          searchArray: result.results,
+          amendSearch: false
+        });
       })
       .catch(err => console.log(err));
   };
 
+  // property details modal, opening event handler
   openModal = e => {
     this.setState({ modalIsOpen: true, displayID: e.target.id });
   };
 
+  // property details modal, closing event handler
   closeModal() {
     this.setState({ modalIsOpen: false });
   }
 
+  // Booking submit handler, redirects the user to the booking page and
+  // passes the booking information along.
   makeBooking = () => {
-    this.setState({ booking: true, modalIsOpen: false }, () =>
-      console.log(this.state.modalIsOpen + "- " + this.state.booking)
-    );
+    this.setState({ booking: true, modalIsOpen: false });
     this.props.history.push({
       pathname: "/book",
       state: {
@@ -103,6 +112,8 @@ class LandingPage extends Component {
   render() {
     let resultsScreen;
 
+    // if no search was submitted by the user yet, the below is displayed next
+    // to the user search sidedrawer
     !this.state.searching
       ? (resultsScreen = (
           <div className="landingContent">
@@ -125,7 +136,9 @@ class LandingPage extends Component {
             </div>
           </div>
         ))
-      : (resultsScreen = (
+      : // if the user has submitted as search request, the search result is diplayed instead of the
+        // main landing content.
+        (resultsScreen = (
           <div className="searchResults">
             <SearchResults
               markerArray={this.state.searchArray}

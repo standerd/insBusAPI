@@ -6,12 +6,17 @@ const multer = require("multer");
 const PORT = process.env.PORT || 3001;
 const userSearchRoute = require("./routes/userRoutes/userSearch");
 const entityRegRoute = require("./routes/entityRoutes/entityReg");
+const entityMaint = require("./routes/entityRoutes/entityMaint");
 const userAccount = require("./routes/userRoutes/userAccount");
 const path = require("path");
 
+//intialise express app.
 const app = express();
 
+//setup body parser
 app.use(bodyParser.json());
+
+// Setup Multer and file access and storage handler for images upload and access
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -34,12 +39,13 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(bodyParser.json());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
+
 app.use("/images", express.static(path.join(__dirname, "images")));
 
+// set headers to ensure CORRS requests can pass.
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -50,14 +56,18 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes setup
 app.use("/entity", entityRegRoute);
+app.use("/entityMaint", entityMaint);
 app.use("/search", userSearchRoute);
 app.use("/user", userAccount);
 
+// mongo db connection setup
 mongoose.connect(
   KEYS.keys.mongoUri,
   { useNewUrlParser: true, useUnifiedTopology: true },
   () => console.log("MongoDB Connected")
 );
 
+//app set to listen of port 3001 if ENV is not used
 app.listen(PORT, () => console.log(`Server is Listening on Port ${PORT}`));

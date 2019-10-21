@@ -51,3 +51,21 @@
   width: 90%;
   margin: 4% 11%;
 }
+
+.bookingCompleted {
+  border: 1px solid black;
+  margin: 10% auto;
+  padding: 2%;
+  width: 50%;
+}
+
+.bookingCompleted a {
+  text-decoration: none;
+  background-color: green;
+  padding: 0.5%;
+  text-align: center;
+  width: 30%;
+  border-radius: 0.3rem;
+  color: black;
+  margin: 1% 38%;
+}

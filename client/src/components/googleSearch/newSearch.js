@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { GoogleMap, StandaloneSearchBox } from "@react-google-maps/api";
 
 // google maps standalone searchbox, sets the city selected by the user state in the landing page component
+// autocompletes and gives suggestions for cities based on user initial input.
 
 class SearchBox extends Component {
   render() {

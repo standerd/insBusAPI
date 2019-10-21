@@ -1,0 +1,14 @@
+.userReg {
+  width: 90%;
+  margin: 1% auto;
+  border: 1px solid black;
+  text-align: center;
+  padding: 1%;
+}
+
+.userReg input {
+  width: 50%;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1%;
+}

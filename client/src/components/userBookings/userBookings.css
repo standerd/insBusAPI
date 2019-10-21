@@ -1,0 +1,82 @@
+.userBookings {
+  width: 90%;
+  background-color: pink;
+  border: 1px solid black;
+  margin: 1% auto;
+}
+
+.individualBooking {
+  width: 80%;
+  border: 1px solid black;
+  height: 200px;
+  margin: 1% auto;
+  padding: 1%;
+  display: flex;
+  flex-direction: row;
+}
+
+.images {
+  width: 30%;
+  margin-left: 5%;
+}
+
+.images h3 {
+  margin-left: 2%;
+}
+
+.details {
+  width: 50%;
+}
+
+.images img {
+  width: 70%;
+  height: auto;
+}
+
+.buttons {
+  width: 20%;
+  text-align: center;
+  margin-top: 3%;
+}
+.buttons button {
+  width: 80%;
+  height: 20%;
+  margin-bottom: 1%;
+}
+
+.buttons button:hover {
+  cursor: pointer;
+}
+
+.lds-hourglass {
+  display: inline-block;
+  position: relative;
+  width: 164px;
+  height: 164px;
+  margin-left: 50%;
+}
+.lds-hourglass:after {
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  margin: 6px;
+  box-sizing: border-box;
+  border: 26px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-hourglass 1.2s infinite;
+}
+@keyframes lds-hourglass {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  100% {
+    transform: rotate(1800deg);
+  }
+}

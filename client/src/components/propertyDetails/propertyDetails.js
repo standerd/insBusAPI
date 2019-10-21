@@ -15,7 +15,6 @@ const customStyles = {
   }
 };
 
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
 let images;
 
@@ -24,10 +23,12 @@ class PropertyDetails extends Component {
     imgIndex: 0
   };
 
+  // on thumbnail click sets the main image array index, for loading the image.
   onClick = e => {
     this.setState({ imgIndex: e.target.id });
   };
 
+  // main image contains 2 arrows to scroll through them, this is the function controlling the clicks.
   imgScroll = e => {
     let newIndex;
     if (e.target.id === "next" && this.state.imgIndex < images.length - 1) {
@@ -40,11 +41,14 @@ class PropertyDetails extends Component {
   };
 
   render() {
+    //on initial load the images array is empty due to a small timing between render and componentdidmount
+    //receiving props, props can never be empty as a user cannot get to the details without having come
+    //from the searchresults.
+
+    // sets the images array
     this.props.details === undefined
       ? (images = null)
       : (images = this.props.details.images);
-
-    console.log("From Images" + images);
 
     let imgSrc;
 
@@ -56,12 +60,13 @@ class PropertyDetails extends Component {
               key={index}
               id={index}
               onClick={this.onClick}
-              src={"/images/" + key}
+              src={"/" + key}
               alt=""
             />
           );
         }));
 
+    // The stay duration is calculted from the in and out days.
     let days;
 
     this.props.dateOut === "" || this.props.dateIn === ""
@@ -70,6 +75,26 @@ class PropertyDetails extends Component {
           (new Date(this.props.dateOut).getTime() -
             new Date(this.props.dateIn).getTime()) /
           (1000 * 3600 * 24));
+
+    // sets the facilties based on the received facilities array from the property database.
+    let facility;
+
+    this.props.details === undefined
+      ? (facility = <p>No Facilities Noted</p>)
+      : (facility = this.props.details.facilities.map(key => {
+          return <p key={key}>{key}</p>;
+        }));
+
+    // setup Rates
+
+    let rates;
+
+    this.props.details === undefined
+      ? (rates = [0, 0])
+      : (rates = [
+          this.props.details.offPeakRates,
+          this.props.details.peakRates
+        ]);
 
     return (
       <div>
@@ -99,11 +124,11 @@ class PropertyDetails extends Component {
                   <tbody>
                     <tr>
                       <td>Peak Season</td>
-                      <td>R 1200 Per Night</td>
+                      <td>R {rates[1]} Per Night</td>
                     </tr>
                     <tr>
                       <td>Off-Peak Season</td>
-                      <td>R 1000 Per Night</td>
+                      <td>R {rates[0]} Per Night</td>
                     </tr>
                   </tbody>
                 </table>
@@ -115,7 +140,10 @@ class PropertyDetails extends Component {
                 <p>
                   {this.props.persons} x Adults for {days} Nights
                 </p>
-                <p>Total Price : R 3 600-00</p>
+                <p>
+                  Total Price : R{" "}
+                  {parseInt(parseInt(rates[0]) * parseInt(days))}
+                </p>
                 <button onClick={this.props.makeBooking}>
                   Book This Property
                 </button>
@@ -142,38 +170,22 @@ class PropertyDetails extends Component {
                   ></i>
                 </p>
                 <img
-                  src={
-                    images === null
-                      ? ""
-                      : "/images/" + images[this.state.imgIndex]
-                  }
+                  src={images === null ? "" : "/" + images[this.state.imgIndex]}
                   alt=""
                 />
               </div>
               <div className="propertyDetails">
                 <div className="propDescription">
                   <h1>Description</h1>
-                  <p>
-                    My Beach Hotel is Located within walking distance from the
-                    beach and has vaious options for dining available both on
-                    site as well as various restaurants within close walking
-                    distance. We serve a great breakfast, and out staff is
-                    always willing to assist with whatever assistance you
-                    require.
-                  </p>
+                  {this.props.details === undefined ? (
+                    <p>None</p>
+                  ) : (
+                    <p>{this.props.details.description}</p>
+                  )}
                 </div>
                 <div className="propFacilities">
                   <h1>Main Facilities</h1>
-                  <div className="facilities">
-                    <p>Wifi</p>
-                    <p>Concierge Services</p>
-                    <p>Bicycle Rental</p>
-                    <p>Swimming Pool</p>
-                    <p>Gymnasium</p>
-                    <p>Airport Transfers</p>
-                    <p>Room Service</p>
-                    <p>Tea/Coffee Facilities</p>
-                  </div>
+                  <div className="facilities">{facility}</div>
                 </div>
               </div>
             </div>

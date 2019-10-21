@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./propertyAdd.css";
+import { withRouter } from "react-router-dom";
 
 class PropertyAdd extends Component {
   state = {
@@ -15,6 +16,11 @@ class PropertyAdd extends Component {
     email: "",
     adminName: "",
     password: "",
+    offPeakRates: "",
+    peakRates: "",
+    description: "",
+    password2: "",
+    error: false,
     option: [],
     index: [false, false, false, false, false, false, false, false]
   };
@@ -22,12 +28,15 @@ class PropertyAdd extends Component {
   // the change handler sets the state values of the input fields.
   changeHandler = name => event => {
     this.setState({ [name]: event.target.value });
-    console.log(this.state);
   };
 
   // The submithandler submits all the data that the entity entered for registration purposes.
   // the Enity will now be require to login and will then be able to add images for the profile.
   onSubmitHandler = e => {
+    if (this.state.password !== this.state.password2) {
+      this.setState({ error: true });
+    }
+
     e.preventDefault();
     fetch("/entity/register", {
       method: "POST",
@@ -47,11 +56,18 @@ class PropertyAdd extends Component {
         email: this.state.email,
         userName: this.state.userName,
         password: this.state.password,
-        facilities: this.state.option
+        facilities: this.state.option,
+        offPeakRates: this.state.offPeakRates,
+        peakRates: this.state.peakRates,
+        description: this.state.description
       })
     })
       .then(res => res.json())
-      .then(data => console.log(data.message))
+      .then(data => {
+        //if user is successfully registered, he is redirected to the maintain screen to upload images
+        //and maintain his availability data.
+        this.props.history.push("/maintain");
+      })
       .catch(err => console.log(err));
   };
 
@@ -160,6 +176,30 @@ class PropertyAdd extends Component {
             value={this.state.password}
             onChange={this.changeHandler("password")}
           />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={this.state.password2}
+            onChange={this.changeHandler("password2")}
+          />
+          <input
+            type="text"
+            placeholder="Peak Rates"
+            value={this.state.peakRates}
+            onChange={this.changeHandler("peakRates")}
+          />
+          <input
+            type="text"
+            placeholder="Off Peak Rates"
+            value={this.state.offPeakRates}
+            onChange={this.changeHandler("offPeakRates")}
+          />
+          <input
+            type="text"
+            placeholder="Hotel Description"
+            value={this.state.description}
+            onChange={this.changeHandler("description")}
+          />
           <h2>Please Select Your Property Facilities From the Below Options</h2>
           <label>Airport Transfer</label>
           <input
@@ -235,4 +275,4 @@ class PropertyAdd extends Component {
   }
 }
 
-export default PropertyAdd;
+export default withRouter(PropertyAdd);

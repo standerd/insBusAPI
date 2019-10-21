@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+//Entity Schema for Mongo DB
+
 const entityReg = new Schema({
   name: { type: String, require: true },
   entityType: { type: String, require: true },
@@ -19,8 +21,9 @@ const entityReg = new Schema({
   images: { type: Array },
   facilities: { type: Array },
   availability: { type: Array },
-  offPeakRates: { type: String },
-  peakRates: { type: String }
+  offPeakRates: { type: String, require: true },
+  peakRates: { type: String, require: true },
+  description: { type: String, require: true }
 });
 
 module.exports = mongoose.model("Entity", entityReg);

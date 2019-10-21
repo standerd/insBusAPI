@@ -1,0 +1,34 @@
+.maintain{
+    width: 90%;
+    background-color: green;
+    margin: 1% auto;
+    text-align: center;
+    padding: 1%;
+}
+
+.maintain input{
+    font-size: 1.3rem;
+    margin: 3%;
+    text-align: center;
+}
+
+.maintain button{
+    font-size: 1.3rem;
+    width: 15%;
+}
+
+.maintain label{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.file{
+    width: 30%;
+}
+
+.uploadImages, .availability {
+    border: 1px solid black;
+    margin: 1%;
+    height: auto;
+    padding: 1%;
+}

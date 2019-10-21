@@ -4,6 +4,9 @@ import { GoogleMap, Marker, Data } from "@react-google-maps/api";
 const map = props => {
   let markers;
 
+  // the markers array is received from the searchresults which returns all the properties
+  // in the location the user searched for. The lat/lng of each property is then taken and
+  // markers are created for each property.
   !props.selected
     ? (markers = null)
     : props.markerArray === undefined || props.markerArray.length === 0
@@ -28,6 +31,7 @@ const map = props => {
       }));
 
   return (
+    // the intial lat long is hardcoded into the landing page state for testing purposes
     <GoogleMap
       id="circle-example"
       mapContainerStyle={{
@@ -50,6 +54,7 @@ const map = props => {
           controls: ["Point"],
           drawingMode: "Point", //  "LineString" or "Polygon".
           featureFactory: geometry => {
+            // logs the lat, long of the point on which the user clicks, this is for future use.
             console.log("geometry: ", geometry);
           },
           // Type:  boolean

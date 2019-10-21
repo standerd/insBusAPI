@@ -1,4 +1,34 @@
 .navbar {
   width: 100%;
   background-color: pink;
+  height: 40px;
+  justify-content: center;
+  padding-top: 0.6%;
+  margin-top: 0.4%;
+  margin-bottom: 0.5%;
+}
+
+.navbar ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+}
+
+li {
+  padding: 0.6%;
+  background-color: orange;
+  border-radius: 0.4rem;
+  vertical-align: center;
+}
+
+.alignLeft {
+  width: 65%;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
