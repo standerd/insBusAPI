@@ -104,7 +104,7 @@ class PropertyDetails extends Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <h1 style={{ textAlign: "center" }}>
+          <h1 className="propHead">
             {this.props.details === undefined
               ? "No Property Loaded"
               : this.props.details.name}
@@ -113,6 +113,7 @@ class PropertyDetails extends Component {
             <div className="imgDrawer">
               <div className="imgBox">{imgSrc}</div>
               <div className="rates">
+                <hr></hr>
                 <h1>RATES</h1>
                 <table>
                   <thead>
@@ -133,10 +134,8 @@ class PropertyDetails extends Component {
                   </tbody>
                 </table>
                 <h3>Your Booking Details</h3>
-                <p>
-                  Check In : {this.props.dateIn} Check Out :{" "}
-                  {this.props.dateOut}
-                </p>
+                <p>Check In : {this.props.dateIn}</p>
+                <p>Check Out : {this.props.dateOut}</p>
                 <p>
                   {this.props.persons} x Adults for {days} Nights
                 </p>
@@ -155,28 +154,32 @@ class PropertyDetails extends Component {
 
             <div className="contentDrawer">
               <div className="mainImg">
-                <p className="forward">
-                  <i
-                    id="back"
-                    onClick={this.imgScroll}
-                    className="fas fa-chevron-left"
-                  ></i>
-                </p>
-                <p className="back">
-                  <i
-                    id="next"
-                    onClick={this.imgScroll}
-                    className="fas fa-chevron-right"
-                  ></i>
-                </p>
                 <img
                   src={images === null ? "" : "/" + images[this.state.imgIndex]}
                   alt=""
                 />
+                <div className="arrows">
+                  <p className="forward" id="back" onClick={this.imgScroll}>
+                    Prev Image
+                  </p>
+                  <p id="next" onClick={this.imgScroll} className="back">
+                    Next Image
+                  </p>
+                </div>
               </div>
+              <hr></hr>
               <div className="propertyDetails">
                 <div className="propDescription">
-                  <h1>Description</h1>
+                  <h1
+                    style={{
+                      borderTop: "0.5px solid white",
+                      borderBottom: "0.5px solid white",
+                      marginTop: "0",
+                      padding: "0.6rem 0"
+                    }}
+                  >
+                    Description
+                  </h1>
                   {this.props.details === undefined ? (
                     <p>None</p>
                   ) : (
@@ -184,7 +187,16 @@ class PropertyDetails extends Component {
                   )}
                 </div>
                 <div className="propFacilities">
-                  <h1>Main Facilities</h1>
+                  <h1
+                    style={{
+                      borderTop: "0.5px solid white",
+                      borderBottom: "0.5px solid white",
+                      marginTop: "0",
+                      padding: "0.6rem 0"
+                    }}
+                  >
+                    Main Facilities
+                  </h1>
                   <div className="facilities">{facility}</div>
                 </div>
               </div>

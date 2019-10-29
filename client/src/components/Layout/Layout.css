@@ -1,0 +1,18 @@
+.main-header {
+  width: 90vw;
+  position: fixed;
+  top: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.content {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .content {
+    margin-top: 3.5rem;
+    padding: 1rem 2rem;
+  }
+}

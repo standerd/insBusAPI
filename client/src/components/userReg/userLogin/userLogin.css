@@ -1,13 +1,100 @@
 .userLogin {
   width: 60%;
   margin: 2% auto;
-  display: block;
+  border: 1px solid #b4172c;
+  box-shadow: 0.5px 0.5px 1px #b4172c;
+}
+
+.userLogin form {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 2% 26%;
 }
 
 .userLogin input {
   width: 50%;
+  margin-bottom: 1%;
+}
+
+.userLogin label {
+  font-weight: bold;
+  margin-bottom: 1%;
+}
+
+.userLogin button {
+  width: 30%;
+  text-align: center;
+  margin-left: 10%;
 }
 
 .userLogin button:hover {
   cursor: pointer;
+}
+
+.oAuth {
+  width: 60%;
+  margin: 1% auto;
+}
+
+.userLogin button {
+  background-color: #81a7ee;
+  color: white;
+  font-weight: bold;
+  height: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  height: auto;
+  outline: none;
+}
+
+.userLogin button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #81a7ee;
+}
+
+.userLogin a {
+  color: #81a7ee;
+  width: 100%;
+  margin-left: 40%;
+}
+
+.error {
+  width: auto;
+  text-align: center;
+  background-color: red;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+  margin: 1%;
+}
+
+@media only screen and (max-width: 768px) {
+  .userLogin {
+    width: 100%;
+    margin-top: 10%;
+  }
+
+  .userLogin a {
+    margin-left: 20%;
+  }
+  .userLogin form {
+    margin: 1% 12%;
+  }
+
+  .userLogin button {
+    width: 50%;
+    margin-left: 17%;
+  }
+
+  .oAuth button {
+    width: 45%;
+    margin-left: 2%;
+  }
+
+  .userLogin input {
+    width: 80%;
+    margin-bottom: 1%;
+  }
 }

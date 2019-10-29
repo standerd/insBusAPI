@@ -62,19 +62,28 @@ const searchResults = props => {
 
   return (
     <div>
-      <h1 style={{ backgroundColor: "lightGray", marginTop: "0" }}>
-        Results For Your Search
+      <h1
+        style={{ backgroundColor: "#81a7ee", color: "white", marginTop: "0" }}
+      >
+        Search Results
       </h1>
-      <Map
-        style={{ border: "1px solid #ccc", padding: "0.3rem" }}
-        markerArray={props.markerArray}
-        initialLat={props.initialLat}
-        initialLng={props.initialLng}
-        zoom={props.zoom}
-        selected={props.selected}
-        dateIn={props.dateIn}
-        dateOut={props.dateOut}
-      />
+      <div
+        style={{
+          border: "1px solid #81a7ee",
+          backgroundColor: "#81a7ee",
+          padding: "0.1rem"
+        }}
+      >
+        <Map
+          markerArray={props.markerArray}
+          initialLat={props.initialLat}
+          initialLng={props.initialLng}
+          zoom={props.zoom}
+          selected={props.selected}
+          dateIn={props.dateIn}
+          dateOut={props.dateOut}
+        />
+      </div>
 
       {/* if the user ammends the search parameter after the intial search, the search results are set to null again */}
       <div className="propertyRow">{props.amendSearch ? null : property}</div>

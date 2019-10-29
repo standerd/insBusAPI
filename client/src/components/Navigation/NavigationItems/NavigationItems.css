@@ -1,5 +1,6 @@
 .navigation-item {
   padding: 0 1.5rem;
+  font-weight: bold;
 }
 
 .navigation-item a {
@@ -10,16 +11,21 @@
 .navigation-item.mobile {
   font-size: 1.75rem;
   margin: 0.5rem 0;
+  font-weight: bold;
 }
 
 .navigation-item.mobile a {
-  color: #3b0062;
+  color: black;
+}
+
+.navigation-item.mobile button {
+  color: black;
 }
 
 .navigation-item a:hover,
 .navigation-item a:active,
 .navigation-item a.active {
-  color: #fab83f;
+  color: #b4172c;
 }
 
 .navigation-item:last-of-type {
@@ -37,5 +43,5 @@
 
 .navigation-item button:hover,
 .navigation-item button:active {
-  color: #fab83f;
+  color: #b4172c;
 }

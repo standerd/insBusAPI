@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import "./userReg.css";
 
 class UserReg extends Component {
@@ -11,7 +11,8 @@ class UserReg extends Component {
     email: "",
     password: "",
     password2: "",
-    error: false
+    error: false,
+    error2: false
   };
 
   // input change handler.
@@ -46,12 +47,25 @@ class UserReg extends Component {
             password
           })
         })
-          .then(res => res.json())
+          .then(res => {
+            if (res.status === 401) {
+              throw new Error(
+                "Validation failed. Make sure the email address isn't used yet!"
+              );
+            }
+
+            if (res.status !== 200 && res.status !== 201) {
+              console.log("Error!");
+              throw new Error("Creating a user failed!");
+            }
+
+            return res.json();
+          })
           .then(result => {
-            console.log(result.message + "-" + result.status);
+            this.setState({ error: false, error2: false });
             this.props.history.push("/");
           })
-          .catch(err => console.log(err));
+          .catch(err => this.setState({ error2: true }));
       });
     }
   };
@@ -59,7 +73,16 @@ class UserReg extends Component {
   render() {
     return (
       <div className="userReg">
-        <h1>User Registration Form</h1>
+        <h1
+          style={{
+            textAlign: "center",
+            color: "white",
+            backgroundColor: "#81a7ee",
+            margin: "1% 1%"
+          }}
+        >
+          User Registration
+        </h1>
         <form>
           <input
             type="text"
@@ -109,11 +132,23 @@ class UserReg extends Component {
               Passwords Do Not Match Please Try Again
             </h3>
           ) : null}
+          {this.state.error2 ? (
+            <h3 style={{ color: "red" }}>
+              Could not Register You, Make Sure the Email is Not Already Used
+            </h3>
+          ) : null}
           <br></br>
           <button type="submit" onClick={this.submitReg}>
             Register
           </button>
         </form>
+        <p>Already Have An Account</p>
+        <Link to="/loginUser">Login Here</Link>
+        <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
+        <div className="oAuth2">
+          <button>Google</button>
+          <button>Facebook</button>
+        </div>
       </div>
     );
   }

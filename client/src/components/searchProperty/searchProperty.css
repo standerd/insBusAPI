@@ -2,11 +2,12 @@
   width: 25%;
   height: auto;
   border: solid black 1px;
-  background-color: orange;
+  background-color: #b4172c;
   display: flex;
   flex-direction: row;
   margin-right: 1rem;
   margin-bottom: 1rem;
+  color: white;
 }
 
 .form input {
@@ -29,15 +30,30 @@
 }
 
 .form button {
-  width: 35%;
+  width: auto;
   height: 2rem;
-  background-color: yellow;
+  background-color: #81a7ee;
+  color: white;
+  outline: none;
   border-radius: 0.3rem;
   font-weight: bold;
+}
+
+.form button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #81a7ee;
 }
 
 .searchBox {
   width: 80%;
   text-align: center;
   margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .searchProperty {
+    margin: 12% auto;
+    width: 100%;
+  }
 }

@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001;
 const userSearchRoute = require("./routes/userRoutes/userSearch");
 const entityRegRoute = require("./routes/entityRoutes/entityReg");
 const entityMaint = require("./routes/entityRoutes/entityMaint");
-const userAccount = require("./routes/userRoutes/userAccount");
+const userAuth = require("./routes/userRoutes/userAuth");
 const path = require("path");
 
 //intialise express app.
@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 app.use("/entity", entityRegRoute);
 app.use("/entityMaint", entityMaint);
 app.use("/search", userSearchRoute);
-app.use("/user", userAccount);
+app.use("/user", userAuth);
 
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
@@ -72,6 +72,13 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
+});
 
 // mongo db connection setup
 mongoose.connect(

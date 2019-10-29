@@ -1,23 +1,28 @@
 .userBookings {
-  width: 90%;
-  background-color: pink;
+  width: 100%;
+  background-color: #81a7ee;
   border: 1px solid black;
-  margin: 1% auto;
+  color: white;
+  margin-bottom: 1%;
 }
 
 .individualBooking {
   width: 80%;
-  border: 1px solid black;
-  height: 200px;
+  background-color: white;
+  color: #81a7ee;
+  height: auto;
   margin: 1% auto;
   padding: 1%;
   display: flex;
   flex-direction: row;
+  box-shadow: 1px 1px 1px #b4172c;
+  border: 1.5px solid #b4172c;
 }
 
 .images {
   width: 30%;
   margin-left: 5%;
+  border-right: 1px solid #b4172c;
 }
 
 .images h3 {
@@ -26,6 +31,8 @@
 
 .details {
   width: 50%;
+  border-right: 1px solid #b4172c;
+  margin-left: 1%;
 }
 
 .images img {
@@ -42,10 +49,17 @@
   width: 80%;
   height: 20%;
   margin-bottom: 1%;
+  background-color: #81a7ee;
+  color: white;
+  font-weight: bold;
+  outline: none;
+  border-radius: 0.4rem;
 }
 
 .buttons button:hover {
   cursor: pointer;
+  background-color: white;
+  color: #81a7ee;
 }
 
 .lds-hourglass {
@@ -78,5 +92,52 @@
   }
   100% {
     transform: rotate(1800deg);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .userBookings {
+    margin-top: 10%;
+    text-align: center;
+  }
+
+  .individualBooking {
+    width: 95%;
+    background-color: white;
+    color: #81a7ee;
+    height: auto;
+    margin: 2% auto;
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 1px #b4172c;
+    border: 1.5px solid #b4172c;
+  }
+
+  .details {
+    width: 100%;
+    border: none;
+  }
+
+  .buttons {
+    width: 90%;
+  }
+
+  .buttons button {
+    width: 55%;
+    display: block;
+    height: 20%;
+    margin: 1% auto;
+  }
+
+  .images {
+    width: 100%;
+    margin: 0 auto;
+    border: none;
+  }
+
+  .images h3 {
+    width: 100%;
+    text-align: center;
   }
 }

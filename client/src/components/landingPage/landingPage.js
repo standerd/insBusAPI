@@ -123,15 +123,24 @@ class LandingPage extends Component {
               <h3>Check Out Date: {this.state.dateOut}</h3>
               <h3>Number of Travellers: {this.state.noOfGuests}</h3>
               <h3>Destination City: {this.state.city}</h3>
-              <Map
-                lat={this.state.lat}
-                lng={this.state.lng}
-                markerArray={this.state.markerArray}
-                initialLat={this.state.initialLat}
-                initialLng={this.state.initialLng}
-                zoom={this.state.zoom}
-                selected={this.state.selected}
-              />
+              <div
+                style={{
+                  border: "2px solid #81a7ee",
+                  backgroundColor: "$81a7ee",
+                  padding: "2px"
+                }}
+              >
+                <Map
+                  lat={this.state.lat}
+                  lng={this.state.lng}
+                  markerArray={this.state.markerArray}
+                  initialLat={this.state.initialLat}
+                  initialLng={this.state.initialLng}
+                  zoom={this.state.zoom}
+                  selected={this.state.selected}
+                />
+              </div>
+
               <br></br>
             </div>
           </div>

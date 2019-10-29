@@ -61,20 +61,21 @@ const searchProperty = props => {
         <br></br>
         <label>Check In Date</label>
         <input
-          onChange={props.changeHandler("dateIn")}
           type="date"
           name="in"
           value={props.dateIn}
+          onChange={props.changeHandler("dateIn")}
           min={checkInLimit.toString()}
-        ></input>
+        />
         <label>Check Out Date </label>
         <input
-          onChange={props.changeHandler("dateOut")}
           type="date"
           name="out"
           value={props.dateOut}
+          onChange={props.changeHandler("dateOut")}
           min={checkOutLimit.toString()}
-        ></input>
+        />
+
         <label>No of Nights </label>
         <p>{days}</p>
         <label>No of Travellers </label>

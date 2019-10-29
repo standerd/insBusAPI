@@ -1,9 +1,11 @@
 .userReg {
-  width: 90%;
+  width: 70%;
   margin: 1% auto;
-  border: 1px solid black;
+  border: 1px solid #b4172c;
+  box-shadow: 0.5px 0.5px 1px #b4172c;
   text-align: center;
   padding: 1%;
+  box-sizing: border-box;
 }
 
 .userReg input {
@@ -11,4 +13,55 @@
   text-align: center;
   font-size: 1.2rem;
   margin-bottom: 1%;
+  border: 0.5px solid black;
+}
+
+.userReg a {
+  color: #81a7ee;
+}
+
+.oAuth2 {
+  width: 60%;
+  margin: 1% auto;
+}
+
+.oAuth2 button {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.userReg button {
+  background-color: #81a7ee;
+  color: white;
+  font-weight: bold;
+  height: 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  height: auto;
+  outline: none;
+  width: 20%;
+}
+
+.userReg button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #81a7ee;
+}
+
+@media only screen and (max-width: 768px) {
+  .userReg {
+    width: 100%;
+    margin-top: 12%;
+  }
+  .userReg input {
+    width: 90%;
+  }
+
+  .oAuth2 {
+    width: 90%;
+  }
+
+  .userReg button {
+    width: 40%;
+  }
 }

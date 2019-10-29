@@ -27,7 +27,20 @@ const bookingDetails = props => {
     ? (propDetails = null)
     : (propDetails = (
         <div className="contentPortion">
-          <h1 style={{ textAlign: "center" }}>Property Details</h1>
+          <button className="exitButton" onClick={props.closeModal}>
+            Back to Bookings
+          </button>
+          <h1
+            style={{
+              textAlign: "center",
+              backgroundColor: "#b4172c",
+              color: "white",
+              height: "auto",
+              padding: "0.5rem"
+            }}
+          >
+            Property Details
+          </h1>
           <img
             style={{ width: "70%" }}
             src={"/" + props.propertyDetails.images[0]}
@@ -42,7 +55,17 @@ const bookingDetails = props => {
           <p>
             GPS: {props.propertyDetails.lat} , {props.propertyDetails.long}
           </p>
-          <h1 style={{ textAlign: "center" }}>Booking Details</h1>
+          <h1
+            style={{
+              textAlign: "center",
+              backgroundColor: "#b4172c",
+              color: "white",
+              height: "auto",
+              padding: "0.5rem"
+            }}
+          >
+            Booking Details
+          </h1>
           <p>Check In Date: {props.bookingDetails.checkInDate}</p>
           <p>Check Out Date: {props.bookingDetails.checkOutDate}</p>
           <p>No of Guests: {props.bookingDetails.guestCount}</p>
@@ -62,7 +85,16 @@ const bookingDetails = props => {
           {propDetails}
 
           <div className="contentPortion">
-            <h1>Property Location</h1>
+            <h1
+              style={{
+                backgroundColor: "#b4172c",
+                color: "white",
+                height: "auto",
+                padding: "0.5rem"
+              }}
+            >
+              Property Location
+            </h1>
             {props.propertyDetails === null ? (
               <p>To Load</p>
             ) : (
@@ -84,9 +116,6 @@ const bookingDetails = props => {
             )}
           </div>
         </div>
-        <button className="exitButton" onClick={props.closeModal}>
-          Back to Bookings
-        </button>
       </Modal>
     </div>
   );

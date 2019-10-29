@@ -32,7 +32,7 @@ class Booking extends Component {
   confirmBooking = e => {
     e.preventDefault();
 
-    let userId = localStorage.getItem('userId')
+    let userId = localStorage.getItem("userId");
 
     // occupation is sent along with the request to ensure that the enities availablity is updated
     // in order to prevent duplicate bookings.

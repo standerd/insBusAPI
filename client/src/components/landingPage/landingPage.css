@@ -1,7 +1,9 @@
 .landingPage {
+  width: 100%;
   display: flex;
   flex-direction: row;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .landingContent {
@@ -14,32 +16,71 @@
   padding: 0 10%;
   justify-content: center;
 }
+
 .searchResults {
   width: 100%;
+  box-sizing: border-box;
 }
 
 .propertyRow {
   margin-top: 1rem;
   margin-bottom: 1rem;
   padding: 0.5rem;
-  border: 1px solid red;
+  border: 1px solid #b4172c;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
 .propertyBlock {
   height: auto;
-  max-width: 33%;
+  width: 33%;
   box-sizing: border-box;
-  border: 1px solid green;
+  border: 2px solid #81a7ee;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
+}
+
+.propertyBlock button:hover {
+  cursor: pointer;
+}
+
+.propertyBlock button {
+  width: 50%;
+  height: 1.3rem;
+  background-color: #81a7ee;
+  color: white;
+  font-weight: bold;
 }
 
 .propertyBlock img {
   box-sizing: border-box;
   width: 90%;
   margin: 0.3rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .landingContent {
+    display: none;
+  }
+
+  .landingPage {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .propertyRow {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #b4172c;
+    display: block;
+  }
+
+  .propertyBlock {
+    width: 100%;
+  }
 }

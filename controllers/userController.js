@@ -6,6 +6,90 @@ const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
+exports.postLogin = (req, res, next) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let loadedUser;
+
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        const error = new Error("User not Found");
+        error.statusCode = 401;
+        throw error;
+      }
+
+      loadedUser = user;
+      return bcrypt.compare(password, user.password);
+    })
+    .then(isMatch => {
+      if (!isMatch) {
+        const error = new Error("Incorrect Password");
+        error.statusCode = 401;
+        throw error;
+      }
+      const token = jwt.sign(
+        { email: loadedUser.email, userId: loadedUser._id, type: "user" },
+        "thisBookingsDotComSecret",
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({
+        token: token,
+        userId: loadedUser._id,
+        type: "user"
+      });
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+// post Register handles the user registration
+exports.postRegister = (req, res, next) => {
+  //destructure incoming data from client fetch request
+  const { name, surname, email, password, telNo, altNo } = req.body;
+
+  // see if the user database already contains a user with the email address, if
+  //it exists a error is sent to the user, else the user is registered in the database
+  User.findOne({ email: email })
+
+    .then(user => {
+      if (user) {
+        const error = new Error("User Already Exists");
+        error.statusCode = 401;
+        throw error;
+      } else {
+        bcrypt
+          .hash(password, 12)
+          .then(hashedPW => {
+            const newUser = new User({
+              name,
+              surname,
+              email,
+              password: hashedPW,
+              telNo,
+              altNo
+            });
+            return newUser.save();
+          })
+          .then(result => {
+            res.status(200).json({ message: "Entity Succesfully Saved" });
+          })
+          .catch(err => res.status(500).json({ message: "Server Error" }));
+      }
+    })
+
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 // The post search fundtion is called when a user submits a search request, it receives a
 // city parameter and return all documents from the data base that matched the search param.
 
@@ -84,77 +168,6 @@ exports.postBooking = (req, res, next) => {
       })
       .catch(err => console.log(err))
   );
-};
-
-exports.postLogin = (req, res, next) => {
-  let email = req.body.email;
-  let password = req.body.password;
-
-  let loadedUser;
-
-  User.findOne({ email: email })
-    .then(user => {
-      if (!user) {
-        res.status(404).json({ message: "No User Found" });
-      }
-
-      loadedUser = user;
-      return bcrypt.compare(password, user.password);
-    })
-    .then(isMatch => {
-      if (!isMatch) {
-        res.status(404).json({ message: "Password Incorrect" });
-      }
-      const token = jwt.sign(
-        { email: loadedUser.email, userId: loadedUser._id, type: 'user' },
-        "thisBookingsDotComSecret",
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({
-        token: token,
-        userId: loadedUser._id,
-        type: 'user'
-      });
-    })
-    .catch(err => console.log(err));
-};
-
-// post Register handles the user registration
-exports.postRegister = (req, res, next) => {
-  //destructure incoming data from client fetch request
-  const { name, surname, email, password, telNo, altNo } = req.body;
-
-  // see if the user database already contains a user with the email address, if
-  //it exists a error is sent to the user, else the user is registered in the database
-  User.findOne({ email: email })
-
-    .then(user => {
-      if (user) {
-        return res.status(404).json({ message: "User Already Exists" });
-      } else {
-        bcrypt
-          .hash(password, 12)
-          .then(hashedPW => {
-            const newUser = new User({
-              name,
-              surname,
-              email,
-              password: hashedPW,
-              telNo,
-              altNo
-            });
-            return newUser.save();
-          })
-          .then(result => {
-            res.status(200).json({ message: "Entity Succesfully Saved" });
-          })
-          .catch(err => res.status(500).json({ message: "Server Error" }));
-      }
-    })
-
-    .catch(err => {
-      console.log(err);
-    });
 };
 
 exports.getBookings = (req, res, next) => {

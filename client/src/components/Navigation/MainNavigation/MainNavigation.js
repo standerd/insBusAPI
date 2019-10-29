@@ -1,11 +1,10 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-import MobileToggle from '../MobileToggle/MobileToggle';
-import Logo from '../../Logo/Logo';
-import NavigationItems from '../NavigationItems/NavigationItems';
-
-import './MainNavigation.css';
+import MobileToggle from "../MobileToggle/MobileToggle";
+import Logo from "../../Logo/Logo";
+import NavigationItems from "../NavigationItems/NavigationItems";
+import "./MainNavigation.css";
 
 const mainNavigation = props => (
   <nav className="main-nav">
@@ -17,7 +16,17 @@ const mainNavigation = props => (
       </NavLink>
     </div>
 
-    
+    <ul className="main-nav__items">
+      <li
+        key={"home"}
+        className={["navigation-item", props.mobile ? "mobile" : ""].join(" ")}
+      >
+        <NavLink to={"/"} exact>
+          Home
+        </NavLink>
+      </li>
+    </ul>
+
     <div className="spacer" />
     <ul className="main-nav__items">
       <NavigationItems isAuth={props.isAuth} onLogout={props.onLogout} />

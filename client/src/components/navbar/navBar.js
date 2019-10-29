@@ -4,31 +4,63 @@ import "./navBar.css";
 
 //basic navbar for testing routing at the moment. to be redone.
 const navBar = () => (
-  <div className="navbar">
-    <ul className="alignLeft">
-      <li>
-        <Link to="/">LOGO</Link>
-      </li>
-      <li>
+
+
+  <nav className="main-nav">
+    {/* <MobileToggle onOpen={props.onOpenMobileNav} /> */}
+
+    <div className="main-nav__logo">
+      <Link to="/">
+        <p>Logo</p>
+      </Link>
+    </div>
+
+    
+    <div className="spacer" />
+    <ul className="main-nav__items">
+    <li>
         <Link to="/">Home</Link>
       </li>
       <li>
-        <Link to="/userBookings">My Bookings</Link>
+        <Link to="/userBookings">Bookings</Link>
       </li>
       <li>
-        <Link to="/userReg">Register User</Link>
+        <Link to="/userReg">Register</Link>
       </li>
       <li>
-        <Link to="addProperty">Entity Register</Link>
+        <Link to="addProperty">Reg Property</Link>
       </li>
       <li>
-        <Link to="/maintain">Entity Maintain</Link>
-      </li>
-      <li>
-        <Link to="/userLogin">User Login</Link>
+        <Link to="/maintain">Profile</Link>
       </li>
     </ul>
-  </div>
+  </nav>
+
+
+
+  // <div className="navbar">
+  //   <ul className="alignLeft">
+  //     <li>
+  //       <Link to="/">Home</Link>
+  //     </li>
+  //     <li>
+  //       <Link to="/userBookings">Bookings</Link>
+  //     </li>
+  //     <li>
+  //       <Link to="/userReg">Register</Link>
+  //     </li>
+  //     <li>
+  //       <Link to="addProperty">Reg Property</Link>
+  //     </li>
+  //     <li>
+  //       <Link to="/maintain">Profile</Link>
+  //     </li>
+
+  //     <li style={{marginLeft: "auto"}}>
+  //       <Link to="/userLogin">Login</Link>
+  //     </li>
+  //   </ul>
+  // </div>
 );
 
 export default navBar;

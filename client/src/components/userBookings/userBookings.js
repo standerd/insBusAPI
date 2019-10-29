@@ -46,8 +46,19 @@ class UserBookings extends Component {
   render() {
     let myBookings;
     let bookingsArray = this.state.bookings;
+    let message;
 
-    bookingsArray === null
+    bookingsArray === null ||
+    bookingsArray === undefined ||
+    bookingsArray.length === 0
+      ? (message = (
+          <h2 style={{ textAlign: "center", backgroundColor: "red" }}>
+            You have no active bookings
+          </h2>
+        ))
+      : (message = null);
+
+    bookingsArray === null || bookingsArray === undefined
       ? (myBookings = <div className="lds-hourglass"></div>)
       : (myBookings = bookingsArray.map((key, index) => {
           return (
@@ -87,6 +98,7 @@ class UserBookings extends Component {
     return (
       <div className="userBookings">
         <h1 style={{ textAlign: "center" }}>Booking Manager</h1>
+        {message}
         {myBookings}
       </div>
     );

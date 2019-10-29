@@ -1,14 +1,18 @@
 import React, { Component, Fragment } from "react";
 import LandingPage from "./components/landingPage/landingPage";
-import NavBar from "./components/navbar/navBar";
+import MainNavigation from "./components/Navigation/MainNavigation/MainNavigation";
+import MobileNavigation from "./components/Navigation/MobileNavigation/MobileNavigation";
 import Footer from "./components/footer/footer";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, withRouter } from "react-router-dom";
 import Booking from "../src/components/booking/booking";
 import AddProperty from "../src/components/propertyAdd/propertyAdd";
 import UserBookings from "../src/components/userBookings/userBookings";
 import UserReg from "../src/components/userReg/userReg";
 import UserLogin from "../src/components/userReg/userLogin/userLogin";
 import PropertyMaintain from "../src/components/propertyAdd/propMaintain/propMaintain";
+import Backdrop from "../src/components/Backdrop/Backdrop";
+import Toolbar from "../src/components/Toolbar/Toolbar";
+import Layout from "../src/components/Layout/Layout";
 
 import "./App.css";
 
@@ -19,7 +23,10 @@ class App extends Component {
     isAuth: false,
     token: null,
     userId: null,
-    type: null
+    type: null,
+    showBackdrop: false,
+    showMobileNav: false,
+    error: false
   };
 
   loginHandler = e => {
@@ -35,17 +42,25 @@ class App extends Component {
         password: this.state.password
       })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          console.log("Error!");
+          throw new Error("Could not authenticate you!");
+        }
+        return res.json();
+      })
       .then(resData => {
-        this.setState(
-          {
-            isAuth: true,
-            token: resData.token,
-            userId: resData.userId,
-            type: resData.type
-          },
-          () => console.log(this.state.userId)
-        );
+        console.log(resData.status);
+        this.setState({
+          isAuth: true,
+          token: resData.token,
+          userId: resData.userId,
+          type: resData.type,
+          error: false
+        });
         localStorage.setItem("token", resData.token);
         localStorage.setItem("userId", resData.userId);
         localStorage.setItem("type", resData.type);
@@ -54,16 +69,25 @@ class App extends Component {
         const tokenExpiry = new Date(new Date().getTime() + remainingTime);
         localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          isAuth: false,
+          authLoading: false,
+          error: true
+        });
+      });
   };
 
   logoutHandler = () => {
-    this.setState({ isAuth: false, token: null, userId: null });
+    this.setState({ isAuth: false, token: null, userId: null, type: "" });
 
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("tokenExpiry");
     localStorage.removeItem("type");
+
+    this.props.history.push("/");
   };
 
   componentDidMount() {
@@ -94,6 +118,14 @@ class App extends Component {
     this.setState({ [name]: e.target.value });
   };
 
+  mobileNavHandler = isOpen => {
+    this.setState({ showMobileNav: isOpen, showBackdrop: isOpen });
+  };
+
+  backdropClickHandler = () => {
+    this.setState({ showBackdrop: false, showMobileNav: false, error: null });
+  };
+
   render() {
     let routes;
 
@@ -101,9 +133,9 @@ class App extends Component {
       routes = (
         <Fragment>
           <Route path="/" exact component={LandingPage} />
-          <Route path="/userReg" component={UserReg} />
+          <Route path="/regUser" component={UserReg} />
           <Route
-            path="/userLogin"
+            path="/loginUser"
             render={() => (
               <UserLogin
                 {...this.props}
@@ -112,6 +144,7 @@ class App extends Component {
                 changeHandler={this.changeHandler}
                 email={this.state.email}
                 password={this.state.password}
+                error={this.state.error}
               />
             )}
           />
@@ -137,7 +170,29 @@ class App extends Component {
 
     return (
       <div className="App">
-        <NavBar />
+        {this.state.showBackdrop && (
+          <Backdrop onClick={this.backdropClickHandler} />
+        )}
+        <Layout
+          header={
+            <Toolbar>
+              <MainNavigation
+                onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
+                onLogout={this.logoutHandler}
+                isAuth={this.state.isAuth}
+              />
+            </Toolbar>
+          }
+          mobileNav={
+            <MobileNavigation
+              open={this.state.showMobileNav}
+              mobile
+              onChooseItem={this.mobileNavHandler.bind(this, false)}
+              onLogout={this.logoutHandler}
+              isAuth={this.state.isAuth}
+            />
+          }
+        />
         {routes}
         <Footer />
       </div>
@@ -145,4 +200,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
