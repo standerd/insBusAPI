@@ -20,7 +20,8 @@ class Booking extends Component {
     postal: "",
     bookingCost: "",
     bookingNo: "",
-    bookingCompleted: false
+    bookingCompleted: false,
+    loading: false
   };
 
   // booking information capture details change handler
@@ -31,6 +32,7 @@ class Booking extends Component {
   // booking confirmation handler, submits the booking data to the server for database storage.
   confirmBooking = e => {
     e.preventDefault();
+    this.setState({ loading: true });
 
     let userId = localStorage.getItem("userId");
 
@@ -78,7 +80,7 @@ class Booking extends Component {
         this.setState({ bookingNo: result.booking }, () => {
           //booking completed controls if the user sees the booking info capture screen
           //or the booking confirmation screen.
-          this.setState({ bookingCompleted: true });
+          this.setState({ bookingCompleted: true, loading: false });
         });
       })
       .catch(err => console.log(err));
@@ -153,89 +155,97 @@ class Booking extends Component {
 
     //booking area is either the booking form or the booking confirmation depending
     //on wheether the booking was completed or not.
-    !this.state.bookingCompleted
-      ? (bookingArea = (
-          <div className="userDetails">
-            <h1>Please Complete Your Booking Below</h1>
-            <form>
-              <input
-                type="text"
-                placeholder="Your Name And Surname"
-                onChange={this.onChange("name")}
-              />
-              <input
-                type="text"
-                placeholder="Street Name"
-                onChange={this.onChange("street")}
-              />
-              <input
-                type="text"
-                placeholder="City Name"
-                onChange={this.onChange("city")}
-              />
-              <input
-                type="text"
-                placeholder="Postal Code"
-                onChange={this.onChange("postal")}
-              />
-              <input
-                type="text"
-                placeholder="Country Name"
-                onChange={this.onChange("country")}
-              />
-              <input
-                type="text"
-                placeholder="Confirm E-Mail Address"
-                onChange={this.onChange("email")}
-              />
-              <input
-                type="text"
-                placeholder="Contact Number 1"
-                onChange={this.onChange("contact1")}
-              />
-              <input
-                type="text"
-                placeholder="Contact Number 2"
-                onChange={this.onChange("contact2")}
-              />
-              <button type="submit" onClick={this.confirmBooking}>
-                Complete Booking
-              </button>
-              <h4>Or</h4>
-              <button onClick={this.cancelBooking}>Cancel Booking</button>
-            </form>
-            <h3>
-              We are working on an Electronic Payment Method, you will pay the
-              property on Arrival
-            </h3>
-          </div>
-        ))
-      : (bookingArea = (
-          <div className="bookingCompleted">
-            <h1 style={{ textAlign: "center" }}>Thank You For Your Booking</h1>
-            <br></br>
-            <h3 style={{ textAlign: "center" }}>
-              Your Booking No: {this.state.bookingNo}
-            </h3>
-            <br></br>
-            <h4>Important Information</h4>
-            <p>The Property Has Been Notified of Your Booking</p>
-            <p>
-              If You Need to Make Any Changes Please Do So From Your Booking
-              Manager
-            </p>
-            <p>
-              You Can Also View The Properties Direct Contact Details From There
-            </p>
-            <p>
-              Or Follow The Link On The Booking Management Please To Send Them
-              An Email
-            </p>
-            <Link to="/">Go To Home Page</Link> <br></br>
-            <br></br>
-            <Link to="/userBookings">View All Bookings</Link>
-          </div>
-        ));
+    if (!this.state.bookingCompleted && !this.state.loading) {
+      bookingArea = (
+        <div className="userDetails">
+          <h1>Please Complete Your Booking Below</h1>
+          <form>
+            <input
+              type="text"
+              placeholder="Your Name And Surname"
+              onChange={this.onChange("name")}
+            />
+            <input
+              type="text"
+              placeholder="Street Name"
+              onChange={this.onChange("street")}
+            />
+            <input
+              type="text"
+              placeholder="City Name"
+              onChange={this.onChange("city")}
+            />
+            <input
+              type="text"
+              placeholder="Postal Code"
+              onChange={this.onChange("postal")}
+            />
+            <input
+              type="text"
+              placeholder="Country Name"
+              onChange={this.onChange("country")}
+            />
+            <input
+              type="text"
+              placeholder="Confirm E-Mail Address"
+              onChange={this.onChange("email")}
+            />
+            <input
+              type="text"
+              placeholder="Contact Number 1"
+              onChange={this.onChange("contact1")}
+            />
+            <input
+              type="text"
+              placeholder="Contact Number 2"
+              onChange={this.onChange("contact2")}
+            />
+            <button type="submit" onClick={this.confirmBooking}>
+              Complete Booking
+            </button>
+            <h4>Or</h4>
+            <button onClick={this.cancelBooking}>Cancel Booking</button>
+          </form>
+          <h3>
+            We are working on an Electronic Payment Method, you will pay the
+            property on Arrival
+          </h3>
+        </div>
+      );
+    } else if (this.state.loading) {
+      bookingArea = (
+        <div className="bookingCompleted">
+          <div className="lds-hourglass"></div>
+        </div>
+      );
+    } else {
+      bookingArea = (
+        <div className="bookingCompleted">
+          <h1 style={{ textAlign: "center" }}>Thank You For Your Booking</h1>
+          <br></br>
+          <h3 style={{ textAlign: "center" }}>
+            Your Booking No: {this.state.bookingNo}
+          </h3>
+          <br></br>
+          <h4>Important Information</h4>
+          <p>The Property Has Been Notified of Your Booking</p>
+          <p>
+            If You Need to Make Any Changes Please Do So From Your Booking
+            Manager
+          </p>
+          <p>
+            You Can Also View The Properties Direct Contact Details From There
+          </p>
+          <p>
+            Or Follow The Link On The Booking Management Please To Send Them An
+            Email
+          </p>
+          <Link to="/">Go To Home Page</Link> <br></br>
+          <br></br>
+          <Link to="/userBookings">View All Bookings</Link>
+        </div>
+      );
+    }
 
     return (
       <div className="booking">

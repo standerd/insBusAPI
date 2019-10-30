@@ -1,0 +1,91 @@
+.toEditDetails {
+  width: 70%;
+  margin: 0 auto;
+  background-color: #81a7ee;
+  text-align: center;
+  line-height: 1.1rem;
+  padding: 3rem;
+  border: 2px solid #b4172c;
+  color: white;
+  font-weight: bold;
+}
+
+.toEditDetails h5 {
+  width: 80%;
+  margin: 2% auto;
+  padding: 1%;
+  background-color: #b4172c;
+  text-align: center;
+  line-height: 1.1rem;
+  color: white;
+  font-weight: bold;
+}
+.editForm input {
+  display: block;
+  width: 20%;
+  margin: 1% auto;
+  text-align: center;
+}
+
+.editForm button {
+  display: block;
+  width: 20%;
+  margin: 1% auto;
+  background-color: #b4172c;
+  color: white;
+  font-weight: bold;
+  padding: 0.2rem;
+}
+
+.editForm button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #b4172c;
+}
+
+.bookingContent {
+  width: 95%;
+  height: 95vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.contentPortion {
+  width: 47%;
+  border: 1px solid #b4172c;
+  padding: 0.5%;
+  margin-bottom: 0.5%;
+  line-height: 1.2rem;
+  background-color: #81a7ee;
+}
+
+@media only screen and (max-width: 768px) {
+  .editForm input {
+    display: block;
+    width: 40%;
+    margin: 2% auto;
+    text-align: center;
+  }
+
+  .toEditDetails {
+    margin: 1.5%;
+    line-height: 1.2rem;
+  }
+
+  .editForm button {
+    display: block;
+    width: 50%;
+    margin: 2% auto;
+  }
+
+  .toEditDetails h5 {
+    width: 90%;
+    margin: 3% auto;
+  }
+}

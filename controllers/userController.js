@@ -189,3 +189,90 @@ exports.getProperty = (req, res, next) => {
     .then(result => res.status(200).json({ details: result }))
     .catch(err => console.log(err));
 };
+
+exports.deleteBooking = (req, res, next) => {
+  let bookId = req.body.bookingID;
+  let occupation = req.body.occupation;
+  let enityID = req.body.entityID;
+
+  Booking.findOneAndDelete({ _id: bookId })
+    .then(result => {
+      Entity.updateMany(
+        { _id: enityID },
+        { $pull: { availability: { $in: occupation } } },
+        { multi: true }
+      )
+        .then(result =>
+          res.status(200).json({ message: "Booking has been deleted" })
+        )
+        .catch(err =>
+          res.status(404).json({ message: "Could not complete delete" })
+        );
+    })
+    .catch(err =>
+      res.status(404).json({ message: "Could not complete delete" })
+    );
+};
+
+exports.ammendBooking = (req, res, next) => {
+  let bookId = req.body.bookingID;
+  let currentOcc = req.body.currentOcc;
+  let occupation = req.body.occupation;
+  let checkIn = req.body.checkIn;
+  let checkOut = req.body.checkOut;
+  let guestCount = req.body.guestCount;
+  let entityID = req.body.entityID;
+
+  Entity.findOne({ _id: entityID })
+    .then(result => {
+      //before doing the check for availability on the changed dates, the old booking dates are removed
+      //from the availability data received from the Database and that is then used to compare against
+      //else the user can never book within period booked by himself again.
+      let isAvailable = false;
+      let availableDates = result.availability;
+      let index = availableDates.indexOf(currentOcc[0]);
+      let length = currentOcc.length;
+      availableDates.splice(index, length);
+
+      for (let i = 0; i < availableDates.length; i++) {
+        if (isAvailable) {
+          break;
+        }
+        isAvailable = availableDates.includes(occupation[i]);
+      }
+
+      if (!isAvailable) {
+        //remove the current occupation from the entity availability in the DB.
+        Entity.updateOne(
+          { _id: entityID },
+          { $pull: { availability: { $in: currentOcc } } },
+          { multi: true }
+        ).catch(err => console.log(err));
+        Entity.updateOne(
+          { _id: entityID },
+          { $push: { availability: { $each: occupation } } }
+        ).catch(err => console.log(err));
+        Booking.updateOne(
+          { _id: bookId },
+          {
+            $set: {
+              checkInDate: checkIn,
+              checkOutDate: checkOut,
+              guestCount: guestCount
+            }
+          }
+        ).catch(err => console.log(err));
+        res.status(200).json({ message: "We have space for you" });
+      } else {
+        res.status(404).json({ message: "We do not have space sorry" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(500)
+        .json({
+          message: "Could not find the booking, please try again later."
+        });
+    });
+};

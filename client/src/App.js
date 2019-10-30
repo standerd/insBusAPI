@@ -29,6 +29,7 @@ class App extends Component {
     error: false
   };
 
+  //user login handler
   loginHandler = e => {
     e.preventDefault();
 
@@ -53,6 +54,8 @@ class App extends Component {
         return res.json();
       })
       .then(resData => {
+        //sets user login status and jwt data in local storage, this allows for the users details to be sent
+        //inside the auth headers to access routes that are protected.
         console.log(resData.status);
         this.setState({
           isAuth: true,
@@ -79,9 +82,9 @@ class App extends Component {
       });
   };
 
+  // user logout handler, remove the jwt data from local storage and logs the user out.
   logoutHandler = () => {
     this.setState({ isAuth: false, token: null, userId: null, type: "" });
-
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("tokenExpiry");
@@ -91,6 +94,8 @@ class App extends Component {
   };
 
   componentDidMount() {
+    // authentication status is checked on component mount and if the users token had not yet expired
+    // the is login status is set to having been logged in.
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("tokenExpiry");
     const type = localStorage.getItem("type");
@@ -114,14 +119,17 @@ class App extends Component {
     });
   }
 
+  //login change handler that handles the users email and password input data.
   changeHandler = name => e => {
     this.setState({ [name]: e.target.value });
   };
 
+  // handles the mobile navigation hamburger icons click.
   mobileNavHandler = isOpen => {
     this.setState({ showMobileNav: isOpen, showBackdrop: isOpen });
   };
 
+  //if users click on the visisble space next to the mobile nav bar, the navbar is closed.
   backdropClickHandler = () => {
     this.setState({ showBackdrop: false, showMobileNav: false, error: null });
   };

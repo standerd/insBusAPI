@@ -14,4 +14,8 @@ router.get("/getProperty/:propId", userController.getProperty);
 
 router.post("/finaliseBooking", userController.postBooking);
 
+router.post("/removeBooking", userController.deleteBooking);
+
+router.post("/ammendBooking", userController.ammendBooking);
+
 module.exports = router;
