@@ -73,81 +73,84 @@ class UserReg extends Component {
   render() {
     return (
       <div className="userReg">
-        <h1
-          style={{
-            textAlign: "center",
-            color: "white",
-            backgroundColor: "#81a7ee",
-            margin: "1% 1%"
-          }}
-        >
-          User Registration
-        </h1>
-        <form>
-          <input
-            type="text"
-            placeholder="First Name"
-            onChange={this.onChange("name")}
-            value={this.state.name}
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            onChange={this.onChange("surname")}
-            value={this.state.surname}
-          />
-          <input
-            type="text"
-            placeholder="Telephone Number"
-            onChange={this.onChange("telNo")}
-            value={this.state.telNo}
-          />
-          <input
-            type="text"
-            placeholder="Alternative Number"
-            onChange={this.onChange("altNo")}
-            value={this.state.altNo}
-          />
-          <input
-            type="email"
-            placeholder="E-Mail Address"
-            onChange={this.onChange("email")}
-            value={this.state.email}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={this.onChange("password")}
-            value={this.state.password}
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            onChange={this.onChange("password2")}
-            value={this.state.password2}
-          />
-          <br></br>
-          {this.state.error ? (
-            <h3 style={{ color: "red" }}>
-              Passwords Do Not Match Please Try Again
-            </h3>
-          ) : null}
-          {this.state.error2 ? (
-            <h3 style={{ color: "red" }}>
-              Could not Register You, Make Sure the Email is Not Already Used
-            </h3>
-          ) : null}
-          <br></br>
-          <button type="submit" onClick={this.submitReg}>
+        <div className="overlay2">
+          <h1
+            style={{
+              textAlign: "center",
+              color: "white",
+
+              margin: "1% 1%"
+            }}
+          >
             Register
-          </button>
-        </form>
-        <p>Already Have An Account</p>
-        <Link to="/loginUser">Login Here</Link>
-        <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
-        <div className="oAuth2">
-          <button>Google</button>
-          <button>Facebook</button>
+          </h1>
+
+          <form>
+            <input
+              type="text"
+              placeholder="First Name"
+              onChange={this.onChange("name")}
+              value={this.state.name}
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              onChange={this.onChange("surname")}
+              value={this.state.surname}
+            />
+            <input
+              type="text"
+              placeholder="Telephone Number"
+              onChange={this.onChange("telNo")}
+              value={this.state.telNo}
+            />
+            <input
+              type="text"
+              placeholder="Alternative Number"
+              onChange={this.onChange("altNo")}
+              value={this.state.altNo}
+            />
+            <input
+              type="email"
+              placeholder="E-Mail Address"
+              onChange={this.onChange("email")}
+              value={this.state.email}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={this.onChange("password")}
+              value={this.state.password}
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              onChange={this.onChange("password2")}
+              value={this.state.password2}
+            />
+            <br></br>
+            {this.state.error ? (
+              <h3 style={{ color: "red" }}>
+                Passwords Do Not Match Please Try Again
+              </h3>
+            ) : null}
+            {this.state.error2 ? (
+              <h3 style={{ color: "red" }}>
+                Could not Register You, Make Sure the Email is Not Already Used
+              </h3>
+            ) : null}
+            <br></br>
+            <button type="submit" onClick={this.submitReg}>
+              Register
+            </button>
+          </form>
+          <p>Already Have An Account</p>
+          <Link to="/loginUser">Login Here</Link>
+          <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
+          <div className="oAuth2">
+            <button>Google</button>
+            <button>Facebook</button>
+          </div>
         </div>
       </div>
     );

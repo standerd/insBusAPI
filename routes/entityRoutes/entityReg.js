@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/register", entityController.postRegister);
 
-router.post("/login", entityController.postLogin);
+router.post("/entityLogin", entityController.postLogin);
 
 module.exports = router;

@@ -4,29 +4,55 @@
   flex-direction: row;
   text-align: center;
   box-sizing: border-box;
+  height: auto;
 }
 
 .landingContent {
   box-sizing: border-box;
   width: 75%;
   border: 1px solid black;
-  background-color: green;
-  height: auto;
+  background-image: url("../../images/landing.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 90vh;
   margin-bottom: 1rem;
   padding: 0 10%;
   justify-content: center;
+  position: relative;
+}
+
+.overLay {
+  background-color: rgba(8, 8, 8, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.landingContent h1 {
+  width: 100%;
+  padding: 0;
+  font-size: 1.8rem;
+  color: white;
+  margin-top: 35%;
+}
+
+.landingContent img {
+  width: 90%;
 }
 
 .searchResults {
   width: 100%;
   box-sizing: border-box;
+  background-color: rgba(8, 8, 8, 0.7);
+  margin-bottom: 1%;
 }
 
 .propertyRow {
   margin-top: 1rem;
   margin-bottom: 1rem;
   padding: 0.5rem;
-  border: 1px solid #b4172c;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -38,19 +64,22 @@
   height: auto;
   width: 33%;
   box-sizing: border-box;
-  border: 2px solid #81a7ee;
+  border: 2px solid black;
+  color: white;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
 }
 
 .propertyBlock button:hover {
   cursor: pointer;
+  color: black;
+  background-color: white;
 }
 
 .propertyBlock button {
   width: 50%;
   height: 1.3rem;
-  background-color: #81a7ee;
+  background-color: black;
   color: white;
   font-weight: bold;
 }
@@ -59,6 +88,7 @@
   box-sizing: border-box;
   width: 90%;
   margin: 0.3rem;
+  border: 1px solid white;
 }
 
 @media only screen and (max-width: 768px) {
@@ -70,13 +100,13 @@
     display: flex;
     flex-direction: column;
     text-align: center;
+    height: auto;
   }
 
   .propertyRow {
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 0.5rem;
-    border: 1px solid #b4172c;
     display: block;
   }
 

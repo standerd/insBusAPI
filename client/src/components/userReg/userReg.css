@@ -1,11 +1,28 @@
 .userReg {
-  width: 70%;
-  margin: 1% auto;
-  border: 1px solid #b4172c;
-  box-shadow: 0.5px 0.5px 1px #b4172c;
+  width: 100%;
+  margin: 0% auto 1% auto;
   text-align: center;
-  padding: 1%;
   box-sizing: border-box;
+  background-image: url("../../images/landing.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  color: white;
+  font-weight: bold;
+}
+
+.overlay2 {
+  background-color: rgba(8, 8, 8, 0.7);
+  padding: 1%;
+}
+
+.userReg form {
+  margin-top: 2%;
+}
+
+.userReg h1 {
+  border-bottom: 1px solid white;
+  padding-bottom: 1%;
 }
 
 .userReg input {
@@ -17,21 +34,24 @@
 }
 
 .userReg a {
-  color: #81a7ee;
+  color: white;
+  text-decoration: underline;
 }
 
 .oAuth2 {
+  display: block;
   width: 60%;
   margin: 1% auto;
 }
 
 .oAuth2 button {
-  margin-left: 5%;
-  margin-right: 5%;
+  display: block;
+  width: 60%;
+  margin: 1% auto;
 }
 
 .userReg button {
-  background-color: #81a7ee;
+  background-color: black;
   color: white;
   font-weight: bold;
   height: 1.5rem;
@@ -40,12 +60,13 @@
   height: auto;
   outline: none;
   width: 20%;
+  font-size: 1.15rem;
 }
 
 .userReg button:hover {
   cursor: pointer;
   background-color: white;
-  color: #81a7ee;
+  color: black;
 }
 
 @media only screen and (max-width: 768px) {
@@ -53,6 +74,11 @@
     width: 100%;
     margin-top: 12%;
   }
+  .userReg h1 {
+    border-bottom: 1px solid white;
+    padding-bottom: 2%;
+  }
+
   .userReg input {
     width: 90%;
   }
@@ -63,5 +89,6 @@
 
   .userReg button {
     width: 40%;
+    margin-bottom: 1%;
   }
 }

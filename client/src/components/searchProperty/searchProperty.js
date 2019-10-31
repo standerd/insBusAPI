@@ -1,5 +1,6 @@
 import React from "react";
 import SearchBox from "../googleSearch/newSearch";
+import { Link } from "react-router-dom";
 import "./searchProperty.css";
 
 // Search Property is the sidedrawer on the left of the screen during the user being allowed
@@ -50,7 +51,7 @@ const searchProperty = props => {
     // the change handler is called from the landing page component
     <div className="searchProperty">
       <div className="form">
-        <h3>Please Search Below</h3>
+        <h3>Search Properties</h3>
         <div className="searchBox">
           <SearchBox
             handleChange={props.handleChange}
@@ -88,6 +89,13 @@ const searchProperty = props => {
         <button onClick={props.searchSubmit} type="submit">
           Submit Search
         </button>
+
+        <div className="otherLogin">
+          <Link onClick={props.typeUpdate} to="/loginProperty">
+            Entity Login
+          </Link>
+          <Link to="/">Admin Login</Link>
+        </div>
       </div>
     </div>
   );

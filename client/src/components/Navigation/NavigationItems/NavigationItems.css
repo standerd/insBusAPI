@@ -25,7 +25,7 @@
 .navigation-item a:hover,
 .navigation-item a:active,
 .navigation-item a.active {
-  color: #b4172c;
+  color: black;
 }
 
 .navigation-item:last-of-type {

@@ -99,8 +99,8 @@ class PropertyAdd extends Component {
   render() {
     return (
       <div className="addProperty">
-        <h1>Please Complete Your Details Below to Register</h1>
         <form>
+          <h1>Please Complete Your Details Below to Register</h1>
           <input
             type="text"
             placeholder="Your Establishment Name"
@@ -108,7 +108,7 @@ class PropertyAdd extends Component {
             onChange={this.changeHandler("name")}
           />
           <select value={this.state.type} onChange={this.changeHandler("type")}>
-            <option value="">Please Select Establishment Type</option>
+            <option value="">Select Establishment Type</option>
             <option value="Hotel">Hotel</option>
             <option value="Guest House">Guest House</option>
             <option value="Apartment">Apartment</option>
@@ -201,71 +201,96 @@ class PropertyAdd extends Component {
             onChange={this.changeHandler("description")}
           />
           <h2>Please Select Your Property Facilities From the Below Options</h2>
-          <label>Airport Transfer</label>
-          <input
-            type="checkBox"
-            value={0}
-            name="Airport Transfer"
-            key="airport"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Swimming Pool</label>
-          <input
-            type="checkBox"
-            value={1}
-            name="Swimming Pool"
-            key="pool"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Concierge Desk</label>
-          <input
-            type="checkBox"
-            value={2}
-            name="Concierge Desk"
-            key="conceierge"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Wifi</label>
-          <input
-            type="checkBox"
-            value={3}
-            name="Wifi"
-            key="wifi"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Room Service</label>
-          <input
-            type="checkBox"
-            value={4}
-            name="Room Service"
-            key="roomSevice"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Tee and Coffee Facilities</label>
-          <input
-            type="checkBox"
-            value={5}
-            name="Tea and Coffee Facilities"
-            key="teaCoffee"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Gymnasium</label>
-          <input
-            type="checkBox"
-            value={6}
-            name="Gymnasium"
-            key="gym"
-            onChange={this.changeCheckHandler}
-          />
-          <label>Bicyle Rental</label>
-          <input
-            type="checkBox"
-            value={7}
-            name="Bicycle Rental"
-            key="bikeRental"
-            onChange={this.changeCheckHandler}
-          />
+          <label htmlFor="at">
+            <input
+              type="checkBox"
+              id="at"
+              value={0}
+              name="Airport Transfer"
+              key="airport"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Airport Transfer
+          </label>
 
+          <label>
+            <input
+              type="checkBox"
+              value={1}
+              name="Swimming Pool"
+              key="pool"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Swimming Pool
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={2}
+              name="Concierge Desk"
+              key="conceierge"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Concierge Desk
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={3}
+              name="Wifi"
+              key="wifi"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Wifi
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={4}
+              name="Room Service"
+              key="roomSevice"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Room Service
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={5}
+              name="Tea and Coffee Facilities"
+              key="teaCoffee"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Tee and Coffee Facilities
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={6}
+              name="Gymnasium"
+              key="gym"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Gymnasium
+          </label>
+
+          <label>
+            <input
+              type="checkBox"
+              value={7}
+              name="Bicycle Rental"
+              key="bikeRental"
+              onChange={this.changeCheckHandler}
+            />{" "}
+            Bicyle Rental
+          </label>
+
+          <br></br>
           <button type="submit" onClick={this.onSubmitHandler}>
             Submit Form
           </button>

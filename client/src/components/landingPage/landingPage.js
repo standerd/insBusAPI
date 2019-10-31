@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./landingPage.css";
 import SearchProperty from "../searchProperty/searchProperty";
 import SearchResults from "../searchResults/searchResults";
-import Map from "../maps/map";
 import Modal from "react-modal";
 import PropDetails from "../propertyDetails/propertyDetails";
 import { withRouter } from "react-router-dom";
@@ -117,31 +116,11 @@ class LandingPage extends Component {
     !this.state.searching
       ? (resultsScreen = (
           <div className="landingContent">
-            <h1>Your Booking Information</h1>
-            <div>
-              <h3>Check In Date: {this.state.dateIn}</h3>
-              <h3>Check Out Date: {this.state.dateOut}</h3>
-              <h3>Number of Travellers: {this.state.noOfGuests}</h3>
-              <h3>Destination City: {this.state.city}</h3>
-              <div
-                style={{
-                  border: "2px solid #81a7ee",
-                  backgroundColor: "$81a7ee",
-                  padding: "2px"
-                }}
-              >
-                <Map
-                  lat={this.state.lat}
-                  lng={this.state.lng}
-                  markerArray={this.state.markerArray}
-                  initialLat={this.state.initialLat}
-                  initialLng={this.state.initialLng}
-                  zoom={this.state.zoom}
-                  selected={this.state.selected}
-                />
-              </div>
-
-              <br></br>
+            <div className="overLay">
+              <h1 className="heading">
+                Where Ever The Map Takes You We Have You Covered
+              </h1>
+              <hr></hr>
             </div>
           </div>
         ))
@@ -173,6 +152,8 @@ class LandingPage extends Component {
           handleSelect={this.handleSelect}
           city={this.state.city}
           searchSubmit={this.handleSearchSubmit}
+          type={this.props.type}
+          typeUpdate={this.props.typeUpdate}
         />
         {resultsScreen}
         <PropDetails

@@ -261,7 +261,7 @@ class UserBookings extends Component {
                   <div className="buttons">
                     <button
                       disabled
-                      style={{ backgroundColor: "white", color: "#81a7ee" }}
+                      style={{ backgroundColor: "white", color: "black" }}
                     >
                       Past Booking
                     </button>

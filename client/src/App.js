@@ -9,6 +9,7 @@ import AddProperty from "../src/components/propertyAdd/propertyAdd";
 import UserBookings from "../src/components/userBookings/userBookings";
 import UserReg from "../src/components/userReg/userReg";
 import UserLogin from "../src/components/userReg/userLogin/userLogin";
+import PropertyLogin from "../src/components/propertyAdd/propLogin/propLogin";
 import PropertyMaintain from "../src/components/propertyAdd/propMaintain/propMaintain";
 import Backdrop from "../src/components/Backdrop/Backdrop";
 import Toolbar from "../src/components/Toolbar/Toolbar";
@@ -20,13 +21,15 @@ class App extends Component {
   state = {
     email: "",
     password: "",
+    entityMail: "",
+    entityPassword: "",
     isAuth: false,
     token: null,
     userId: null,
-    type: null,
     showBackdrop: false,
     showMobileNav: false,
-    error: false
+    error: false,
+    type: "user"
   };
 
   //user login handler
@@ -71,6 +74,7 @@ class App extends Component {
         const remainingTime = 60 * 60 * 1000;
         const tokenExpiry = new Date(new Date().getTime() + remainingTime);
         localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
+        this.props.history.push("/userBookings");
       })
       .catch(err => {
         console.log(err);
@@ -84,7 +88,7 @@ class App extends Component {
 
   // user logout handler, remove the jwt data from local storage and logs the user out.
   logoutHandler = () => {
-    this.setState({ isAuth: false, token: null, userId: null, type: "" });
+    this.setState({ isAuth: false, token: null, userId: null, type: "user" });
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("tokenExpiry");
@@ -134,47 +138,122 @@ class App extends Component {
     this.setState({ showBackdrop: false, showMobileNav: false, error: null });
   };
 
-  render() {
-    let routes;
+  typeUpdate = () => {
+    this.setState({ type: "entity" }, () => {
+      console.log(this.state.type);
+    });
+  };
 
-    if (!this.state.isAuth) {
-      routes = (
-        <Fragment>
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/regUser" component={UserReg} />
-          <Route
-            path="/loginUser"
-            render={() => (
-              <UserLogin
-                {...this.props}
-                onLogin={this.loginHandler}
-                onLogout={this.logoutHandler}
-                changeHandler={this.changeHandler}
-                email={this.state.email}
-                password={this.state.password}
-                error={this.state.error}
-              />
-            )}
-          />
-          <Route path="/addproperty" component={AddProperty} />
-        </Fragment>
-      );
-    } else if (this.state.isAuth) {
-      routes = (
-        <Fragment>
-          <Route path="/" exact component={LandingPage} />
-          <Route path="/book" component={Booking} />
-          <Route path="/maintain" component={PropertyMaintain} />
-          <Route
-            path="/userBookings"
-            render={() => (
-              <UserBookings {...this.props} token={this.state.token} />
-            )}
-          />
-          <Redirect to="/" />
-        </Fragment>
-      );
-    }
+  entityLogin = e => {
+    e.preventDefault();
+    fetch("/entity/entityLogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: this.state.entityMail,
+        password: this.state.entityPassword
+      })
+    })
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          console.log("Error!");
+          throw new Error("Could not authenticate you!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        //sets entity login status and jwt data in local storage, this allows for the details to be sent
+        //inside the auth headers to access routes that are protected.
+        this.setState({
+          isAuth: true,
+          token: resData.token,
+          userId: resData.entityId,
+          type: resData.type,
+          error: false
+        });
+        localStorage.setItem("token", resData.token);
+        localStorage.setItem("userId", resData.entityId);
+        localStorage.setItem("type", resData.type);
+
+        const remainingTime = 60 * 60 * 1000;
+        const tokenExpiry = new Date(new Date().getTime() + remainingTime);
+        localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          isAuth: false,
+          authLoading: false,
+          error: true
+        });
+      });
+  };
+
+  entityChangeHandler = name => e => {
+    this.setState({ [name]: e.target.value });
+  };
+
+  render() {
+    let routes = (
+      <Fragment>
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <LandingPage
+              {...this.props}
+              type={this.state.type}
+              typeUpdate={this.typeUpdate.bind(this)}
+            />
+          )}
+        />
+        <Route path="/regUser" component={UserReg} />
+        <Route
+          path="/loginUser"
+          render={() => (
+            <UserLogin
+              {...this.props}
+              onLogin={this.loginHandler}
+              onLogout={this.logoutHandler}
+              changeHandler={this.changeHandler}
+              email={this.state.mail}
+              password={this.state.password}
+              error={this.state.error}
+            />
+          )}
+        />
+
+        <Route
+          path="/loginProperty"
+          render={() => (
+            <PropertyLogin
+              {...this.props}
+              entityLogin={this.entityLogin}
+              onLogout={this.logoutHandler}
+              entityChange={this.entityChangeHandler}
+              email={this.state.entityMail}
+              password={this.state.entityPassword}
+              error={this.state.error}
+            />
+          )}
+        />
+        <Route path="/book" component={Booking} />
+        <Route path="/maintain" component={PropertyMaintain} />
+        <Route
+          path="/userBookings"
+          render={() => (
+            <UserBookings {...this.props} token={this.state.token} />
+          )}
+        />
+        <Redirect to="/" />
+        <Route path="/addproperty" component={AddProperty} />
+      </Fragment>
+    );
 
     return (
       <div className="App">
@@ -188,6 +267,7 @@ class App extends Component {
                 onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
                 onLogout={this.logoutHandler}
                 isAuth={this.state.isAuth}
+                type={this.state.type}
               />
             </Toolbar>
           }
@@ -198,6 +278,7 @@ class App extends Component {
               onChooseItem={this.mobileNavHandler.bind(this, false)}
               onLogout={this.logoutHandler}
               isAuth={this.state.isAuth}
+              type={this.state.type}
             />
           }
         />

@@ -63,14 +63,19 @@ const searchResults = props => {
   return (
     <div>
       <h1
-        style={{ backgroundColor: "#81a7ee", color: "white", marginTop: "0" }}
+        style={{
+          backgroundColor: "rgba(0,0,0,0.9)",
+          color: "white",
+          margin: "0.5%",
+          border: "0.8px solid white"
+        }}
       >
         Search Results
       </h1>
       <div
         style={{
-          border: "1px solid #81a7ee",
-          backgroundColor: "#81a7ee",
+          border: "1px solid black",
+          backgroundColor: "black",
           padding: "0.1rem"
         }}
       >

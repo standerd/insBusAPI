@@ -15,6 +15,52 @@ const googleMapsClient = require("@google/maps").createClient({
   Promise: Promise
 });
 
+exports.postLogin = (req, res, next) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let loadedEntity;
+
+  Entity.findOne({ email: email })
+    .then(entity => {
+      if (!entity) {
+        const error = new Error("User not Found");
+        error.statusCode = 401;
+        throw error;
+      }
+
+      loadedEntity = entity;
+      return bcrypt.compare(password, entity.password);
+    })
+    .then(isMatch => {
+      if (!isMatch) {
+        const error = new Error("Incorrect Password");
+        error.statusCode = 401;
+        throw error;
+      }
+      const token = jwt.sign(
+        {
+          email: loadedEntity.email,
+          entityId: loadedEntity._id,
+          type: "entity"
+        },
+        "thisBookingsDotComSecretEntity",
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({
+        token: token,
+        entityId: loadedEntity._id,
+        type: "entity"
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
 exports.postRegister = (req, res, next) => {
   // destructure the incoming data from the client.
 
@@ -123,38 +169,6 @@ exports.getBookings = (req, res, next) => {
       } else {
         res.status(200).json({ bookings: result });
       }
-    })
-    .catch(err => console.log(err));
-};
-
-exports.postLogin = (req, res, next) => {
-  let email = req.body.email;
-  let password = req.body.password;
-
-  let loadedEntity;
-
-  Entity.findOne({ email: email })
-    .then(entity => {
-      if (!entity) {
-        res.status(404).json({ message: "No User Found" });
-      }
-
-      loadedEntity = entity;
-      return bcrypt.compare(password, entity.password);
-    })
-    .then(isMatch => {
-      if (!isMatch) {
-        res.status(404).json({ message: "Password Incorrect" });
-      }
-      const token = jwt.sign(
-        { email: loadedEntity.email, entityId: loadedEntity._id },
-        "thisBookingsDotComSecret",
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({
-        token: token,
-        entityId: loadedEntity._id
-      });
     })
     .catch(err => console.log(err));
 };
