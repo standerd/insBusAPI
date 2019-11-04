@@ -5,15 +5,18 @@
   background-repeat: no-repeat;
   background-size: cover;
   margin-bottom: 3rem;
-  padding: 1rem 0;
   height: auto;
   color: white;
   text-align: center;
 }
 
-.addProperty form {
+.backgroundBlur {
   background-color: rgba(8, 8, 8, 0.8);
-  width: 80%;
+  padding-bottom: 1%;
+}
+
+.addProperty form {
+  width: 70%;
   padding: 2%;
   display: block;
   margin: 1% auto;
@@ -31,6 +34,10 @@
   text-align: center;
   font-size: 1.1rem;
   font-weight: bold;
+}
+
+.addProperty textarea {
+  width: 70%;
 }
 
 option {
@@ -72,6 +79,13 @@ option {
 .addProperty button:hover {
   color: black;
   background-color: white;
+  cursor: pointer;
+}
+
+.backgroundBlur a {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 768px) {
@@ -88,5 +102,9 @@ option {
   .addProperty select {
     width: 90%;
     background: white;
+  }
+
+  .addProperty textarea {
+    width: 90%;
   }
 }

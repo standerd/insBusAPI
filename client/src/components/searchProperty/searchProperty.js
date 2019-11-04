@@ -14,6 +14,7 @@ const searchProperty = props => {
   let checkInLimitMonth = today.getMonth() + 1;
   let checkInLimit;
   let checkOutLimit;
+  let links;
 
   // calculation of the number of nights for the booking.
   props.dateOut === "" || props.dateIn === ""
@@ -47,55 +48,95 @@ const searchProperty = props => {
         "-" +
         (checkIn.getDate() + 1));
 
+  //check the current user type and set the links to change the user type accodingly.
+  if (props.type === "user") {
+    links = (
+      <div className="otherLogin">
+        <h4>Other Login</h4>
+        <Link id="entity" onClick={props.typeUpdate} to="/loginProperty">
+          Entity Login
+        </Link>
+        <Link id="admin" onClick={props.typeUpdate} to="/">
+          Admin Login
+        </Link>
+      </div>
+    );
+  } else if (props.type === "entity") {
+    links = (
+      <div className="otherLogin">
+        <h4>Other Login</h4>
+        <Link id="user" onClick={props.typeUpdate} to="/loginUser">
+          User Login
+        </Link>
+        <Link id="admin" onClick={props.typeUpdate} to="/">
+          Admin Login
+        </Link>
+      </div>
+    );
+  } else {
+    links = (
+      <div className="otherLogin">
+        <h4>Other Login</h4>
+        <Link id="entity" onClick={props.typeUpdate} to="/loginProperty">
+          Entity Login
+        </Link>
+        <Link id="user" onClick={props.typeUpdate} to="/loginUser">
+          User Login
+        </Link>
+      </div>
+    );
+  }
+
   return (
     // the change handler is called from the landing page component
     <div className="searchProperty">
       <div className="form">
-        <h3>Search Properties</h3>
-        <div className="searchBox">
-          <SearchBox
-            handleChange={props.handleChange}
-            address={props.city}
-            handleSelect={props.handleSelect}
+        <form onSubmit={props.searchSubmit}>
+          <h3>Search Properties</h3>
+          <div className="searchBox">
+            <SearchBox
+              handleChange={props.handleChange}
+              address={props.city}
+              handleSelect={props.handleSelect}
+            />
+          </div>
+          <br></br>
+          <label>Check In Date</label>
+          <input
+            type="date"
+            name="in"
+            value={props.dateIn}
+            onChange={props.changeHandler("dateIn")}
+            min={checkInLimit.toString()}
+            required
           />
-        </div>
-        <br></br>
-        <label>Check In Date</label>
-        <input
-          type="date"
-          name="in"
-          value={props.dateIn}
-          onChange={props.changeHandler("dateIn")}
-          min={checkInLimit.toString()}
-        />
-        <label>Check Out Date </label>
-        <input
-          type="date"
-          name="out"
-          value={props.dateOut}
-          onChange={props.changeHandler("dateOut")}
-          min={checkOutLimit.toString()}
-        />
+          <label>Check Out Date </label>
+          <input
+            type="date"
+            name="out"
+            value={props.dateOut}
+            onChange={props.changeHandler("dateOut")}
+            min={checkOutLimit.toString()}
+            required
+          />
 
-        <label>No of Nights </label>
-        <p>{days}</p>
-        <label>No of Travellers </label>
-        <input
-          onChange={props.changeHandler("noOfGuests")}
-          type="number"
-          min="1"
-          defaultValue="1"
-        ></input>
-        <button onClick={props.searchSubmit} type="submit">
-          Submit Search
-        </button>
+          <label>No of Nights </label>
+          <p>{days}</p>
+          <label>No of Travellers </label>
+          <input
+            onChange={props.changeHandler("noOfGuests")}
+            type="number"
+            min="1"
+            value={props.noOfGuests}
+            required
+          ></input>
+          <button type="submit">Submit Search</button>
+        </form>
+        <h4 style={{ color: "red" }}>
+          {props.valid ? "" : "Please Select City"}
+        </h4>
 
-        <div className="otherLogin">
-          <Link onClick={props.typeUpdate} to="/loginProperty">
-            Entity Login
-          </Link>
-          <Link to="/">Admin Login</Link>
-        </div>
+        {links}
       </div>
     </div>
   );

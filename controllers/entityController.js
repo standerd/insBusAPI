@@ -93,39 +93,48 @@ exports.postRegister = (req, res, next) => {
 
         .then(entity => {
           if (entity) {
-            return res.status(404).json({ message: "User Already Exists" });
+            const error = new Error("User Already Exists");
+            error.statusCode = 401;
+            throw error;
           } else {
             // if the email was not found a new entity is stored to the database.
-            bcrypt.hash(password, 12).then(hashedPW => {
-              const newEntity = new Entity({
-                name,
-                entityType,
-                street,
-                suburb,
-                city,
-                country,
-                postalCode,
-                long: response.json.results[0].geometry.location.lng,
-                lat: response.json.results[0].geometry.location.lat,
-                telNo,
-                altNo,
-                email,
-                userName,
-                password: hashedPW,
-                facilities,
-                offPeakRates,
-                peakRates,
-                description
-              });
-              return newEntity.save(() => {
+            bcrypt
+              .hash(password, 12)
+              .then(hashedPW => {
+                const newEntity = new Entity({
+                  name,
+                  entityType,
+                  street,
+                  suburb,
+                  city,
+                  country,
+                  postalCode,
+                  long: response.json.results[0].geometry.location.lng,
+                  lat: response.json.results[0].geometry.location.lat,
+                  telNo,
+                  altNo,
+                  email,
+                  userName,
+                  password: hashedPW,
+                  facilities,
+                  offPeakRates,
+                  peakRates,
+                  description
+                });
+                return newEntity.save();
+              })
+              .then(result => {
                 res.status(200).json({ message: "Entity Succesfully Saved" });
-              });
-            });
+              })
+              .catch(err => res.status(500).json({ message: "Server Error" }));
           }
         })
 
         .catch(err => {
-          console.log(err);
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
         });
     })
 
@@ -161,8 +170,10 @@ exports.putAvailability = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//get the enity bookings from the bookings collection in the database. The Entity ID to collect
+// is contained in the Auth Header sent from the client.
 exports.getBookings = (req, res, next) => {
-  Booking.find({ propertyId: "5d9e18f13c0dd418c43bb793" })
+  Booking.find({ propertyId: req.userId })
     .then(result => {
       if (!result) {
         res.status(500).json({ data: "No Bookings Found for User" });

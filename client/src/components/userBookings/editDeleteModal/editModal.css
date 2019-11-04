@@ -1,11 +1,11 @@
 .toEditDetails {
   width: 70%;
   margin: 0 auto;
-  background-color: #81a7ee;
+  background-color: black;
   text-align: center;
   line-height: 1.1rem;
   padding: 3rem;
-  border: 2px solid #b4172c;
+  border: 2px solid white;
   color: white;
   font-weight: bold;
 }
@@ -14,7 +14,7 @@
   width: 80%;
   margin: 2% auto;
   padding: 1%;
-  background-color: #b4172c;
+  background-color: rgb(66, 61, 61);
   text-align: center;
   line-height: 1.1rem;
   color: white;
@@ -31,7 +31,7 @@
   display: block;
   width: 20%;
   margin: 1% auto;
-  background-color: #b4172c;
+  background-color: rgb(66, 61, 61);
   color: white;
   font-weight: bold;
   padding: 0.2rem;
@@ -56,14 +56,14 @@
   text-align: center;
 }
 
-.contentPortion {
+/* .contentPortion {
   width: 47%;
   border: 1px solid #b4172c;
   padding: 0.5%;
   margin-bottom: 0.5%;
   line-height: 1.2rem;
   background-color: #81a7ee;
-}
+} */
 
 @media only screen and (max-width: 768px) {
   .editForm input {

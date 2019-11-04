@@ -4,6 +4,7 @@
   background-color: #ccc;
   text-align: center;
   line-height: 0.8rem;
+  color: white;
 }
 
 .exitButton {
@@ -11,9 +12,31 @@
   width: 30%;
   height: 25px;
   margin-left: auto;
-  background-color: #b4172c;
+  background-color: rgb(66, 61, 61);
   color: white;
   font-weight: bold;
+}
+
+.exitButton:hover {
+  cursor: pointer;
+  background-color: white;
+  color: rgb(66, 61, 61);
+}
+
+.border {
+  border: 2px solid white;
+  padding: 2%;
+  margin: 0 2%;
+}
+
+.modalHead {
+  text-align: center;
+  background-color: rgb(66, 61, 61);
+  color: white;
+  height: auto;
+  padding: 0.5rem;
+  border: 2px solid white;
+  margin: 2% 2%;
 }
 
 .bookingContent {
@@ -27,21 +50,27 @@
   box-sizing: border-box;
   flex-wrap: wrap;
   text-align: center;
+  font-weight: bold;
 }
 
 .contentPortion {
   width: 47%;
-  border: 1px solid #b4172c;
+  border: 1px solid white;
   padding: 0.5%;
   margin-bottom: 0.5%;
   line-height: 1.2rem;
-  background-color: #81a7ee;
+  background-color: black;
+  color: white;
+}
+
+.contentPortion img {
+  border: 2px solid white;
 }
 
 @media only screen and (max-width: 768px) {
   .bookingContent {
     width: 98%;
-    height: 100vh;
+    height: auto;
     margin: 0 auto;
     display: block;
     flex-direction: column;
@@ -53,13 +82,11 @@
 
   .contentPortion {
     width: 95%;
-    border: 2px solid #b4172c;
     padding: 0.5%;
     padding-bottom: 2%;
     margin-bottom: 3%;
     line-height: 1.2rem;
     height: auto;
-    background-color: #81a7ee;
   }
 
   .contentPortion:nth-child(2) {
@@ -69,7 +96,6 @@
   .exitButton {
     text-align: center;
     width: auto;
-    background-color: #b4172c;
     height: 25px;
     margin-left: auto;
     margin-top: 2%;

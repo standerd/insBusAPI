@@ -14,7 +14,7 @@ class LandingPage extends Component {
     this.state = {
       dateIn: "",
       dateOut: "",
-      noOfGuests: "",
+      noOfGuests: "1",
       city: "",
       lat: "",
       zoomLevel: 3,
@@ -28,7 +28,8 @@ class LandingPage extends Component {
       amendSearch: false,
       modalIsOpen: false,
       displayID: "",
-      booking: false
+      booking: false,
+      valid: true
     };
 
     this.openModal = this.openModal.bind(this);
@@ -61,25 +62,29 @@ class LandingPage extends Component {
 
   //search component on click handler, once the search details is submitted, the data is
   //sent to the server as a POST request and the returned data is set to state.
-  handleSearchSubmit = () => {
-    fetch("/search/searchProperty", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        city: this.state.city
-      })
-    })
-      .then(res => res.json())
-      .then(result => {
-        this.setState({
-          searching: true,
-          searchArray: result.results,
-          amendSearch: false
-        });
-      })
-      .catch(err => console.log(err));
+  handleSearchSubmit = e => {
+    e.preventDefault();
+    this.state.city === ""
+      ? this.setState({ valid: false })
+      : fetch("/search/searchProperty", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            city: this.state.city
+          })
+        })
+          .then(res => res.json())
+          .then(result => {
+            this.setState({
+              searching: true,
+              searchArray: result.results,
+              amendSearch: false,
+              valid: true
+            });
+          })
+          .catch(err => console.log(err));
   };
 
   // property details modal, opening event handler
@@ -154,6 +159,8 @@ class LandingPage extends Component {
           searchSubmit={this.handleSearchSubmit}
           type={this.props.type}
           typeUpdate={this.props.typeUpdate}
+          noOfGuests={this.state.noOfGuests}
+          valid={this.state.valid}
         />
         {resultsScreen}
         <PropDetails

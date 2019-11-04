@@ -85,48 +85,55 @@ class UserReg extends Component {
             Register
           </h1>
 
-          <form>
+          <form onSubmit={this.submitReg}>
             <input
               type="text"
               placeholder="First Name"
               onChange={this.onChange("name")}
               value={this.state.name}
+              required
             />
             <input
               type="text"
               placeholder="Last Name"
               onChange={this.onChange("surname")}
               value={this.state.surname}
+              required
             />
             <input
               type="text"
               placeholder="Telephone Number"
               onChange={this.onChange("telNo")}
               value={this.state.telNo}
+              required
             />
             <input
               type="text"
               placeholder="Alternative Number"
               onChange={this.onChange("altNo")}
               value={this.state.altNo}
+              required
             />
             <input
               type="email"
               placeholder="E-Mail Address"
               onChange={this.onChange("email")}
               value={this.state.email}
+              required
             />
             <input
               type="password"
               placeholder="Password"
               onChange={this.onChange("password")}
               value={this.state.password}
+              required
             />
             <input
               type="password"
               placeholder="Confirm Password"
               onChange={this.onChange("password2")}
               value={this.state.password2}
+              required
             />
             <br></br>
             {this.state.error ? (
@@ -140,9 +147,7 @@ class UserReg extends Component {
               </h3>
             ) : null}
             <br></br>
-            <button type="submit" onClick={this.submitReg}>
-              Register
-            </button>
+            <button type="submit">Register</button>
           </form>
           <p>Already Have An Account</p>
           <Link to="/loginUser">Login Here</Link>

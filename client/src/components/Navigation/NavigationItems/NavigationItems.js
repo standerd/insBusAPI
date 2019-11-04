@@ -28,7 +28,7 @@ const navItems = [
   },
   {
     id: "maintain",
-    text: "Register",
+    text: "Maintain",
     link: "/maintain",
     auth: true,
     type: "entity"

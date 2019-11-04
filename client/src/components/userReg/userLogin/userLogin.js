@@ -20,7 +20,7 @@ const userLogin = props => {
           Login
         </h1>
         {error}
-        <form>
+        <form onSubmit={props.onLogin}>
           <label htmlFor="e-mail">Email Address </label>
           <input
             type="email"
@@ -37,9 +37,10 @@ const userLogin = props => {
             value={props.password}
             onChange={props.changeHandler("password")}
             placeholder="Password"
+            required={true}
           />
           <br></br>
-          <button onClick={props.onLogin}>Login</button>
+          <button type="submit">Login</button>
         </form>
 
         <div className="oAuth">

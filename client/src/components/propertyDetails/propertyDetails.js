@@ -31,11 +31,12 @@ class PropertyDetails extends Component {
   // main image contains 2 arrows to scroll through them, this is the function controlling the clicks.
   imgScroll = e => {
     let newIndex;
+
     if (e.target.id === "next" && this.state.imgIndex < images.length - 1) {
-      newIndex = this.state.imgIndex + 1;
+      newIndex = parseInt(this.state.imgIndex) + 1;
       this.setState({ imgIndex: newIndex });
     } else if (e.target.id === "back" && this.state.imgIndex > 0) {
-      newIndex = this.state.imgIndex - 1;
+      newIndex = parseInt(this.state.imgIndex) - 1;
       this.setState({ imgIndex: newIndex });
     }
   };

@@ -269,10 +269,8 @@ exports.ammendBooking = (req, res, next) => {
     })
     .catch(err => {
       console.log(err);
-      res
-        .status(500)
-        .json({
-          message: "Could not find the booking, please try again later."
-        });
+      res.status(500).json({
+        message: "Could not find the booking, please try again later."
+      });
     });
 };

@@ -14,6 +14,7 @@ import PropertyMaintain from "../src/components/propertyAdd/propMaintain/propMai
 import Backdrop from "../src/components/Backdrop/Backdrop";
 import Toolbar from "../src/components/Toolbar/Toolbar";
 import Layout from "../src/components/Layout/Layout";
+import EntityBookings from "../src/components/entityBookings/entityBookings"
 
 import "./App.css";
 
@@ -138,8 +139,8 @@ class App extends Component {
     this.setState({ showBackdrop: false, showMobileNav: false, error: null });
   };
 
-  typeUpdate = () => {
-    this.setState({ type: "entity" }, () => {
+  typeUpdate = e => {
+    this.setState({ type: e.target.id }, () => {
       console.log(this.state.type);
     });
   };
@@ -199,61 +200,93 @@ class App extends Component {
   };
 
   render() {
-    let routes = (
-      <Fragment>
-        <Route
-          path="/"
-          exact
-          render={() => (
-            <LandingPage
-              {...this.props}
-              type={this.state.type}
-              typeUpdate={this.typeUpdate.bind(this)}
-            />
-          )}
-        />
-        <Route path="/regUser" component={UserReg} />
-        <Route
-          path="/loginUser"
-          render={() => (
-            <UserLogin
-              {...this.props}
-              onLogin={this.loginHandler}
-              onLogout={this.logoutHandler}
-              changeHandler={this.changeHandler}
-              email={this.state.mail}
-              password={this.state.password}
-              error={this.state.error}
-            />
-          )}
-        />
+    let routes;
 
-        <Route
-          path="/loginProperty"
-          render={() => (
-            <PropertyLogin
-              {...this.props}
-              entityLogin={this.entityLogin}
-              onLogout={this.logoutHandler}
-              entityChange={this.entityChangeHandler}
-              email={this.state.entityMail}
-              password={this.state.entityPassword}
-              error={this.state.error}
-            />
-          )}
-        />
-        <Route path="/book" component={Booking} />
-        <Route path="/maintain" component={PropertyMaintain} />
-        <Route
-          path="/userBookings"
-          render={() => (
-            <UserBookings {...this.props} token={this.state.token} />
-          )}
-        />
-        <Redirect to="/" />
-        <Route path="/addproperty" component={AddProperty} />
-      </Fragment>
-    );
+    if (!this.state.isAuth) {
+      routes = (
+        <Fragment>
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <LandingPage
+                {...this.props}
+                type={this.state.type}
+                typeUpdate={this.typeUpdate.bind(this)}
+              />
+            )}
+          />
+          <Route path="/regUser" component={UserReg} />
+          <Route
+            path="/loginUser"
+            render={() => (
+              <UserLogin
+                {...this.props}
+                onLogin={this.loginHandler}
+                onLogout={this.logoutHandler}
+                changeHandler={this.changeHandler}
+                email={this.state.mail}
+                password={this.state.password}
+                error={this.state.error}
+              />
+            )}
+          />
+          <Route path="/addproperty" component={AddProperty} />
+          <Route
+            path="/loginProperty"
+            render={() => (
+              <PropertyLogin
+                {...this.props}
+                entityLogin={this.entityLogin}
+                onLogout={this.logoutHandler}
+                entityChange={this.entityChangeHandler}
+                email={this.state.entityMail}
+                password={this.state.entityPassword}
+                error={this.state.error}
+              />
+            )}
+          />
+        </Fragment>
+      );
+    } else if (this.state.isAuth && this.state.type === "user") {
+      routes = (
+        <Fragment>
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <LandingPage
+                {...this.props}
+                type={this.state.type}
+                typeUpdate={this.typeUpdate.bind(this)}
+              />
+            )}
+          />
+          <Route path="/book" component={Booking} />
+          <Route
+            path="/userBookings"
+            render={() => (
+              <UserBookings {...this.props} token={this.state.token} />
+            )}
+          />
+          <Redirect to="/" />
+        </Fragment>
+      );
+    } else if (this.state.isAuth && this.state.type === "entity") {
+      routes = (
+        <Fragment>
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <EntityBookings {...this.props} token={this.state.token} />
+            )}
+          />
+          <Route path="/maintain" component={PropertyMaintain} />
+          <Redirect to="/" />
+        </Fragment>
+      );
+    }
 
     return (
       <div className="App">
