@@ -4,10 +4,11 @@ import "./propMaintain.css";
 class UploadImage extends Component {
   state = {
     files: "",
-    id: "5da4a8541c9d4400001421d2",
     preview: "",
     dateIn: "",
-    dateOut: ""
+    dateOut: "",
+    updateError: false,
+    loaded: false
   };
 
   // handles the change of image name when the user selects and image
@@ -31,7 +32,10 @@ class UploadImage extends Component {
   onDateSubmit = e => {
     e.preventDefault();
     let occupation = [];
+    //on resubmit of the button the errors are reset.
+    this.setState({ updateError: false, loaded: false });
 
+    //set the date range that is included as an array with the request to the server.
     let myFirstDate = new Date(this.state.dateIn);
     let myLastDate = new Date(this.state.dateOut);
     let duration = parseInt((myLastDate - myFirstDate) / (1000 * 3600 * 24));
@@ -42,13 +46,32 @@ class UploadImage extends Component {
       myFirstDate = new Date(myFirstDate.setDate(myFirstDate.getDate() + 1));
     }
 
+    //sending Auth header so the data array is sent as a formData object.
+    const formData = new FormData();
+    formData.append("dateRange", occupation);
+
     fetch("/entityMaint/maintainDates", {
-      method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        Authorization: "Bearer " + this.props.token
       },
-      body: JSON.stringify({ dateRange: occupation, id: this.state.id })
-    });
+      method: "POST",
+      body: formData
+    })
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("No availability");
+        }
+        return res.json();
+      })
+      .then(result => {
+        this.setState({ loaded: true });
+      })
+      .catch(err => {
+        this.setState({ updateError: true });
+      });
   };
 
   // upload image handler, shows a img preview on click of the uploaded image to
@@ -60,9 +83,12 @@ class UploadImage extends Component {
     // is created to send the file data with the other normal body data.
     const formData = new FormData();
     formData.append("image", this.state.files);
-    formData.append("id", this.state.id);
 
     fetch("/entityMaint/uploadImg", {
+      headers: {
+        Authorization: "Bearer " + this.props.token
+      },
+
       method: "POST",
       body: formData
     })
@@ -74,6 +100,7 @@ class UploadImage extends Component {
   render() {
     return (
       <div className="maintain">
+        <h1>Upload Images or Maintain Availability Of Your Property</h1>
         <div className="uploadImages">
           <h1>Please Upload Images of Your Property Below</h1>
           <form>
@@ -99,6 +126,14 @@ class UploadImage extends Component {
             <label htmlFor="dateTo">Date To</label>
             <input name="dateTo" type="date" onChange={this.onDateOutChange} />
             <br></br>
+            {this.state.updateError ? (
+              <h2 style={{ color: "red" }}>
+                There are already bookings for these dates. Please review
+              </h2>
+            ) : null}
+            {this.state.loaded ? (
+              <h2 style={{ color: "green" }}>Dates successfully added</h2>
+            ) : null}
             <button type="submit" onClick={this.onDateSubmit}>
               Submit Dates
             </button>

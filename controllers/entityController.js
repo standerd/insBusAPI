@@ -15,6 +15,7 @@ const googleMapsClient = require("@google/maps").createClient({
   Promise: Promise
 });
 
+//entity login function.
 exports.postLogin = (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
@@ -145,7 +146,7 @@ exports.postRegister = (req, res, next) => {
 
 // entity image upload handler
 exports.postUpload = (req, res, next) => {
-  let id = req.body.id;
+  let id = req.entityId;
   let file = req.file.path;
 
   Entity.updateOne({ _id: id }, { $push: { images: file } })
@@ -155,25 +156,46 @@ exports.postUpload = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
-// entity availability upload handler
+// entity availability upload handler. The entity can add unavailable dates to the availability
+// array within the database collection. This might be due to a manual booking made by them or
+// maybe a period in which the property will be closed and not available for booking.
 exports.putAvailability = (req, res, next) => {
   let appendRange = req.body.dateRange;
-  let id = req.body.id;
+  let id = req.entityId;
 
-  Entity.updateOne(
-    { _id: id },
-    { $push: { availability: { $each: appendRange } } }
-  )
+  Entity.findOne({ _id: id })
     .then(result => {
-      res.status(200).json({ image: "Change MAde" });
+      let isAvailable = false;
+      let availableDates = result.availability;
+
+      //check for available dates and either updated the db or send an error message
+      //if the date are not available.
+      for (let i = 0; i < availableDates.length; i++) {
+        if (isAvailable) {
+          break;
+        }
+        isAvailable = availableDates.includes(appendRange.split(",")[i]);
+      }
+
+      if (!isAvailable) {
+        Entity.updateOne(
+          { _id: id },
+          { $push: { availability: { $each: appendRange.split(",") } } }
+        ).catch(err => res.status(500).json({ message: "Cannot Update" }));
+        res.status(200).json({ message: "Updated" });
+      } else res.status(404).json({ message: "No Availability" });
     })
-    .catch(err => console.log(err));
+
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 //get the enity bookings from the bookings collection in the database. The Entity ID to collect
 // is contained in the Auth Header sent from the client.
 exports.getBookings = (req, res, next) => {
-  Booking.find({ propertyId: req.userId })
+  console.log(req);
+  Booking.find({ propertyId: req.entityId })
     .then(result => {
       if (!result) {
         res.status(500).json({ data: "No Bookings Found for User" });

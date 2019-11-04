@@ -143,6 +143,7 @@ class LandingPage extends Component {
               dateOut={this.state.dateOut}
               amendSearch={this.state.amendSearch}
               openModal={this.openModal}
+              auth={this.props.isAuth}
             />
           </div>
         ));

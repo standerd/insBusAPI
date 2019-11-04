@@ -69,6 +69,9 @@ class Booking extends Component {
         city: this.state.city,
         country: this.state.country,
         postal: this.state.postal,
+        name: this.state.name,
+        email: this.state.email,
+        contact: this.state.contact1,
         bookingArray: occupation,
         destination: this.state.propertyDetails.city,
         imageSrc: this.state.propertyDetails.images[0],
@@ -159,50 +162,56 @@ class Booking extends Component {
       bookingArea = (
         <div className="userDetails">
           <h1>Please Complete Your Booking Below</h1>
-          <form>
+          <form onSubmit={this.confirmBooking}>
             <input
               type="text"
               placeholder="Your Name And Surname"
               onChange={this.onChange("name")}
+              required
             />
             <input
               type="text"
               placeholder="Street Name"
               onChange={this.onChange("street")}
+              required
             />
             <input
               type="text"
               placeholder="City Name"
               onChange={this.onChange("city")}
+              required
             />
             <input
               type="text"
               placeholder="Postal Code"
               onChange={this.onChange("postal")}
+              required
             />
             <input
               type="text"
               placeholder="Country Name"
               onChange={this.onChange("country")}
+              required
             />
             <input
               type="text"
               placeholder="Confirm E-Mail Address"
               onChange={this.onChange("email")}
+              required
             />
             <input
               type="text"
               placeholder="Contact Number 1"
               onChange={this.onChange("contact1")}
+              required
             />
             <input
               type="text"
               placeholder="Contact Number 2"
               onChange={this.onChange("contact2")}
+              required
             />
-            <button type="submit" onClick={this.confirmBooking}>
-              Complete Booking
-            </button>
+            <button type="submit">Complete Booking</button>
             <h4>Or</h4>
             <button onClick={this.cancelBooking}>Cancel Booking</button>
           </form>

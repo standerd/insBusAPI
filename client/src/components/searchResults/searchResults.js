@@ -36,8 +36,9 @@ const searchResults = props => {
     }
 
     //if property is not available the View Property button is disabled to not allow the user to
-    // view and book the propery
-    isAvailable
+    // view and book the propery, also if the user is not logged in, he is not able to the view
+    // the properties and make a booking.
+    isAvailable || !props.auth
       ? (button = null)
       : (button = (
           <button id={index} onClick={props.openModal}>
@@ -56,6 +57,9 @@ const searchResults = props => {
         <p>{key.facilities[2]}</p>
         <p>Available : {!isAvailable ? "Yes" : "No"}</p>
         {button}
+        <p style={{ color: "red" }}>
+          {!props.auth ? "Please Login To View" : null}
+        </p>
       </div>
     );
   });

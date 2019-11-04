@@ -1,34 +1,70 @@
-.maintain{
-    width: 90%;
-    background-color: green;
+.maintain {
+  width: 90%;
+  background-color: rgba(8, 8, 8, 0.8);
+  margin: 1% auto;
+  text-align: center;
+  padding: 1%;
+}
+
+.maintain h1 {
+  color: white;
+}
+
+.maintain input {
+  font-size: 1.3rem;
+  margin: 3%;
+  text-align: center;
+}
+
+.maintain button {
+  font-size: 1.3rem;
+  width: 15%;
+  background-color: black;
+  color: white;
+}
+
+.maintain button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.maintain label {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.file {
+  width: 30%;
+}
+
+.uploadImages,
+.availability {
+  border: 1px solid black;
+  margin: 1%;
+  height: auto;
+  padding: 1%;
+  background-color: rgba(8, 8, 8, 0.7);
+  color: white;
+}
+
+@media only screen and (max-width: 768px) {
+  .maintain {
+    width: 100%;
+    margin-top: 10%;
+  }
+
+  .maintain button {
+    display: block;
+    width: 50%;
     margin: 1% auto;
-    text-align: center;
-    padding: 1%;
-}
+  }
 
-.maintain input{
-    font-size: 1.3rem;
-    margin: 3%;
-    text-align: center;
-}
+  .maintain img {
+    width: 80%;
+  }
 
-.maintain button{
-    font-size: 1.3rem;
-    width: 15%;
-}
-
-.maintain label{
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.file{
-    width: 30%;
-}
-
-.uploadImages, .availability {
-    border: 1px solid black;
-    margin: 1%;
-    height: auto;
-    padding: 1%;
+  .maintain label {
+    display: block;
+  }
 }

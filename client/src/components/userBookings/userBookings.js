@@ -214,9 +214,7 @@ class UserBookings extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        this.setState({ bookings: result.bookings }, () =>
-          console.log(this.state.bookings)
-        );
+        this.setState({ bookings: result.bookings });
       });
   };
 
@@ -229,18 +227,18 @@ class UserBookings extends Component {
     let bookingsArray = this.state.bookings;
     let message;
 
-    bookingsArray === null ||
-    bookingsArray === undefined ||
-    bookingsArray.length === 0
-      ? (message = (
-          <h2 style={{ textAlign: "center", backgroundColor: "red" }}>
-            You have no active bookings
-          </h2>
-        ))
-      : (message = null);
+    if (bookingsArray === null || bookingsArray === undefined) {
+      message = <div className="lds-hourglass"></div>;
+    } else if (bookingsArray.length === 0) {
+      message = (
+        <h2 style={{ textAlign: "center", backgroundColor: "red" }}>
+          You have no active bookings
+        </h2>
+      );
+    }
 
     bookingsArray === null || bookingsArray === undefined
-      ? (myBookings = <div className="lds-hourglass"></div>)
+      ? (myBookings = null)
       : (myBookings = bookingsArray.map((key, index) => {
           return (
             <div key={key._id}>

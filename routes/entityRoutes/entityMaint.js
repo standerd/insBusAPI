@@ -5,8 +5,8 @@ const isAuth = require("../../middleware/isAuthEnt");
 
 // Controller handels all requests relating to the Entity maintaining their profile.
 
-router.post("/uploadImg", entityController.postUpload);
-router.put("/maintainDates", entityController.putAvailability);
+router.post("/uploadImg", isAuth, entityController.postUpload);
+router.post("/maintainDates", isAuth, entityController.putAvailability);
 
 router.get("/bookings", isAuth, entityController.getBookings);
 

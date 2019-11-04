@@ -17,7 +17,10 @@ const bookings = new Schema({
   bookingDate: { type: Date, require: true },
   destination: { type: String, require: true },
   imageSrc: { type: String, require: true },
-  entityName: { type: String, require: true }
+  entityName: { type: String, require: true },
+  name: { type: String, require: true },
+  email: { type: String, require: true },
+  contact: { type: String, require: true }
 });
 
 module.exports = mongoose.model("Booking", bookings);

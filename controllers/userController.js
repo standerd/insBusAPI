@@ -6,6 +6,7 @@ const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
+//user login handler.
 exports.postLogin = (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
@@ -128,7 +129,10 @@ exports.postBooking = (req, res, next) => {
     bookingArray,
     destination,
     imageSrc,
-    entityName
+    entityName,
+    email,
+    name,
+    contact
   } = req.body;
 
   // update the entity booked availability array to ensure that it cannot be booked a second time.
@@ -152,7 +156,10 @@ exports.postBooking = (req, res, next) => {
     postal,
     destination,
     imageSrc,
-    entityName
+    entityName,
+    name,
+    email,
+    contact
   });
 
   return (
@@ -170,6 +177,8 @@ exports.postBooking = (req, res, next) => {
   );
 };
 
+//get booking function, get Request from the client, finds all bookings for the user in
+//the database and send the a response containing all the usersbookings.
 exports.getBookings = (req, res, next) => {
   Booking.find({ userId: req.userId })
     .then(result => {
@@ -182,6 +191,8 @@ exports.getBookings = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+// if the users clicks on booking details from withing his booking manager, a request
+//is sent here to fetch the property details for the user to see displayed.
 exports.getProperty = (req, res, next) => {
   let property = req.params.propId;
 
@@ -190,6 +201,8 @@ exports.getProperty = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+// booking delete function, if a user wishes to delete a booking, a request is sent from
+//the client to this endpoint and the booking is deleterd.
 exports.deleteBooking = (req, res, next) => {
   let bookId = req.body.bookingID;
   let occupation = req.body.occupation;
@@ -197,6 +210,8 @@ exports.deleteBooking = (req, res, next) => {
 
   Booking.findOneAndDelete({ _id: bookId })
     .then(result => {
+      //the booking is not only removed from the bookings collection but the entity availability data
+      //is also updated to make the date range available again for future bookings.
       Entity.updateMany(
         { _id: enityID },
         { $pull: { availability: { $in: occupation } } },
@@ -214,6 +229,8 @@ exports.deleteBooking = (req, res, next) => {
     );
 };
 
+// users can ammend the dates and persons count of their bookings. This endpoint handles
+// the users request data and updated the booking and entity database collections accordingly.
 exports.ammendBooking = (req, res, next) => {
   let bookId = req.body.bookingID;
   let currentOcc = req.body.currentOcc;

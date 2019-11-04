@@ -14,7 +14,7 @@ import PropertyMaintain from "../src/components/propertyAdd/propMaintain/propMai
 import Backdrop from "../src/components/Backdrop/Backdrop";
 import Toolbar from "../src/components/Toolbar/Toolbar";
 import Layout from "../src/components/Layout/Layout";
-import EntityBookings from "../src/components/entityBookings/entityBookings"
+import EntityBookings from "../src/components/entityBookings/entityBookings";
 
 import "./App.css";
 
@@ -52,7 +52,6 @@ class App extends Component {
           throw new Error("Validation failed.");
         }
         if (res.status !== 200 && res.status !== 201) {
-          console.log("Error!");
           throw new Error("Could not authenticate you!");
         }
         return res.json();
@@ -60,7 +59,6 @@ class App extends Component {
       .then(resData => {
         //sets user login status and jwt data in local storage, this allows for the users details to be sent
         //inside the auth headers to access routes that are protected.
-        console.log(resData.status);
         this.setState({
           isAuth: true,
           token: resData.token,
@@ -78,7 +76,6 @@ class App extends Component {
         this.props.history.push("/userBookings");
       })
       .catch(err => {
-        console.log(err);
         this.setState({
           isAuth: false,
           authLoading: false,
@@ -139,12 +136,15 @@ class App extends Component {
     this.setState({ showBackdrop: false, showMobileNav: false, error: null });
   };
 
+  // user type is set on clicking the appropriate navigation button, this sets the login and
+  // registration navigation links accodingly.
   typeUpdate = e => {
     this.setState({ type: e.target.id }, () => {
       console.log(this.state.type);
     });
   };
 
+  // entity login function
   entityLogin = e => {
     e.preventDefault();
     fetch("/entity/entityLogin", {
@@ -202,6 +202,8 @@ class App extends Component {
   render() {
     let routes;
 
+    // unauthenticated routes, login and reg routes are set, the type is set clicking the appriate
+    // buttons on the landing page inside the search property side drawer, default is set to user.
     if (!this.state.isAuth) {
       routes = (
         <Fragment>
@@ -248,6 +250,8 @@ class App extends Component {
           />
         </Fragment>
       );
+
+      //if authenticated and the user type is set to user, the user NavLinks and routes are set below.
     } else if (this.state.isAuth && this.state.type === "user") {
       routes = (
         <Fragment>
@@ -259,6 +263,7 @@ class App extends Component {
                 {...this.props}
                 type={this.state.type}
                 typeUpdate={this.typeUpdate.bind(this)}
+                isAuth={this.state.isAuth}
               />
             )}
           />
@@ -272,6 +277,9 @@ class App extends Component {
           <Redirect to="/" />
         </Fragment>
       );
+
+      //if authenticated and the user type is set to entity the routes and navigation
+      //items are set accordingly.
     } else if (this.state.isAuth && this.state.type === "entity") {
       routes = (
         <Fragment>
@@ -282,7 +290,12 @@ class App extends Component {
               <EntityBookings {...this.props} token={this.state.token} />
             )}
           />
-          <Route path="/maintain" component={PropertyMaintain} />
+          <Route
+            path="/maintain"
+            render={() => (
+              <PropertyMaintain {...this.props} token={this.state.token} />
+            )}
+          />
           <Redirect to="/" />
         </Fragment>
       );

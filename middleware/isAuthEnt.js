@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 
+//entity authentication middleware, in order to ensure that a user cannot access any entity routes,
+//the entity middleware is set with a different secret, the incoming auth header is decoded and the
+//entity ID is set for use to get bookings and also for maintaining property details.
 module.exports = (req, res, next) => {
   const authHeader = req.get("Authorization");
 
