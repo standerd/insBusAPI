@@ -8,6 +8,7 @@ const userSearchRoute = require("./routes/userRoutes/userSearch");
 const entityRegRoute = require("./routes/entityRoutes/entityReg");
 const entityMaint = require("./routes/entityRoutes/entityMaint");
 const userAuth = require("./routes/userRoutes/userAuth");
+const admin = require("./routes/admin");
 const path = require("path");
 
 //intialise express app.
@@ -61,6 +62,7 @@ app.use("/entity", entityRegRoute);
 app.use("/entityMaint", entityMaint);
 app.use("/search", userSearchRoute);
 app.use("/user", userAuth);
+app.use("/admin", admin);
 
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets

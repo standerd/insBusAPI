@@ -15,6 +15,11 @@ import Backdrop from "../src/components/Backdrop/Backdrop";
 import Toolbar from "../src/components/Toolbar/Toolbar";
 import Layout from "../src/components/Layout/Layout";
 import EntityBookings from "../src/components/entityBookings/entityBookings";
+import AdminLogin from "../src/components/Admin/adminLogin/adminLogin";
+import AdminBookings from "../src/components/Admin/allBookings/allBookings";
+import AdminUsers from "../src/components/Admin/allUsers/allUsers";
+import AdminEntities from "../src/components/Admin/allEntities/allEntities";
+import AdminLand from "../src/components/Admin/adminLand/adminLand";
 
 import "./App.css";
 
@@ -139,9 +144,7 @@ class App extends Component {
   // user type is set on clicking the appropriate navigation button, this sets the login and
   // registration navigation links accodingly.
   typeUpdate = e => {
-    this.setState({ type: e.target.id }, () => {
-      console.log(this.state.type);
-    });
+    this.setState({ type: e.target.id });
   };
 
   // entity login function
@@ -199,6 +202,55 @@ class App extends Component {
     this.setState({ [name]: e.target.value });
   };
 
+  //user login handler
+  adminLoginHandler = e => {
+    e.preventDefault();
+
+    fetch("/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: this.state.email,
+        password: this.state.password
+      })
+    })
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Could not authenticate you!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        //sets user login status and jwt data in local storage, this allows for the users details to be sent
+        //inside the auth headers to access routes that are protected.
+        this.setState({
+          isAuth: true,
+          token: resData.token,
+          type: resData.type,
+          error: false
+        });
+        localStorage.setItem("token", resData.token);
+        localStorage.setItem("type", resData.type);
+
+        const remainingTime = 60 * 60 * 1000;
+        const tokenExpiry = new Date(new Date().getTime() + remainingTime);
+        localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
+        this.props.history.push("/");
+      })
+      .catch(err => {
+        this.setState({
+          isAuth: false,
+          authLoading: false,
+          error: true
+        });
+      });
+  };
+
   render() {
     let routes;
 
@@ -225,6 +277,20 @@ class App extends Component {
               <UserLogin
                 {...this.props}
                 onLogin={this.loginHandler}
+                onLogout={this.logoutHandler}
+                changeHandler={this.changeHandler}
+                email={this.state.mail}
+                password={this.state.password}
+                error={this.state.error}
+              />
+            )}
+          />
+          <Route
+            path="/adminLogin"
+            render={() => (
+              <AdminLogin
+                {...this.props}
+                onLogin={this.adminLoginHandler}
                 onLogout={this.logoutHandler}
                 changeHandler={this.changeHandler}
                 email={this.state.mail}
@@ -294,6 +360,34 @@ class App extends Component {
             path="/maintain"
             render={() => (
               <PropertyMaintain {...this.props} token={this.state.token} />
+            )}
+          />
+          <Redirect to="/" />
+        </Fragment>
+      );
+    } else if (this.state.isAuth && this.state.type === "admin") {
+      routes = (
+        <Fragment>
+          <Route path="/" exact component={AdminLand} />
+          <Route
+            path="/adminBookings"
+            exact
+            render={() => (
+              <AdminBookings {...this.props} token={this.state.token} />
+            )}
+          />
+          <Route
+            path="/adminUsers"
+            exact
+            render={() => (
+              <AdminUsers {...this.props} token={this.state.token} />
+            )}
+          />
+          <Route
+            path="/adminProps"
+            exact
+            render={() => (
+              <AdminEntities {...this.props} token={this.state.token} />
             )}
           />
           <Redirect to="/" />

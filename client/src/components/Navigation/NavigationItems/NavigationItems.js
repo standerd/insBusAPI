@@ -13,6 +13,34 @@ const navItems = [
   },
   { id: "login", text: "Login", link: "/loginUser", auth: false, type: "user" },
   {
+    id: "admBook",
+    text: "Bookings",
+    link: "/adminBookings",
+    auth: true,
+    type: "admin"
+  },
+  {
+    id: "admUsers",
+    text: "Users",
+    link: "/adminUsers",
+    auth: true,
+    type: "admin"
+  },
+  {
+    id: "admProps",
+    text: "Properties",
+    link: "/adminProps",
+    auth: true,
+    type: "admin"
+  },
+  {
+    id: "loginadmin",
+    text: "Login",
+    link: "/adminLogin",
+    auth: false,
+    type: "admin"
+  },
+  {
     id: "signup",
     text: "Register",
     link: "/regUser",

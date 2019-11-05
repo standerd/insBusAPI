@@ -54,9 +54,9 @@ const searchProperty = props => {
       <div className="otherLogin">
         <h4>Other Login</h4>
         <Link id="entity" onClick={props.typeUpdate} to="/loginProperty">
-          Entity Login
+          Property Login
         </Link>
-        <Link id="admin" onClick={props.typeUpdate} to="/">
+        <Link id="admin" onClick={props.typeUpdate} to="/adminLogin">
           Admin Login
         </Link>
       </div>
@@ -68,7 +68,7 @@ const searchProperty = props => {
         <Link id="user" onClick={props.typeUpdate} to="/loginUser">
           User Login
         </Link>
-        <Link id="admin" onClick={props.typeUpdate} to="/">
+        <Link id="admin" onClick={props.typeUpdate} to="/adminLogin">
           Admin Login
         </Link>
       </div>
@@ -78,7 +78,7 @@ const searchProperty = props => {
       <div className="otherLogin">
         <h4>Other Login</h4>
         <Link id="entity" onClick={props.typeUpdate} to="/loginProperty">
-          Entity Login
+          Property Login
         </Link>
         <Link id="user" onClick={props.typeUpdate} to="/loginUser">
           User Login
