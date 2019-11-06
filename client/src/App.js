@@ -166,6 +166,7 @@ class App extends Component {
     }
 
     const userId = localStorage.getItem("userId");
+    const remainingTime = new Date(expiryDate).getTime() - new Date().getTime();
 
     this.setState({
       isAuth: true,
@@ -173,6 +174,8 @@ class App extends Component {
       userId: userId,
       type: type
     });
+
+    this.setAutoLogout(remainingTime);
   }
 
   //login change handler that handles the users email and password input data.
@@ -298,6 +301,12 @@ class App extends Component {
           error: true
         });
       });
+  };
+
+  setAutoLogout = milliseconds => {
+    setTimeout(() => {
+      this.logoutHandler();
+    }, milliseconds);
   };
 
   render() {

@@ -29,7 +29,9 @@ class LandingPage extends Component {
       modalIsOpen: false,
       displayID: "",
       booking: false,
-      valid: true
+      valid: true,
+      showInfo: false,
+      markerIndex: ""
     };
 
     this.openModal = this.openModal.bind(this);
@@ -39,6 +41,8 @@ class LandingPage extends Component {
   //search component change handler.
   changeHandler = name => e => {
     this.setState({ [name]: e.target.value, amendSearch: true }, () => {
+      //if the user change his search dates and the dateIn becomes larger than the dateOut
+      //date Out is reset to no value.
       let dateIn = new Date(this.state.dateIn);
       let dateOut = new Date(this.state.dateOut);
       if (dateOut.getTime() < dateIn.getTime()) {
@@ -113,6 +117,14 @@ class LandingPage extends Component {
     });
   };
 
+  openWindow = index => {
+    this.setState({ showInfo: true, markerIndex: index });
+  };
+
+  closeWindow = () => {
+    this.setState({ showInfo: false });
+  };
+
   render() {
     let resultsScreen;
 
@@ -144,6 +156,24 @@ class LandingPage extends Component {
               amendSearch={this.state.amendSearch}
               openModal={this.openModal}
               auth={this.props.isAuth}
+              openWindow={this.openWindow}
+              closeWindow={this.closeWindow}
+              showInfo={this.state.showInfo}
+              propsName={
+                this.state.markerIndex === ""
+                  ? "No Info"
+                  : this.state.searchArray[this.state.markerIndex].name
+              }
+              propsLat={
+                this.state.markerIndex === ""
+                  ? "No Info"
+                  : this.state.searchArray[this.state.markerIndex].lat
+              }
+              propsLng={
+                this.state.markerIndex === ""
+                  ? "No Info"
+                  : this.state.searchArray[this.state.markerIndex].long
+              }
             />
           </div>
         ));

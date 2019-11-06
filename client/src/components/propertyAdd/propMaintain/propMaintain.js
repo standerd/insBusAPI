@@ -98,6 +98,43 @@ class UploadImage extends Component {
   };
 
   render() {
+    let today = new Date();
+    let checkIn = new Date(this.state.dateIn);
+    let checkOutLimitMonth = checkIn.getMonth() + 1;
+    let checkInLimitMonth = today.getMonth() + 1;
+    let checkInLimit;
+    let checkOutLimit;
+    let day;
+    let checkDay;
+
+    today.getDate() < 10
+      ? (day = "0" + today.getDate())
+      : (day = today.getDate().toString());
+    checkIn.getDate() < 10
+      ? (checkDay = "0" + (checkIn.getDate() + 1))
+      : (checkDay = checkIn.getDate() + 1);
+
+    console.log("checkoutlimi" + checkDay);
+
+    //first check if the months are single digits, if so a leading zero is added. and the date
+    // is contructed in the format expected by the HTML input calendar.
+    checkInLimitMonth < 10
+      ? (checkInLimit =
+          today.getFullYear() +
+          "-0" +
+          checkInLimitMonth +
+          "-" +
+          today.getDate())
+      : (checkInLimit =
+          today.getFullYear() + "-" + checkInLimitMonth + "-" + day);
+
+    checkOutLimitMonth < 10
+      ? (checkOutLimit =
+          checkIn.getFullYear() + "-0" + checkOutLimitMonth + "-" + checkDay)
+      : (checkOutLimit =
+          checkIn.getFullYear() + "-" + checkOutLimitMonth + "-" + checkDay);
+
+    console.log(checkInLimit);
     return (
       <div className="maintain">
         <h1>Upload Images or Maintain Availability Of Your Property</h1>
@@ -122,9 +159,21 @@ class UploadImage extends Component {
           <h1>Or Other Unavailable Dates</h1>
           <form>
             <label htmlFor="dateFrom">Date From</label>
-            <input name="dateFrom" type="date" onChange={this.onDateInChange} />
+            <input
+              name="dateFrom"
+              type="date"
+              value={this.state.dateIn}
+              min={checkInLimit.toString()}
+              onChange={this.onDateInChange}
+            />
             <label htmlFor="dateTo">Date To</label>
-            <input name="dateTo" type="date" onChange={this.onDateOutChange} />
+            <input
+              name="dateTo"
+              type="date"
+              onChange={this.onDateOutChange}
+              value={this.state.dateOut}
+              min={checkOutLimit.toString()}
+            />
             <br></br>
             {this.state.updateError ? (
               <h2 style={{ color: "red" }}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { GoogleMap, Marker, Data } from "@react-google-maps/api";
+import { GoogleMap, Marker, Data, InfoWindow } from "@react-google-maps/api";
 
 const map = props => {
   let markers;
@@ -18,10 +18,12 @@ const map = props => {
           }}
         />
       ))
-    : (markers = props.markerArray.map(key => {
+    : (markers = props.markerArray.map((key, index) => {
         return (
           <Marker
             key={key._id}
+            onClick={MouseEvent => props.openWindow(index)}
+            label={(index + 1).toString()}
             position={{
               lat: parseFloat(key.lat),
               lng: parseFloat(key.long)
@@ -46,6 +48,25 @@ const map = props => {
         }}
       >
         {markers}
+        {props.showInfo ? (
+          <InfoWindow
+            onCloseClick={() => props.closeWindow()}
+            position={{
+              lat: parseFloat(props.propsLat),
+              lng: parseFloat(props.propsLng)
+            }}
+          >
+            <div
+              style={{
+                background: `white`,
+                border: `1px solid #ccc`,
+                padding: 10
+              }}
+            >
+              <h1>{props.propsName}</h1>
+            </div>
+          </InfoWindow>
+        ) : null}
 
         <Data
           options={{

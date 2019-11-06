@@ -15,6 +15,15 @@ const searchProperty = props => {
   let checkInLimit;
   let checkOutLimit;
   let links;
+  let day;
+  let checkDay;
+
+  today.getDate() < 10
+    ? (day = "0" + today.getDate())
+    : (day = today.getDate().toString());
+  checkIn.getDate() < 10
+    ? (checkDay = "0" + (checkIn.getDate() + 1))
+    : (checkDay = checkIn.getDate() + 1);
 
   // calculation of the number of nights for the booking.
   props.dateOut === "" || props.dateIn === ""
@@ -30,23 +39,15 @@ const searchProperty = props => {
   // is contructed in the format expected by the HTML input calendar.
   checkInLimitMonth < 10
     ? (checkInLimit =
-        today.getFullYear() + "-0" + checkInLimitMonth + "-" + today.getDate())
+        today.getFullYear() + "-0" + checkInLimitMonth + "-" + day)
     : (checkInLimit =
-        today.getFullYear() + "-" + checkInLimitMonth + "-" + today.getDate());
+        today.getFullYear() + "-" + checkInLimitMonth + "-" + day);
 
   checkOutLimitMonth < 10
     ? (checkOutLimit =
-        checkIn.getFullYear() +
-        "-0" +
-        checkOutLimitMonth +
-        "-" +
-        (checkIn.getDate() + 1))
+        checkIn.getFullYear() + "-0" + checkOutLimitMonth + "-" + checkDay)
     : (checkOutLimit =
-        checkIn.getFullYear() +
-        "-" +
-        checkOutLimitMonth +
-        "-" +
-        (checkIn.getDate() + 1));
+        checkIn.getFullYear() + "-" + checkOutLimitMonth + "-" + checkDay);
 
   //check the current user type and set the links to change the user type accodingly.
   if (props.type === "user") {

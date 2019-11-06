@@ -91,6 +91,12 @@ const searchResults = props => {
           selected={props.selected}
           dateIn={props.dateIn}
           dateOut={props.dateOut}
+          openWindow={props.openWindow}
+          closeWindow={props.closeWindow}
+          showInfo={props.showInfo}
+          propsName={props.propsName}
+          propsLat={props.propsLat}
+          propsLng={props.propsLng}
         />
       </div>
 

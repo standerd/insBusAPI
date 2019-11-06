@@ -7,8 +7,18 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const { OAuth2Client } = require("google-auth-library");
 const KEY = require("../config/keys");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
 
 const client = new OAuth2Client(KEY.keys.googleLogin);
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      api_key: KEY.keys.mailer
+    }
+  })
+);
 
 //user login handler.
 exports.postLogin = (req, res, next) => {
@@ -149,6 +159,13 @@ exports.postRegister = (req, res, next) => {
             return newUser.save();
           })
           .then(result => {
+            transporter.sendMail({
+              to: email,
+              from: "traveller@travelling.co.za",
+              subject: "Signup succeeded!",
+              html:
+                "<h1>You successfully signed up!</h1><p>Thanks for signing up you can now login to you account with your account details and make bookings</p>"
+            });
             res.status(200).json({ message: "Entity Succesfully Saved" });
           })
           .catch(err => res.status(500).json({ message: "Server Error" }));
@@ -240,6 +257,12 @@ exports.postBooking = (req, res, next) => {
 
       //return the booking id to the client for confirmation purposes.
       .then(result => {
+        transporter.sendMail({
+          to: email,
+          from: "traveller@travelling.co.za",
+          subject: "Booking Successful",
+          html: `<h1>Booking Successful</h1><p>Thank you for your booking</p><p>Booking Reference No: ${result._id}</p><p>Property Name: ${entityName}</p><p>Check In Date: ${checkInDate}</p><p>Check Out Date: ${checkOutDate}</p><p>Cost: R ${totalBookingCost}</p><p>No of Guests: ${guestCount}</p>`
+        });
         res.status(200).json({
           message: "Booking Succesfully Created",
           booking: result._id

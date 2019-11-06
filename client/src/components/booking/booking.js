@@ -97,13 +97,12 @@ class Booking extends Component {
 
   // the state is set that is received from props on component mounting.
   componentDidMount() {
-    this.setState(
-      {
-        propertyDetails: this.props.location.state.propertyDetails,
-        dateIn: this.props.location.state.checkIn,
-        dateOut: this.props.location.state.checkOut,
-        occupants: this.props.location.state.occupants
-      });
+    this.setState({
+      propertyDetails: this.props.location.state.propertyDetails,
+      dateIn: this.props.location.state.checkIn,
+      dateOut: this.props.location.state.checkOut,
+      occupants: this.props.location.state.occupants
+    });
   }
 
   render() {
