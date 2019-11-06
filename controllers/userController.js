@@ -5,6 +5,10 @@ const User = require("../models/user");
 const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const { OAuth2Client } = require("google-auth-library");
+const KEY = require("../config/keys");
+
+const client = new OAuth2Client(KEY.keys.googleLogin);
 
 //user login handler.
 exports.postLogin = (req, res, next) => {
@@ -46,6 +50,74 @@ exports.postLogin = (req, res, next) => {
       }
       next(err);
     });
+};
+
+// google login handler
+exports.postGoogleLogin = async (req, res, next) => {
+  //a token is received from the client that Google returns when the user clicks on the google
+  //sign in button. This is sent to the server as part of the request.
+  const token = req.body.token;
+
+  //if the google verification fails and error message is received and handled by the catch method.
+  try {
+    //the token that is received is validated via the google verification method provided
+    //by them on the website.
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: KEY.keys.googleLogin
+    });
+    const payload = await ticket.getPayload();
+
+    // first check if the google id exists in the user database, if it does not the user is
+    // registered and then logged in automatically. If the user is found the user is logged in.
+
+    // NOTE - THIS IS WRONG - I only have access to my own gmail login account and I am also
+    // registering a user using my gmail e-mail address, so if I check Google sign against e-mail
+    // I cannot test it, so I am using the google Id to test with and creating a gmail field in the
+    // DB to avoid clashing on Google and normal log in. In production E-Mail should be used to ensure
+    // that users cannot register 2 accounts.
+    User.findOne({ googleId: payload.sub }).then(user => {
+      if (!user) {
+        const newUser = new User({
+          name: payload.given_name,
+          surname: payload.family_name,
+          gmail: payload.email,
+          googleId: payload.sub
+        });
+        return newUser
+          .save()
+          .then(result => {
+            const token = jwt.sign(
+              { email: result.gmail, userId: result._id, type: "user" },
+              "thisBookingsDotComSecret",
+              { expiresIn: "1h" }
+            );
+            res.status(200).json({
+              message: "User Logged In",
+              token: token,
+              userId: result._id,
+              type: "user"
+            });
+          })
+          .catch(err => console.log(err));
+      } else {
+        const token = jwt.sign(
+          { email: user.gmail, userId: user._id, type: "user" },
+          "thisBookingsDotComSecret",
+          { expiresIn: "1h" }
+        );
+        res.status(200).json({
+          message: "User Logged In",
+          token: token,
+          userId: user._id,
+          type: "user"
+        });
+      }
+    });
+  } catch {
+    console.log("There was an error");
+    res.json({ message: "There was an error with authenticating you" });
+  }
 };
 
 // post Register handles the user registration

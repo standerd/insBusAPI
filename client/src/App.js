@@ -89,6 +89,55 @@ class App extends Component {
       });
   };
 
+  responseGoogle = response => {
+    let token = response.Zi.id_token;
+    fetch("/user/googlelogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: token
+      })
+    })
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          console.log("Error!");
+          throw new Error("Could not authenticate you!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        //sets user login status and jwt data in local storage, this allows for the users details to be sent
+        //inside the auth headers to access routes that are protected.
+        this.setState({
+          isAuth: true,
+          token: resData.token,
+          userId: resData.userId,
+          type: resData.type,
+          error: false
+        });
+        localStorage.setItem("token", resData.token);
+        localStorage.setItem("userId", resData.userId);
+        localStorage.setItem("type", resData.type);
+
+        const remainingTime = 60 * 60 * 1000;
+        const tokenExpiry = new Date(new Date().getTime() + remainingTime);
+        localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
+        this.props.history.push("/userBookings");
+      })
+      .catch(err => {
+        this.setState({
+          isAuth: false,
+          authLoading: false,
+          error: true
+        });
+      });
+  };
+
   // user logout handler, remove the jwt data from local storage and logs the user out.
   logoutHandler = () => {
     this.setState({ isAuth: false, token: null, userId: null, type: "user" });
@@ -270,7 +319,12 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/regUser" component={UserReg} />
+          <Route
+            path="/regUser"
+            render={() => (
+              <UserReg {...this.props} responseGoogle={this.responseGoogle} />
+            )}
+          />
           <Route
             path="/loginUser"
             render={() => (
@@ -282,6 +336,7 @@ class App extends Component {
                 email={this.state.mail}
                 password={this.state.password}
                 error={this.state.error}
+                responseGoogle={this.responseGoogle}
               />
             )}
           />

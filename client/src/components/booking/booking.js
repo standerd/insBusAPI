@@ -103,9 +103,7 @@ class Booking extends Component {
         dateIn: this.props.location.state.checkIn,
         dateOut: this.props.location.state.checkOut,
         occupants: this.props.location.state.occupants
-      },
-      () => console.log(this.state.propertyDetails)
-    );
+      });
   }
 
   render() {

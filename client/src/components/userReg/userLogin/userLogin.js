@@ -1,5 +1,6 @@
 import React from "react";
 import "./userLogin.css";
+import Google from "../googleLogin/googleLogin";
 import { Link } from "react-router-dom";
 
 const userLogin = props => {
@@ -50,7 +51,7 @@ const userLogin = props => {
           </div>
 
           <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
-          <button>Google</button>
+          <Google responseGoogle={props.responseGoogle} />
           <button>Facebook</button>
         </div>
       </div>

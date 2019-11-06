@@ -5,10 +5,12 @@ const Schema = mongoose.Schema;
 const user = new Schema({
   name: { type: String, require: true },
   surname: { type: String, require: true },
-  telNo: { type: String, require: true },
-  altNo: { type: String, require: true },
-  email: { type: String, require: true },
-  password: { type: String, require: true }
+  telNo: { type: String, require: false },
+  altNo: { type: String, require: false },
+  email: { type: String, require: false },
+  gmail: { type: String, required: false },
+  password: { type: String, require: false },
+  googleId: { type: String, require: false }
 });
 
 module.exports = mongoose.model("User", user);

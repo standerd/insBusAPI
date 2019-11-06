@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
+import Google from "./googleLogin/googleLogin";
 import "./userReg.css";
 
 class UserReg extends Component {
@@ -152,8 +153,10 @@ class UserReg extends Component {
           <p>Already Have An Account</p>
           <Link to="/loginUser">Login Here</Link>
           <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
-          <div className="oAuth2">
-            <button>Google</button>
+          <div className="oAuth2" style={{ width: "100%" }}>
+            <div className="googleButton">
+              <Google responseGoogle={this.props.responseGoogle} />
+            </div>
             <button>Facebook</button>
           </div>
         </div>
