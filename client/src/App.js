@@ -89,6 +89,7 @@ class App extends Component {
       });
   };
 
+  //google login handler
   responseGoogle = response => {
     let token = response.Zi.id_token;
     fetch("/user/googlelogin", {
@@ -98,6 +99,61 @@ class App extends Component {
       },
       body: JSON.stringify({
         token: token
+      })
+    })
+      .then(res => {
+        if (res.status === 422) {
+          throw new Error("Validation failed.");
+        }
+        if (res.status !== 200 && res.status !== 201) {
+          console.log("Error!");
+          throw new Error("Could not authenticate you!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        //sets user login status and jwt data in local storage, this allows for the users details to be sent
+        //inside the auth headers to access routes that are protected.
+        this.setState({
+          isAuth: true,
+          token: resData.token,
+          userId: resData.userId,
+          type: resData.type,
+          error: false
+        });
+        localStorage.setItem("token", resData.token);
+        localStorage.setItem("userId", resData.userId);
+        localStorage.setItem("type", resData.type);
+
+        const remainingTime = 60 * 60 * 1000;
+        const tokenExpiry = new Date(new Date().getTime() + remainingTime);
+        localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
+        this.props.history.push("/userBookings");
+      })
+      .catch(err => {
+        this.setState({
+          isAuth: false,
+          authLoading: false,
+          error: true
+        });
+      });
+  };
+
+  //facebook login handler.
+  responseFacebook = response => {
+    const token = response.accessToken;
+    const { name, email, userID } = response;
+
+    fetch("/user/facebookLogin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        token: token,
+        name,
+        email,
+        userID
       })
     })
       .then(res => {
@@ -250,11 +306,12 @@ class App extends Component {
       });
   };
 
+  //set the type of entity that is currently using the website.
   entityChangeHandler = name => e => {
     this.setState({ [name]: e.target.value });
   };
 
-  //user login handler
+  //admin login handler
   adminLoginHandler = e => {
     e.preventDefault();
 
@@ -303,6 +360,8 @@ class App extends Component {
       });
   };
 
+  // if the token received from the backend expires the user is logged out, the normal logout
+  // handeler function is then called.
   setAutoLogout = milliseconds => {
     setTimeout(() => {
       this.logoutHandler();
@@ -331,7 +390,11 @@ class App extends Component {
           <Route
             path="/regUser"
             render={() => (
-              <UserReg {...this.props} responseGoogle={this.responseGoogle} />
+              <UserReg
+                {...this.props}
+                responseGoogle={this.responseGoogle}
+                responseFacebook={this.responseFacebook}
+              />
             )}
           />
           <Route
@@ -346,6 +409,7 @@ class App extends Component {
                 password={this.state.password}
                 error={this.state.error}
                 responseGoogle={this.responseGoogle}
+                responseFacebook={this.responseFacebook}
               />
             )}
           />
@@ -429,6 +493,8 @@ class App extends Component {
           <Redirect to="/" />
         </Fragment>
       );
+      //if authenticated and the user type is set to admin the routes and navigation
+      //items are set accordingly.
     } else if (this.state.isAuth && this.state.type === "admin") {
       routes = (
         <Fragment>

@@ -9,6 +9,7 @@ const { OAuth2Client } = require("google-auth-library");
 const KEY = require("../config/keys");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
+const request = require("request");
 
 const client = new OAuth2Client(KEY.keys.googleLogin);
 
@@ -127,6 +128,94 @@ exports.postGoogleLogin = async (req, res, next) => {
   } catch {
     console.log("There was an error");
     res.json({ message: "There was an error with authenticating you" });
+  }
+};
+
+// facebook login handler
+exports.postFacebookLogin = (req, res, next) => {
+  //a token is received from the client that Facebook returns when the user clicks on the facebook
+  //sign in button. This is sent to the server as part of the request.
+  const token = req.body.token;
+  const { name, email, userID } = req.body;
+
+  //set facebook login validation request params
+  const clientId = KEY.keys.clientId;
+  const clientSecret = KEY.keys.clientSecret;
+  const appLink =
+    "https://graph.facebook.com/debug_token?input_token=" +
+    token +
+    "&access_token=" +
+    clientId +
+    "|" +
+    clientSecret;
+
+  try {
+    //The token received from the client is sent to the facebook authentication API to check the
+    //validity, if valid the login or registration process is continued else and error is sent.
+    request.get(appLink, (error, response, body) => {
+      let myData = JSON.parse(body);
+
+      let isValid = myData.data.is_valid;
+
+      // first check if the facebook id exists in the user database, if it does not the user is
+      // registered and then logged in automatically. If the user is found the user is logged in.
+
+      // NOTE - THIS IS WRONG - Similar to the google login issue, I only have access to my own Facebook
+      // account and am therefore check against Facebook ID and not email. For production this would need
+      // to be done differently.
+
+      //check if the token verification response
+      if (isValid) {
+        User.findOne({ facebookId: userID }).then(user => {
+          if (!user) {
+            const newUser = new User({
+              name: name.split(" ")[0],
+              surname: name.split(" ")[1],
+              fmail: email,
+              facebookId: userID
+            });
+            return newUser
+              .save()
+              .then(result => {
+                const token = jwt.sign(
+                  { email: result.fmail, userId: result._id, type: "user" },
+                  "thisBookingsDotComSecret",
+                  { expiresIn: "1h" }
+                );
+                res.status(200).json({
+                  message: "User Logged In",
+                  token: token,
+                  userId: result._id,
+                  type: "user"
+                });
+              })
+              .catch(err => console.log(err));
+          } else {
+            const token = jwt.sign(
+              { email: user.fmail, userId: user._id, type: "user" },
+              "thisBookingsDotComSecret",
+              { expiresIn: "1h" }
+            );
+            res.status(200).json({
+              message: "User Logged In",
+              token: token,
+              userId: user._id,
+              type: "user"
+            });
+          }
+        });
+      } else {
+        console.log("The token is not valid");
+        res
+          .status(422)
+          .json({ message: "There was an error with authenticating you" });
+      }
+    });
+  } catch {
+    console.log("There was an error");
+    res
+      .status(422)
+      .json({ message: "There was an error with authenticating you" });
   }
 };
 

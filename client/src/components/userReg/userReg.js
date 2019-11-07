@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import Google from "./googleLogin/googleLogin";
+import Facebook from "./facebookLogin/facebookLogin";
 import "./userReg.css";
 
+//User registration component, this component manages it's own state as the user is
+//not logged in automatically after registration is completed.
 class UserReg extends Component {
   state = {
     name: "",
@@ -148,7 +151,9 @@ class UserReg extends Component {
               </h3>
             ) : null}
             <br></br>
-            <button type="submit">Register</button>
+            <button className="regButton" type="submit">
+              Register
+            </button>
           </form>
           <p>Already Have An Account</p>
           <Link to="/loginUser">Login Here</Link>
@@ -156,8 +161,8 @@ class UserReg extends Component {
           <div className="oAuth2" style={{ width: "100%" }}>
             <div className="googleButton">
               <Google responseGoogle={this.props.responseGoogle} />
+              <Facebook responseFacebook={this.props.responseFacebook} />
             </div>
-            <button>Facebook</button>
           </div>
         </div>
       </div>

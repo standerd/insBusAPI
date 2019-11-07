@@ -10,4 +10,6 @@ router.post("/login", userController.postLogin);
 
 router.post("/googlelogin", userController.postGoogleLogin);
 
+router.post("/facebookLogin", userController.postFacebookLogin);
+
 module.exports = router;

@@ -39,7 +39,9 @@ const propLogin = props => {
             placeholder="Password"
           />
           <br></br>
-          <button onClick={props.entityLogin}>Login</button>
+          <button className="propLogin" onClick={props.entityLogin}>
+            Login
+          </button>
         </form>
 
         <div className="oAuth">

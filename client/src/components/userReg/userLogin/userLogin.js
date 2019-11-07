@@ -1,8 +1,11 @@
 import React from "react";
 import "./userLogin.css";
 import Google from "../googleLogin/googleLogin";
+import Facebook from "../facebookLogin/facebookLogin";
 import { Link } from "react-router-dom";
 
+// Standard user login component allowing the user to login with their email and password
+// setup during the user registration page.
 const userLogin = props => {
   let error;
   props.error
@@ -41,7 +44,9 @@ const userLogin = props => {
             required={true}
           />
           <br></br>
-          <button type="submit">Login</button>
+          <button className="loginButton" type="submit">
+            Login
+          </button>
         </form>
 
         <div className="oAuth">
@@ -52,7 +57,7 @@ const userLogin = props => {
 
           <h5 style={{ width: "100%", textAlign: "center" }}>Or Login With</h5>
           <Google responseGoogle={props.responseGoogle} />
-          <button>Facebook</button>
+          <Facebook responseFacebook={props.responseFacebook} />
         </div>
       </div>
     </div>

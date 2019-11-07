@@ -42,7 +42,9 @@ const adminLogin = props => {
             required={true}
           />
           <br></br>
-          <button type="submit">Login</button>
+          <button className="adminLogin" type="submit">
+            Login
+          </button>
         </form>
       </div>
     </div>

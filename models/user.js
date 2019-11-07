@@ -10,7 +10,9 @@ const user = new Schema({
   email: { type: String, require: false },
   gmail: { type: String, required: false },
   password: { type: String, require: false },
-  googleId: { type: String, require: false }
+  googleId: { type: String, require: false },
+  facebookId: { type: String, require: false },
+  fmail: { type: String, required: false }
 });
 
 module.exports = mongoose.model("User", user);
