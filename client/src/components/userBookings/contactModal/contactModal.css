@@ -1,5 +1,5 @@
-.bookingModal {
-  width: 90%;
+.contactModal {
+  width: 85%;
   margin: 0 auto;
   background-color: #ccc;
   text-align: center;
@@ -9,10 +9,10 @@
 
 .exitButton {
   text-align: center;
-  width: 30%;
+  width: 20%;
   height: 25px;
-  margin-left: auto;
-  background-color: rgb(66, 61, 61);
+  margin: 1% auto;
+  background-color: rgb(37, 36, 36);
   color: white;
   font-weight: bold;
 }
@@ -23,64 +23,27 @@
   color: rgb(66, 61, 61);
 }
 
-.border {
-  border: 2px solid white;
-  padding: 2%;
-  margin: 0 2%;
+.text {
+  font-size: 0.8rem;
+  max-width: 90%;
 }
 
-.modalHead {
-  text-align: center;
+.contactForm {
+  width: 90%;
   background-color: rgb(66, 61, 61);
   color: white;
   height: auto;
-  padding: 0.5rem;
-  border: 2px solid white;
-  margin: 2% 2%;
-}
-
-.bookingContent {
-  width: 95%;
-  height: 95vh;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem;
+  margin: 1% auto;
+  display: block;
+  padding: 3%;
   box-sizing: border-box;
   flex-wrap: wrap;
   text-align: center;
   font-weight: bold;
 }
 
-.contentPortion {
-  width: 47%;
-  border: 1px solid white;
-  padding: 0.5%;
-  margin-bottom: 0.5%;
-  line-height: 1.2rem;
-  background-color: black;
-  color: white;
-}
-
-.contentPortion img {
-  border: 2px solid white;
-}
-
 @media only screen and (max-width: 768px) {
-  .bookingContent {
-    width: 98%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
-    flex-direction: column;
-    padding: 1rem;
-    box-sizing: border-box;
-    text-align: center;
-    font-size: 0.8rem;
-  }
-
-  .contentPortion {
+  .contactForm {
     width: 95%;
     padding: 0.5%;
     padding-bottom: 2%;
@@ -93,9 +56,13 @@
     margin-bottom: 12%;
   }
 
+  .text {
+    max-width: 90%;
+  }
+
   .exitButton {
     text-align: center;
-    width: auto;
+    width: 80%;
     height: 25px;
     margin-left: auto;
     margin-top: 2%;

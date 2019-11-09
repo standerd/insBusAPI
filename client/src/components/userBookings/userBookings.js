@@ -17,14 +17,14 @@ class UserBookings extends Component {
     checkOut: "",
     guestCount: "",
     error: false,
-    unavailable: false
+    unavailable: false,
+    message: ""
   };
 
   //booking details modal, shows the booking as well as the property details
   openModal = e => {
     let index = e.target.value;
     let id = e.target.id;
-    console.log(e.target.value);
     fetch(`/search/getProperty/${id}`)
       .then(res => res.json())
       .then(result => {
@@ -222,23 +222,44 @@ class UserBookings extends Component {
 
   //contact modal open and set params
   contactModel = e => {
-    let bookings = this.state.bookings;
-    this.setState(
-      {
-        checkIn: bookings[e.target.value].checkInDate,
-        checkOut: bookings[e.target.value].checkOutDate,
-        guestCount: bookings[e.target.value].guestCount,
-        editIndex: e.target.value
-      },
-      () => {
-        this.setState({ contactModalOpen: true });
-      }
-    );
+    let index = e.target.value;
+    let id = e.target.id;
+    fetch(`/search/getProperty/${id}`)
+      .then(res => res.json())
+      .then(result => {
+        this.setState({ propertyDetails: result.details, index: index }, () => {
+          this.setState({ contactModalOpen: true });
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   //closes the contact modal.
   contactModalClose = e => {
-    this.setState({ contactModalOpen: false });
+    this.setState({ contactModalOpen: false , message: ""});
+  };
+
+  messageHandler = e => {
+    this.setState({ message: e.target.value });
+  };
+
+  sendMessage = e => {
+    e.preventDefault();
+    fetch("/search/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: this.state.message,
+        userID: this.state.bookings[this.state.index].userId,
+        bookID: this.state.bookings[this.state.index]._id,
+        email: this.state.propertyDetails.email
+      })
+    })
+      .then(res => res.json())
+      .then(result => this.setState({ sent: true }))
+      .catch(err => console.log(err));
   };
 
   componentDidMount() {
@@ -301,7 +322,7 @@ class UserBookings extends Component {
                     </button>
 
                     <button
-                      id={key._id}
+                      id={key.propertyId}
                       value={index}
                       onClick={this.contactModel}
                     >
@@ -334,7 +355,11 @@ class UserBookings extends Component {
                 modalIsOpen={this.state.contactModalOpen}
                 closeModal={this.contactModalClose}
                 // editChange={this.editChange}
-                data={this.state.bookings[this.state.editIndex]}
+                data={this.state.propertyDetails}
+                sendMessage={this.sendMessage}
+                messageHandler={this.messageHandler}
+                message={this.state.message}
+                sent={this.state.sent}
               />
             </div>
           );

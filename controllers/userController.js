@@ -313,7 +313,8 @@ exports.postSearch = async (req, res, next) => {
 
       if (sendingData.length === 0) {
         res.status(404).json({
-          message: "We could not find any properties for your search", results: null
+          message: "We could not find any properties for your search",
+          results: null
         });
       } else res.status(200).json({ results: sendingData });
     })
@@ -513,32 +514,48 @@ exports.ammendBooking = (req, res, next) => {
     });
 };
 
-exports.postPlay = async (req, res, next) => {
-  let lat = req.body.lat;
-  let lng = req.body.lng;
+// exports.postPlay = async (req, res, next) => {
+//   let lat = req.body.lat;
+//   let lng = req.body.lng;
 
-  let entity = await Entity.find();
+//   let entity = await Entity.find();
 
-  let myFuntion = () => {
-    return Promise.all(
-      entity.map(async key => {
-        let distance = await requestPromise.get(
-          `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
-        );
-        if (
-          JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
-          30
-        ) {
-          return key;
-        } else {
-          return null;
-        }
-      })
-    );
-  };
+//   let myFuntion = () => {
+//     return Promise.all(
+//       entity.map(async key => {
+//         let distance = await requestPromise.get(
+//           `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
+//         );
+//         if (
+//           JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
+//           30
+//         ) {
+//           return key;
+//         } else {
+//           return null;
+//         }
+//       })
+//     );
+//   };
 
-  myFuntion().then(data => {
-    console.log(data);
-    res.send(data);
-  });
+//   myFuntion().then(data => {
+//     console.log(data);
+//     res.send(data);
+//   });
+// };
+
+exports.postContact = (req, res, next) => {
+  const { userID, message, email, bookID } = req.body;
+
+  User.findOne({ _id: userID })
+    .then(data => {
+      transporter.sendMail({
+        to: "stander.dewald@gmail.com",
+        from: data.email,
+        subject: "New Booking Message",
+        html: `<h1>New Message From: ${data.name} ${data.surname}</h1><p>Booking Number: ${bookID}</p><p>Message: </p><p>${message}</p><p>Please respond directly to the user from this mail.</p><p>Regards The Travelling Team</p>`
+      });
+      res.status(200).json({data: "Message was sent successfully"})
+    })
+    .catch(err => res.status(500).json({ data: "There was an error" }));
 };
