@@ -10,6 +10,7 @@ const KEY = require("../config/keys");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 const request = require("request");
+const requestPromise = require("request-promise");
 
 const client = new OAuth2Client(KEY.keys.googleLogin);
 
@@ -272,18 +273,54 @@ exports.postRegister = (req, res, next) => {
 // The post search fundtion is called when a user submits a search request, it receives a
 // city parameter and return all documents from the data base that matched the search param.
 
-exports.postSearch = (req, res, next) => {
-  let city = req.body.city;
+exports.postSearch = async (req, res, next) => {
+  let lat = req.body.lat;
+  let lng = req.body.lng;
 
-  Entity.find({ city: city })
+  //Find all entities in the database and return the result
+  let entity = await Entity.find();
+
+  //Loop through all the returned results and find properties that are in a range of 30 km from the the users
+  //search city coordinates - I think this needs some refactoring as it will be slow if the database is large.
+  let myFuntion = () => {
+    return Promise.all(
+      entity.map(async key => {
+        let distance = await requestPromise.get(
+          `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
+        );
+        if (
+          JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
+          30
+        ) {
+          return key;
+        } else {
+          return null;
+        }
+      })
+    );
+  };
+
+  myFuntion()
     .then(data => {
-      if (data.length === 0) {
+      //removes all nulls retured from map, I have not been able to get this working in one function
+      //to review as some point.
+      let sendingData = data.reduce((sendingData, key) => {
+        if (key !== null) {
+          sendingData.push(key);
+        }
+        return sendingData;
+      }, []);
+
+      if (sendingData.length === 0) {
         res.status(404).json({
-          message: "We could not find any properties for your search"
+          message: "We could not find any properties for your search", results: null
         });
-      } else res.status(200).json({ results: data });
+      } else res.status(200).json({ results: sendingData });
     })
-    .catch(err => res.status(500).json({ message: "Server Error" }));
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: "Server Error" });
+    });
 };
 
 // Postbooking is called when the user submit the final booking form,
@@ -474,4 +511,34 @@ exports.ammendBooking = (req, res, next) => {
         message: "Could not find the booking, please try again later."
       });
     });
+};
+
+exports.postPlay = async (req, res, next) => {
+  let lat = req.body.lat;
+  let lng = req.body.lng;
+
+  let entity = await Entity.find();
+
+  let myFuntion = () => {
+    return Promise.all(
+      entity.map(async key => {
+        let distance = await requestPromise.get(
+          `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
+        );
+        if (
+          JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
+          30
+        ) {
+          return key;
+        } else {
+          return null;
+        }
+      })
+    );
+  };
+
+  myFuntion().then(data => {
+    console.log(data);
+    res.send(data);
+  });
 };

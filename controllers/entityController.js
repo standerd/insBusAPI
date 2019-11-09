@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+let resultsArray = [];
 
 // Google maps Geocoding api setup, used to get lat and lng from the entity
 // registration adress. Lat, lng is used to display the properties on a map

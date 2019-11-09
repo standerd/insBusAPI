@@ -58,9 +58,11 @@ const map = props => {
           >
             <div
               style={{
-                background: `white`,
-                border: `1px solid #ccc`,
-                padding: 10
+                background: `rgba(8, 8, 8, 0.8)`,
+                border: `1px solid white`,
+                color: "white",
+                fontSize: " 0.5rem",
+                padding: 5
               }}
             >
               <h1>{props.propsName}</h1>
@@ -73,8 +75,8 @@ const map = props => {
             controlPosition: window.google
               ? window.google.maps.ControlPosition.TOP_RIGHT
               : undefined,
-            controls: ["Point"],
-            drawingMode: "Point", //  "LineString" or "Polygon".
+            // controls: ["Point"],
+            // drawingMode: "Point", //  "LineString" or "Polygon".
             featureFactory: geometry => {
               // logs the lat, long of the point on which the user clicks, this is for future use.
               console.log("geometry: ", geometry);

@@ -16,8 +16,6 @@ const customStyles = {
   }
 };
 
-// "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-26.17338046,28.027493754&radius=5000&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs"
-
 Modal.setAppElement("#root");
 
 const bookingDetails = props => {

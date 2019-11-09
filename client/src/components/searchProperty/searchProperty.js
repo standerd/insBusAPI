@@ -95,11 +95,7 @@ const searchProperty = props => {
         <form onSubmit={props.searchSubmit}>
           <h3>Search Properties</h3>
           <div className="searchBox">
-            <SearchBox
-              handleChange={props.handleChange}
-              address={props.city}
-              handleSelect={props.handleSelect}
-            />
+            <SearchBox handleChange={props.handleChange} address={props.city} />
           </div>
           <br></br>
           <label>Check In Date</label>

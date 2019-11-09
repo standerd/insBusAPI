@@ -31,7 +31,8 @@ class LandingPage extends Component {
       booking: false,
       valid: true,
       showInfo: false,
-      markerIndex: ""
+      markerIndex: "",
+      getError: false
     };
 
     this.openModal = this.openModal.bind(this);
@@ -76,19 +77,29 @@ class LandingPage extends Component {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            city: this.state.city
+            city: this.state.city,
+            lat: this.state.initialLat,
+            lng: this.state.initialLng
           })
         })
           .then(res => res.json())
           .then(result => {
-            this.setState({
-              searching: true,
-              searchArray: result.results,
-              amendSearch: false,
-              valid: true
-            });
+            // if no properties were found for the search location entered by the user
+            // the server returns null, if null is received an error is set and a message
+            // is shown to the user which cities have got properties loaded.
+            if (result.results === null) {
+              this.setState({ getError: true, searching: true });
+            } else {
+              this.setState({
+                searching: true,
+                searchArray: result.results,
+                amendSearch: false,
+                valid: true,
+                getError: false
+              });
+            }
           })
-          .catch(err => console.log(err));
+          .catch(err => console.log("There was an errro" + err));
   };
 
   // property details modal, opening event handler
@@ -130,53 +141,68 @@ class LandingPage extends Component {
 
     // if no search was submitted by the user yet, the below is displayed next
     // to the user search sidedrawer
-    !this.state.searching
-      ? (resultsScreen = (
-          <div className="landingContent">
-            <div className="overLay">
-              <h1 className="heading">
-                Where Ever The Map Takes You We Have You Covered
-              </h1>
-              <hr></hr>
-            </div>
+    if (!this.state.searching && !this.state.getError) {
+      resultsScreen = (
+        <div className="landingContent">
+          <div className="overLay">
+            <h1 className="heading">
+              Where Ever The Map Takes You We Have You Covered
+            </h1>
+            <hr></hr>
           </div>
-        ))
-      : // if the user has submitted as search request, the search result is diplayed instead of the
-        // main landing content.
-        (resultsScreen = (
-          <div className="searchResults">
-            <SearchResults
-              markerArray={this.state.searchArray}
-              initialLat={this.state.initialLat}
-              initialLng={this.state.initialLng}
-              zoom={this.state.zoom}
-              selected={this.state.selected}
-              dateIn={this.state.dateIn}
-              dateOut={this.state.dateOut}
-              amendSearch={this.state.amendSearch}
-              openModal={this.openModal}
-              auth={this.props.isAuth}
-              openWindow={this.openWindow}
-              closeWindow={this.closeWindow}
-              showInfo={this.state.showInfo}
-              propsName={
-                this.state.markerIndex === ""
-                  ? "No Info"
-                  : this.state.searchArray[this.state.markerIndex].name
-              }
-              propsLat={
-                this.state.markerIndex === ""
-                  ? "No Info"
-                  : this.state.searchArray[this.state.markerIndex].lat
-              }
-              propsLng={
-                this.state.markerIndex === ""
-                  ? "No Info"
-                  : this.state.searchArray[this.state.markerIndex].long
-              }
-            />
-          </div>
-        ));
+        </div>
+      );
+    } else if (this.state.searching && !this.state.getError) {
+      // if the user has submitted as search request, the search result is diplayed instead of the
+      // main landing content.
+      resultsScreen = (
+        <div className="searchResults">
+          <SearchResults
+            markerArray={this.state.searchArray}
+            initialLat={this.state.initialLat}
+            initialLng={this.state.initialLng}
+            zoom={this.state.zoom}
+            selected={this.state.selected}
+            dateIn={this.state.dateIn}
+            dateOut={this.state.dateOut}
+            amendSearch={this.state.amendSearch}
+            openModal={this.openModal}
+            auth={this.props.isAuth}
+            openWindow={this.openWindow}
+            closeWindow={this.closeWindow}
+            showInfo={this.state.showInfo}
+            propsName={
+              this.state.markerIndex === ""
+                ? "No Info"
+                : this.state.searchArray[this.state.markerIndex].name
+            }
+            propsLat={
+              this.state.markerIndex === ""
+                ? "No Info"
+                : this.state.searchArray[this.state.markerIndex].lat
+            }
+            propsLng={
+              this.state.markerIndex === ""
+                ? "No Info"
+                : this.state.searchArray[this.state.markerIndex].long
+            }
+          />
+        </div>
+      );
+    } else if (this.state.searching && this.state.getError) {
+      // if the user has submitted as search request, the search result is diplayed instead of the
+      // main landing content.
+      resultsScreen = (
+        <div className="errorResult">
+          <h3>We could not find any properties for your search location</h3>
+          <h3>
+            While we are starting we only have properties in Johannsburg and
+            Cape Town
+          </h3>
+          <h3>We will add more in due course</h3>
+        </div>
+      );
+    }
 
     return (
       <div className="landingPage">
@@ -185,7 +211,6 @@ class LandingPage extends Component {
           dateOut={this.state.dateOut}
           dateIn={this.state.dateIn}
           handleChange={this.handleChange}
-          handleSelect={this.handleSelect}
           city={this.state.city}
           searchSubmit={this.handleSearchSubmit}
           type={this.props.type}

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import BookingModal from "../userBookings/bookingModal/bookingModal";
 import EditModal from "../userBookings/editDeleteModal/editModal";
+import ContactModal from "../userBookings/contactModal/contactModal";
 import "./userBookings.css";
 
 class UserBookings extends Component {
   state = {
     modalIsOpen: false,
     editModalOpen: false,
+    contactModalOpen: false,
     bookings: null,
     propertyDetails: null,
     index: 0,
@@ -218,6 +220,27 @@ class UserBookings extends Component {
       });
   };
 
+  //contact modal open and set params
+  contactModel = e => {
+    let bookings = this.state.bookings;
+    this.setState(
+      {
+        checkIn: bookings[e.target.value].checkInDate,
+        checkOut: bookings[e.target.value].checkOutDate,
+        guestCount: bookings[e.target.value].guestCount,
+        editIndex: e.target.value
+      },
+      () => {
+        this.setState({ contactModalOpen: true });
+      }
+    );
+  };
+
+  //closes the contact modal.
+  contactModalClose = e => {
+    this.setState({ contactModalOpen: false });
+  };
+
   componentDidMount() {
     this.fetchBookings();
   }
@@ -276,6 +299,14 @@ class UserBookings extends Component {
                     <button id={key._id} value={index} onClick={this.editModel}>
                       Edit/Cancel Booking
                     </button>
+
+                    <button
+                      id={key._id}
+                      value={index}
+                      onClick={this.contactModel}
+                    >
+                      Contact Property
+                    </button>
                   </div>
                 )}
               </div>
@@ -298,6 +329,12 @@ class UserBookings extends Component {
                 ammendBooking={this.ammendBooking}
                 data={this.state.bookings[this.state.editIndex]}
                 unavailable={this.state.unavailable}
+              />
+              <ContactModal
+                modalIsOpen={this.state.contactModalOpen}
+                closeModal={this.contactModalClose}
+                // editChange={this.editChange}
+                data={this.state.bookings[this.state.editIndex]}
               />
             </div>
           );
