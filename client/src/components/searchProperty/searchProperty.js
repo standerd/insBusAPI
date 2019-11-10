@@ -127,7 +127,11 @@ const searchProperty = props => {
             value={props.noOfGuests}
             required
           ></input>
-          <button type="submit">Submit Search</button>
+          {props.waiting ? (
+            <button disabled>Searching ...</button>
+          ) : (
+            <button type="submit">Submit Search</button>
+          )}
         </form>
         <h4 style={{ color: "red" }}>
           {props.valid ? "" : "Please Select City"}

@@ -67,8 +67,10 @@ const editBooking = props => {
               Cancel Booking
             </button>
             <button className="editButton" onClick={props.closeModal}>
-              Cancel
+              Back to Bookings
             </button>
+            {props.processing ? <h3>Processing Request</h3> : null}
+            {props.success ? <h3>Change Was Successfully Submitted</h3> : null}
           </form>
 
           {props.unavailable ? (

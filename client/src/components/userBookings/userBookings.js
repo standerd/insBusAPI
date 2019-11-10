@@ -18,7 +18,9 @@ class UserBookings extends Component {
     guestCount: "",
     error: false,
     unavailable: false,
-    message: ""
+    message: "",
+    success: false,
+    processing: false
   };
 
   //booking details modal, shows the booking as well as the property details
@@ -60,7 +62,7 @@ class UserBookings extends Component {
 
   //closes the edit modal.
   editModalClose = e => {
-    this.setState({ editModalOpen: false });
+    this.setState({ editModalOpen: false }, () => this.fetchBookings());
   };
 
   //handles the input changes from the user on editing their booking dates or guest count.
@@ -71,6 +73,7 @@ class UserBookings extends Component {
   // ammend booking handler.
   ammendBooking = e => {
     e.preventDefault();
+    this.setState({ processing: true });
 
     //calculate the current occupation period to also be sent along with the newlys requested one, this is to
     //delete it from the entity avaialibily and to not take it into account during the availability check to be
@@ -123,7 +126,7 @@ class UserBookings extends Component {
     })
       .then(res => {
         if (res.status === 404) {
-          this.setState({ unavailable: true });
+          this.setState({ unavailable: true, processing: false });
           throw new Error();
         } else if (res.status === 500) {
           this.setState({ error: true });
@@ -134,15 +137,12 @@ class UserBookings extends Component {
       //on resdata received the modal is set to close and the userBookings page is refreshed to show the booking
       //has been removed.
       .then(resData => {
-        console.log(resData.message);
-        this.setState(
-          {
-            error: false,
-            editModalOpen: false,
-            editIndex: 0
-          },
-          () => this.fetchBookings()
-        );
+        this.setState({
+          error: false,
+          editIndex: 0,
+          success: true,
+          processing: false
+        });
       })
       .catch(err => {
         console.log(err);
@@ -350,6 +350,8 @@ class UserBookings extends Component {
                 ammendBooking={this.ammendBooking}
                 data={this.state.bookings[this.state.editIndex]}
                 unavailable={this.state.unavailable}
+                success={this.state.success}
+                processing={this.state.processing}
               />
               <ContactModal
                 modalIsOpen={this.state.contactModalOpen}

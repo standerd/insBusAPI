@@ -32,7 +32,8 @@ class LandingPage extends Component {
       valid: true,
       showInfo: false,
       markerIndex: "",
-      getError: false
+      getError: false,
+      waiting: false
     };
 
     this.openModal = this.openModal.bind(this);
@@ -69,6 +70,7 @@ class LandingPage extends Component {
   //sent to the server as a POST request and the returned data is set to state.
   handleSearchSubmit = e => {
     e.preventDefault();
+    this.setState({ waiting: true });
     this.state.city === ""
       ? this.setState({ valid: false })
       : fetch("/search/searchProperty", {
@@ -95,7 +97,8 @@ class LandingPage extends Component {
                 searchArray: result.results,
                 amendSearch: false,
                 valid: true,
-                getError: false
+                getError: false,
+                waiting: false
               });
             }
           })
@@ -217,6 +220,7 @@ class LandingPage extends Component {
           typeUpdate={this.props.typeUpdate}
           noOfGuests={this.state.noOfGuests}
           valid={this.state.valid}
+          waiting={this.state.waiting}
         />
         {resultsScreen}
         <PropDetails
