@@ -14,6 +14,7 @@ const requestPromise = require("request-promise");
 
 const client = new OAuth2Client(KEY.keys.googleLogin);
 
+//nodemailer client setup.
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
@@ -86,8 +87,11 @@ exports.postGoogleLogin = async (req, res, next) => {
     // NOTE - THIS IS WRONG - I only have access to my own gmail login account and I am also
     // registering a user using my gmail e-mail address, so if I check Google sign against e-mail
     // I cannot test it, so I am using the google Id to test with and creating a gmail field in the
-    // DB to avoid clashing on Google and normal log in. In production E-Mail should be used to ensure
+    // DB to avoid clashing on Google and normal log in. In a production environment E-Mail should be used to ensure
     // that users cannot register 2 accounts.
+
+    //the login process is exactly the same on the user is authenticated as with local sign in. A JWT token is
+    //sent to the client and validated on return.
     User.findOne({ googleId: payload.sub }).then(user => {
       if (!user) {
         const newUser = new User({
@@ -249,12 +253,13 @@ exports.postRegister = (req, res, next) => {
             return newUser.save();
           })
           .then(result => {
+            //send an email confirmation to the user confirming that the registration was successful.
             transporter.sendMail({
               to: email,
               from: "traveller@travelling.co.za",
               subject: "Signup succeeded!",
               html:
-                "<h1>You successfully signed up!</h1><p>Thanks for signing up you can now login to you account with your account details and make bookings</p>"
+                "<h1>You successfully signed up!</h1><p>Thanks for signing up you can now login to your account with your account details and make bookings</p>"
             });
             res.status(200).json({ message: "Entity Succesfully Saved" });
           })
@@ -270,8 +275,8 @@ exports.postRegister = (req, res, next) => {
     });
 };
 
-// The post search fundtion is called when a user submits a search request, it receives a
-// city parameter and return all documents from the data base that matched the search param.
+// The post search fun tion is called when a user submits a search request, it receives a
+// lat/lng parameter and return all properties withing a 30km radius from the search params.
 
 exports.postSearch = async (req, res, next) => {
   let lat = req.body.lat;
@@ -280,13 +285,13 @@ exports.postSearch = async (req, res, next) => {
   //Find all entities in the database and return the result
   let entity = await Entity.find();
 
-  //Loop through all the returned results and find properties that are in a range of 30 km from the the users
+  //Loop through all the returned entities and find properties that are in a range of 30 km from the the users
   //search city coordinates - I think this needs some refactoring as it will be slow if the database is large.
   let myFuntion = () => {
     return Promise.all(
       entity.map(async key => {
         let distance = await requestPromise.get(
-          `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
+          `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=${KEY.keys.google}`
         );
         if (
           JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
@@ -303,7 +308,7 @@ exports.postSearch = async (req, res, next) => {
   myFuntion()
     .then(data => {
       //removes all nulls retured from map, I have not been able to get this working in one function
-      //to review as some point.
+      //to review at some point.
       let sendingData = data.reduce((sendingData, key) => {
         if (key !== null) {
           sendingData.push(key);
@@ -384,6 +389,7 @@ exports.postBooking = (req, res, next) => {
 
       //return the booking id to the client for confirmation purposes.
       .then(result => {
+        //send the user an email with their booking details.
         transporter.sendMail({
           to: email,
           from: "traveller@travelling.co.za",
@@ -400,7 +406,7 @@ exports.postBooking = (req, res, next) => {
 };
 
 //get booking function, get Request from the client, finds all bookings for the user in
-//the database and send the a response containing all the usersbookings.
+//the database and sends the a response containing all the usersbookings.
 exports.getBookings = (req, res, next) => {
   Booking.find({ userId: req.userId })
     .then(result => {
@@ -424,7 +430,7 @@ exports.getProperty = (req, res, next) => {
 };
 
 // booking delete function, if a user wishes to delete a booking, a request is sent from
-//the client to this endpoint and the booking is deleterd.
+//the client to this endpoint and the booking is deleted.
 exports.deleteBooking = (req, res, next) => {
   let bookId = req.body.bookingID;
   let occupation = req.body.occupation;
@@ -451,8 +457,8 @@ exports.deleteBooking = (req, res, next) => {
     );
 };
 
-// users can ammend the dates and persons count of their bookings. This endpoint handles
-// the users request data and updated the booking and entity database collections accordingly.
+// users can ammend the dates and guest count of their bookings. This endpoint handles
+// the users request data and updates the booking and entity database collections accordingly.
 exports.ammendBooking = (req, res, next) => {
   let bookId = req.body.bookingID;
   let currentOcc = req.body.currentOcc;
@@ -466,7 +472,7 @@ exports.ammendBooking = (req, res, next) => {
     .then(result => {
       //before doing the check for availability on the changed dates, the old booking dates are removed
       //from the availability data received from the Database and that is then used to compare against
-      //else the user can never book within period booked by himself again.
+      //else the user can never book within the period booked by himself again.
       let isAvailable = false;
       let availableDates = result.availability;
       let index = availableDates.indexOf(currentOcc[0]);
@@ -514,6 +520,27 @@ exports.ammendBooking = (req, res, next) => {
     });
 };
 
+// the user is able to contact the property from within his booking manager, this sends an
+// email to the entity.
+exports.postContact = (req, res, next) => {
+  const { userID, message, email, bookID } = req.body;
+
+  // user is looked up from the database to get the user details for display on the email body,
+  User.findOne({ _id: userID })
+    .then(data => {
+      transporter.sendMail({
+        //entity registrations were done with fake email addressed, therefore the email to is hardcoded so not
+        //to send random emails around. Functionality exists for obtaining the email from the request body.
+        to: "stander.dewald@gmail.com",
+        from: data.email,
+        subject: "New Booking Message",
+        html: `<h1>New Message From: ${data.name} ${data.surname}</h1><p>Booking Number: ${bookID}</p><p>Message: </p><p>${message}</p><p>Please respond directly to the user from this mail.</p><p>Regards The Travelling Team</p>`
+      });
+      res.status(200).json({ data: "Message was sent successfully" });
+    })
+    .catch(err => res.status(500).json({ data: "There was an error" }));
+};
+
 // this has been left on purpose, I want to try and refactor the search functionality
 
 // exports.postPlay = async (req, res, next) => {
@@ -526,7 +553,7 @@ exports.ammendBooking = (req, res, next) => {
 //     return Promise.all(
 //       entity.map(async key => {
 //         let distance = await requestPromise.get(
-//           `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=AIzaSyDTo_2pBvjLZ40oamTNXbUFa5ZgJOUfKrs`
+//           `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${lat},${lng}&destinations=${key.lat},${key.long}&key=${KEY.keys.google}`
 //         );
 //         if (
 //           JSON.parse(distance).rows[0].elements[0].distance.value / 1000 <
@@ -545,19 +572,3 @@ exports.ammendBooking = (req, res, next) => {
 //     res.send(data);
 //   });
 // };
-
-exports.postContact = (req, res, next) => {
-  const { userID, message, email, bookID } = req.body;
-
-  User.findOne({ _id: userID })
-    .then(data => {
-      transporter.sendMail({
-        to: "stander.dewald@gmail.com",
-        from: data.email,
-        subject: "New Booking Message",
-        html: `<h1>New Message From: ${data.name} ${data.surname}</h1><p>Booking Number: ${bookID}</p><p>Message: </p><p>${message}</p><p>Please respond directly to the user from this mail.</p><p>Regards The Travelling Team</p>`
-      });
-      res.status(200).json({ data: "Message was sent successfully" });
-    })
-    .catch(err => res.status(500).json({ data: "There was an error" }));
-};

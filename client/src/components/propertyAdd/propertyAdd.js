@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./propertyAdd.css";
 import { withRouter, Link } from "react-router-dom";
 
+//property registration component.
 class PropertyAdd extends Component {
   state = {
     name: "",
@@ -23,6 +24,7 @@ class PropertyAdd extends Component {
     error: false,
     error2: false,
     option: [],
+    //looks strange, used to manage the state of the checkboxes.
     index: [false, false, false, false, false, false, false, false]
   };
 
@@ -32,7 +34,7 @@ class PropertyAdd extends Component {
   };
 
   // The submithandler submits all the data that the entity entered for registration purposes.
-  // the Enity will now be require to login and will then be able to add images for the profile.
+  // the Enity will now be required to login and will then be able to add images for the profile.
   onSubmitHandler = e => {
     e.preventDefault();
     if (this.state.password !== this.state.password2) {

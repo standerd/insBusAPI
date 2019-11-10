@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./allEntities.css";
 
+//admin users can view a listing of all registered entities.
 class AllEntities extends Component {
   state = {
     entities: null
@@ -33,8 +34,7 @@ class AllEntities extends Component {
       );
     }
 
-    //entity bookings that are returned is split between expired and currently active bookings.
-    //first map function checkes for bookings that are not yet past the check out date
+    //entities are returned as an array and mapped to display the results.
     entitiesArray === null || entitiesArray === undefined
       ? (myEntities = null)
       : (myEntities = entitiesArray.map((key, index) => {

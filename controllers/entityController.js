@@ -55,7 +55,6 @@ exports.postLogin = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log(err);
       if (!err.statusCode) {
         err.statusCode = 500;
       }
@@ -63,6 +62,7 @@ exports.postLogin = (req, res, next) => {
     });
 };
 
+// entity registration handler.
 exports.postRegister = (req, res, next) => {
   // destructure the incoming data from the client.
 
@@ -169,7 +169,7 @@ exports.putAvailability = (req, res, next) => {
       let isAvailable = false;
       let availableDates = result.availability;
 
-      //check for available dates and either updated the db or send an error message
+      //check for available dates and either update the db or send an error message
       //if the date are not available.
       for (let i = 0; i < availableDates.length; i++) {
         if (isAvailable) {
@@ -195,7 +195,6 @@ exports.putAvailability = (req, res, next) => {
 //get the enity bookings from the bookings collection in the database. The Entity ID to collect
 // is contained in the Auth Header sent from the client.
 exports.getBookings = (req, res, next) => {
-  console.log(req);
   Booking.find({ propertyId: req.entityId })
     .then(result => {
       if (!result) {

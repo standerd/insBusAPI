@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import "./editModal.css";
 
+// modal custom styles
 const customStyles = {
   content: {
     top: "50%",
@@ -17,6 +18,7 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+//allows the user to edit their booking,
 const editBooking = props => {
   return (
     <div className="editModal">

@@ -7,6 +7,7 @@ const facebook = props => {
   return (
     <div>
       <br></br>
+      {/* Standard react component import */}
       <FacebookLogin
         appId={KEY.appId}
         autoLoad={false}

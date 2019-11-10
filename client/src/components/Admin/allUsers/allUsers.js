@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./allUsers.css";
 
+//admin users are able to view a listing of all the registered users.
 class AllUsers extends Component {
   state = {
     users: null

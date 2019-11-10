@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import "./bookingModal.css";
 import Map from "../../maps/map";
 
+//custom modal styles
 const customStyles = {
   content: {
     top: "50%",
@@ -18,6 +19,8 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+//user can view the booking shown as a summary on his booking manager in detail.
+//this displays the booking details, property details and the properties location on map.
 const bookingDetails = props => {
   let propDetails;
 

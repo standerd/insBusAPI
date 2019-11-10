@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import "./contactModal.css";
 
+//customer modal styling
 const customStyles = {
   content: {
     top: "50%",
@@ -17,6 +18,7 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+// contact property function.
 const contactProp = props => {
   return (
     <div className="contactModal">

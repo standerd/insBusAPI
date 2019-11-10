@@ -7,7 +7,7 @@ const Admin = require("../models/admin");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-//user login handler.
+//admoin login handler.
 exports.postLogin = (req, res, next) => {
   console.log(req.body);
   let name = req.body.name;
@@ -45,6 +45,8 @@ exports.postLogin = (req, res, next) => {
     });
 };
 
+//admin registration handler, this is not accessible through the app, needed this to get an admin
+//user in the DB, can utilise this through Postman.
 exports.postRegister = (req, res, next) => {
   let name = req.body.name;
   let password = req.body.password;
@@ -62,6 +64,7 @@ exports.postRegister = (req, res, next) => {
     .catch(err => res.status(500).json({ message: "Server Error" }));
 };
 
+//get all bookings for the admin user.
 exports.getBookings = (req, res, next) => {
   Booking.find()
     .then(result => {
@@ -74,6 +77,7 @@ exports.getBookings = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//get all entities for the admin user.
 exports.getEntities = (req, res, next) => {
   Entity.find()
     .then(result => {
@@ -86,6 +90,7 @@ exports.getEntities = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//get all users for the admin user.
 exports.getUsers = (req, res, next) => {
   User.find()
     .then(result => {

@@ -36,7 +36,7 @@ const searchProperty = props => {
   // the html input calendar is restricted.
 
   //first check if the months are single digits, if so a leading zero is added. and the date
-  // is contructed in the format expected by the HTML input calendar.
+  // is constructed in the format expected by the HTML input calendar.
   checkInLimitMonth < 10
     ? (checkInLimit =
         today.getFullYear() + "-0" + checkInLimitMonth + "-" + day)

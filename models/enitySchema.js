@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//Entity Schema for Mongo DB
+//Entity/property Schema for Mongo DB
 
 const entityReg = new Schema({
   name: { type: String, require: true },

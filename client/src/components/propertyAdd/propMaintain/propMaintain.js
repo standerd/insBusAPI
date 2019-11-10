@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./propMaintain.css";
 
+//entity can maintain their availability and upload images after registration.
 class UploadImage extends Component {
   state = {
     files: "",

@@ -1,6 +1,8 @@
 import React from "react";
 import { GoogleMap, Marker, Data, InfoWindow } from "@react-google-maps/api";
 
+//google maps component, uses to display the user search results and also the property
+//location during the property details view.
 const map = props => {
   let markers;
 

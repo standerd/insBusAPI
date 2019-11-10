@@ -8,6 +8,7 @@ import { withRouter } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
+//handles all the functionality related to the main users landing page.
 class LandingPage extends Component {
   constructor() {
     super();
@@ -131,6 +132,7 @@ class LandingPage extends Component {
     });
   };
 
+  // map marker info boxes on marker click.
   openWindow = index => {
     this.setState({ showInfo: true, markerIndex: index });
   };

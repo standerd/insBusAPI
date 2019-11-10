@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./entityBookings.css";
 
-class UserBookings extends Component {
+//returns the entities bookings on entity login
+class EntityBookings extends Component {
   state = {
     bookings: null
   };
@@ -133,4 +134,4 @@ class UserBookings extends Component {
   }
 }
 
-export default UserBookings;
+export default EntityBookings;

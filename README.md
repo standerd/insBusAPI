@@ -15,7 +15,7 @@ Copy the project folder to your local machine.
 # Base testing data
 
 1. Admin login, username= "admin" password="password
-2. User login, email="teststander@gmai.com" password="password"
+2. User login, email="teststander@gmail.com" password="password"
 3. Property login, email="teststander@gmail.com" password="password" --- Property name if you want to test booking "MyTestProp" city="Johannesburg"
 4. Or feel free to create a new user account or sign in with Facebook or Google. You can also register your own property if you want.
 

@@ -3,6 +3,7 @@ import NavigationItems from "../NavigationItems/NavigationItems";
 import { NavLink } from "react-router-dom";
 import "./MobileNavigation.css";
 
+//sets the items to show in the mobile navgation window on open. based on user type and state.
 const mobileNavigation = props => (
   <nav className={["mobile-nav", props.open ? "open" : ""].join(" ")}>
     <ul

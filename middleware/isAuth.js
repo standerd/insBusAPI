@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 
+//user authentication middleware, receives a Authorization header from the client
+//and sets the req.userId to access in the app.
+
 module.exports = (req, res, next) => {
   const authHeader = req.get("Authorization");
 

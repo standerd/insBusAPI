@@ -75,6 +75,7 @@ class App extends Component {
         localStorage.setItem("userId", resData.userId);
         localStorage.setItem("type", resData.type);
 
+        //sets token expiry, users are automatically logged out after 60 mins.
         const remainingTime = 60 * 60 * 1000;
         const tokenExpiry = new Date(new Date().getTime() + remainingTime);
         localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
@@ -89,8 +90,10 @@ class App extends Component {
       });
   };
 
-  //google login handler
+  //google login handler, after the request is sent to the server containing the user info received
+  //from the google API, the login process is exactly the same as for local login.
   responseGoogle = response => {
+    // token is returned by the google API, token is validated in the server side code also.
     let token = response.Zi.id_token;
     fetch("/user/googlelogin", {
       method: "POST",
@@ -125,6 +128,7 @@ class App extends Component {
         localStorage.setItem("userId", resData.userId);
         localStorage.setItem("type", resData.type);
 
+        //autologout info.
         const remainingTime = 60 * 60 * 1000;
         const tokenExpiry = new Date(new Date().getTime() + remainingTime);
         localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
@@ -141,7 +145,13 @@ class App extends Component {
 
   //facebook login handler.
   responseFacebook = response => {
+    //response is received from facebook API when user logs in. This data is sent to the server
+    //for login or registration of the user. the token is also validated in the server against
+    //the facebook validation API.
     const token = response.accessToken;
+
+    //unlike google login, facebook validation results in the server does not return user details again
+    //so these are sent to the server with the login request.
     const { name, email, userID } = response;
 
     fetch("/user/facebookLogin", {
@@ -180,6 +190,7 @@ class App extends Component {
         localStorage.setItem("userId", resData.userId);
         localStorage.setItem("type", resData.type);
 
+        //autologout info
         const remainingTime = 60 * 60 * 1000;
         const tokenExpiry = new Date(new Date().getTime() + remainingTime);
         localStorage.setItem("tokenExpiry", tokenExpiry.toISOString());
@@ -252,6 +263,7 @@ class App extends Component {
   // user type is set on clicking the appropriate navigation button, this sets the login and
   // registration navigation links accodingly.
   typeUpdate = e => {
+    this.logoutHandler();
     this.setState({ type: e.target.id });
   };
 
@@ -306,7 +318,7 @@ class App extends Component {
       });
   };
 
-  //set the type of entity that is currently using the website.
+  //sets the entity email and password entered during the login process..
   entityChangeHandler = name => e => {
     this.setState({ [name]: e.target.value });
   };
@@ -335,7 +347,7 @@ class App extends Component {
         return res.json();
       })
       .then(resData => {
-        //sets user login status and jwt data in local storage, this allows for the users details to be sent
+        //sets admin login status and jwt data in local storage, this allows for the users details to be sent
         //inside the auth headers to access routes that are protected.
         this.setState({
           isAuth: true,

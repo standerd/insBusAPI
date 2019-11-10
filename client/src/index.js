@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
+    {/* LoadScript is for use with @react-google-map */}
     <LoadScript
       id="script-loader"
       libraries={["places"]}

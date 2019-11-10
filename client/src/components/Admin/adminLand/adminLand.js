@@ -2,6 +2,7 @@ import React from "react";
 import "./adminLand.css";
 import { withRouter, Link } from "react-router-dom";
 
+//admin landing showing the 3 options for the admin user.
 const adminLand = props => {
   return (
     <div className="adminLand">

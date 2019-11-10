@@ -4,6 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 
 let days;
 
+// handles the booking confirmation page where the user finalises his booking
 class Booking extends Component {
   state = {
     propertyDetails: null,
@@ -154,7 +155,7 @@ class Booking extends Component {
         ));
 
     //booking area is either the booking form or the booking confirmation depending
-    //on wheether the booking was completed or not.
+    //on whether the booking was completed or not.
     if (!this.state.bookingCompleted && !this.state.loading) {
       bookingArea = (
         <div className="userDetails">

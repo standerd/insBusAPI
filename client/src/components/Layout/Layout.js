@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 
 import "./Layout.css";
 
+//layout is used for the navbar and mobile navbar display.
 const layout = props => (
   <Fragment>
     <header className="main-header">{props.header}</header>

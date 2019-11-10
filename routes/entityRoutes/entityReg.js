@@ -2,10 +2,12 @@ const express = require("express");
 const entityController = require("../../controllers/entityController");
 const router = express.Router();
 
-// Controller deals with Entity Registrations and Login
+//entity registration and login routes
 
+//entity registration route.
 router.post("/register", entityController.postRegister);
 
+//entity login route.
 router.post("/entityLogin", entityController.postLogin);
 
 module.exports = router;

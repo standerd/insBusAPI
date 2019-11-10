@@ -4,6 +4,8 @@ import EditModal from "../userBookings/editDeleteModal/editModal";
 import ContactModal from "../userBookings/contactModal/contactModal";
 import "./userBookings.css";
 
+//render a page showing all the users bookings, past and current.
+
 class UserBookings extends Component {
   state = {
     modalIsOpen: false,
@@ -134,8 +136,7 @@ class UserBookings extends Component {
         }
         return res.json();
       })
-      //on resdata received the modal is set to close and the userBookings page is refreshed to show the booking
-      //has been removed.
+
       .then(resData => {
         this.setState({
           error: false,
@@ -239,10 +240,13 @@ class UserBookings extends Component {
     this.setState({ contactModalOpen: false, message: "" });
   };
 
+  //handles the message input entered by the user, to be used as the e-mail message component.
   messageHandler = e => {
     this.setState({ message: e.target.value });
   };
 
+  //send message function, data is sent to the server and the server sends an email to the property
+  //containing the users message and the users and booking details.
   sendMessage = e => {
     e.preventDefault();
     fetch("/search/contact", {

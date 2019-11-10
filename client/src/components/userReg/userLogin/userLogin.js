@@ -5,7 +5,6 @@ import Facebook from "../facebookLogin/facebookLogin";
 import { Link } from "react-router-dom";
 
 // Standard user login component allowing the user to login with their email and password
-// setup during the user registration page.
 const userLogin = props => {
   let error;
   props.error

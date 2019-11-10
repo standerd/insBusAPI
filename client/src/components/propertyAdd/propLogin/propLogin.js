@@ -2,6 +2,7 @@ import React from "react";
 import "./propLogin.css";
 import { Link } from "react-router-dom";
 
+// basic login component, no google facebook as details of entities are specific.
 const propLogin = props => {
   let error;
   props.error

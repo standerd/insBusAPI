@@ -24,7 +24,7 @@ class UserReg extends Component {
     this.setState({ [name]: e.target.value });
   };
 
-  // registration submit handler, on succesfull registration the user is redirected to the home screen.
+  // registration submit handler, on succesfull registration the user is redirected to the login screen.
   // on login functionality user to be redirected to the users bookings page.
   submitReg = e => {
     //destructuring of state data.

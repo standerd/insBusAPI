@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Modal from "react-modal";
 import "./propertyDetails.css";
 
+//modal styles
 const customStyles = {
   content: {
     top: "50%",
@@ -18,6 +19,8 @@ const customStyles = {
 Modal.setAppElement("#root");
 let images;
 
+//user can view the property details from the search results, this opens up a modal
+//displaying al the property details
 class PropertyDetails extends Component {
   state = {
     imgIndex: 0
@@ -28,7 +31,7 @@ class PropertyDetails extends Component {
     this.setState({ imgIndex: e.target.id });
   };
 
-  // main image contains 2 arrows to scroll through them, this is the function controlling the clicks.
+  // main image contains 2 tabs to scroll through them, this is the function controlling the clicks.
   imgScroll = e => {
     let newIndex;
 

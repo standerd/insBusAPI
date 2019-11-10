@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import "./NavigationItems.css";
 
+//navitems are set below and display is based on use type and login state.
 const navItems = [
   {
     id: "bookings",

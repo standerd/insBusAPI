@@ -6,6 +6,8 @@ import Logo from "../../Logo/Logo";
 import NavigationItems from "../NavigationItems/NavigationItems";
 import "./MainNavigation.css";
 
+//main navigation feeds the mobile as well as the main navigation header. Items from the
+//navigationItems component are rendered based on the user type and state.
 const mainNavigation = props => (
   <nav className="main-nav">
     <MobileToggle onOpen={props.onOpenMobileNav} />

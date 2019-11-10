@@ -18,7 +18,6 @@ const app = express();
 app.use(bodyParser.json());
 
 // Setup Multer and file access and storage handler for images upload and access
-
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -64,6 +63,7 @@ app.use("/search", userSearchRoute);
 app.use("/user", userAuth);
 app.use("/admin", admin);
 
+//production setup
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
   app.use(express.static("client/build"));
@@ -74,6 +74,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+//error handler middleware setup.
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;

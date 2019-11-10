@@ -3,6 +3,7 @@ import "../landingPage/landingPage.css";
 import Map from "../maps/map";
 import "./searchResults.css";
 
+//sets properties displayed on the search results page.
 const searchResults = props => {
   let property;
   let button;

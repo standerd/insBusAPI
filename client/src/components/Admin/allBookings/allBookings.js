@@ -6,7 +6,7 @@ class AllBookings extends Component {
     bookings: null
   };
 
-  // all bookings are fetched duroing the component did mount.
+  // all bookings are fetched during the component did mount.
   componentDidMount() {
     fetch("/admin/bookings", {
       headers: {

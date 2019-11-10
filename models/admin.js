@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// Asmin Schema For Mongo DB
+// Admin Schema For Mongo DB
 
 const admin = new Schema({
   name: { type: String, require: true },
