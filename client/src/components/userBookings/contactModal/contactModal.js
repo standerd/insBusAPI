@@ -44,11 +44,12 @@ const contactProp = props => {
               Send Message
             </button>
           </form>
-          <h3 style={{background: "green"}}>{!props.sent ? null : "Message Sent"}</h3>
+          <h3 style={{ background: "green" }}>
+            {!props.sent ? null : "Message Sent"}
+          </h3>
           <button className="exitButton" onClick={props.closeModal}>
             Back To Bookings
           </button>
-         
         </div>
       </Modal>
     </div>

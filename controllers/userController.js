@@ -514,6 +514,8 @@ exports.ammendBooking = (req, res, next) => {
     });
 };
 
+// this has been left on purpose, I want to try and refactor the search functionality
+
 // exports.postPlay = async (req, res, next) => {
 //   let lat = req.body.lat;
 //   let lng = req.body.lng;
@@ -555,7 +557,7 @@ exports.postContact = (req, res, next) => {
         subject: "New Booking Message",
         html: `<h1>New Message From: ${data.name} ${data.surname}</h1><p>Booking Number: ${bookID}</p><p>Message: </p><p>${message}</p><p>Please respond directly to the user from this mail.</p><p>Regards The Travelling Team</p>`
       });
-      res.status(200).json({data: "Message was sent successfully"})
+      res.status(200).json({ data: "Message was sent successfully" });
     })
     .catch(err => res.status(500).json({ data: "There was an error" }));
 };

@@ -236,7 +236,7 @@ class UserBookings extends Component {
 
   //closes the contact modal.
   contactModalClose = e => {
-    this.setState({ contactModalOpen: false , message: ""});
+    this.setState({ contactModalOpen: false, message: "" });
   };
 
   messageHandler = e => {

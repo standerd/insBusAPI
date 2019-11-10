@@ -8,7 +8,8 @@ class UploadImage extends Component {
     dateIn: "",
     dateOut: "",
     updateError: false,
-    loaded: false
+    loaded: false,
+    uploading: false
   };
 
   // handles the change of image name when the user selects and image
@@ -28,7 +29,8 @@ class UploadImage extends Component {
 
   //dates are submitted to the database to be written into the availability field.
 
-  // NB NEED TO STILL CODE THE CHECK IF AVAILABLE OR NOT TO AMMEND
+  //date submit function, submits request to the server to update, server does a check to see if 
+  //dates are not booked and responds with OK or error message.
   onDateSubmit = e => {
     e.preventDefault();
     let occupation = [];
@@ -78,6 +80,7 @@ class UploadImage extends Component {
   // confirm succesfull upload.
   uploadImg = e => {
     e.preventDefault();
+    this.setState({uploading: true})
 
     // cannot send send images in application/json, so a new form object
     // is created to send the file data with the other normal body data.
@@ -93,7 +96,7 @@ class UploadImage extends Component {
       body: formData
     })
       .then(res => res.json())
-      .then(result => this.setState({ preview: result.image }))
+      .then(result => this.setState({ preview: result.image, uploading:false }))
       .catch(err => console.log(err));
   };
 
@@ -145,6 +148,7 @@ class UploadImage extends Component {
             <button type="submit" onClick={this.uploadImg}>
               Upload Image
             </button>
+            {this.state.uploading ? <h3 style={{color: "green"}}>Image Uploading Please Be Patient</h3> : null}
             <br></br>
           </form>
           <img
