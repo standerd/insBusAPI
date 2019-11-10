@@ -67,7 +67,7 @@ class UserReg extends Component {
           })
           .then(result => {
             this.setState({ error: false, error2: false });
-            this.props.history.push("/");
+            this.props.history.push("/loginUser");
           })
           .catch(err => this.setState({ error2: true }));
       });
