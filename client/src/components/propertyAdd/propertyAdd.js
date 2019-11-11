@@ -24,6 +24,7 @@ class PropertyAdd extends Component {
     error: false,
     error2: false,
     option: [],
+    loading: false,
     //looks strange, used to manage the state of the checkboxes.
     index: [false, false, false, false, false, false, false, false]
   };
@@ -37,8 +38,9 @@ class PropertyAdd extends Component {
   // the Enity will now be required to login and will then be able to add images for the profile.
   onSubmitHandler = e => {
     e.preventDefault();
+    this.setState({loading: true})
     if (this.state.password !== this.state.password2) {
-      this.setState({ error: true });
+      this.setState({ error: true, loading: false });
     } else {
       this.setState({ error: false }, () => {
         fetch("/entity/register", {
@@ -80,10 +82,10 @@ class PropertyAdd extends Component {
             return res.json();
           })
           .then(result => {
-            this.setState({ error: false, error2: false });
+            this.setState({ error: false, error2: false, loading: false });
             this.props.history.push("/loginProperty");
           })
-          .catch(err => this.setState({ error2: true }));
+          .catch(err => this.setState({ error2: true, loading: false }));
       });
     }
   };
@@ -344,6 +346,7 @@ class PropertyAdd extends Component {
             <br></br>
             <button type="submit">Submit Form</button>
           </form>
+          {this.state.loading ? <h2 style={{color: "green"}}>Processing Please Wait</h2> : null}
           <p>Already Have An Account</p>
           <Link to="/loginProperty">Login Here</Link>
         </div>

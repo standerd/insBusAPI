@@ -120,8 +120,6 @@ class UploadImage extends Component {
       ? (checkDay = "0" + (checkIn.getDate() + 1))
       : (checkDay = checkIn.getDate() + 1);
 
-    console.log("checkoutlimi" + checkDay);
-
     //first check if the months are single digits, if so a leading zero is added. and the date
     // is contructed in the format expected by the HTML input calendar.
     checkInLimitMonth < 10
@@ -140,7 +138,6 @@ class UploadImage extends Component {
       : (checkOutLimit =
           checkIn.getFullYear() + "-" + checkOutLimitMonth + "-" + checkDay);
 
-    console.log(checkInLimit);
     return (
       <div className="maintain">
         <h1>Upload Images or Maintain Availability Of Your Property</h1>
