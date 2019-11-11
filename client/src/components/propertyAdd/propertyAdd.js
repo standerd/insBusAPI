@@ -38,7 +38,7 @@ class PropertyAdd extends Component {
   // the Enity will now be required to login and will then be able to add images for the profile.
   onSubmitHandler = e => {
     e.preventDefault();
-    this.setState({loading: true})
+    this.setState({ loading: true });
     if (this.state.password !== this.state.password2) {
       this.setState({ error: true, loading: false });
     } else {
@@ -346,7 +346,9 @@ class PropertyAdd extends Component {
             <br></br>
             <button type="submit">Submit Form</button>
           </form>
-          {this.state.loading ? <h2 style={{color: "green"}}>Processing Please Wait</h2> : null}
+          {this.state.loading ? (
+            <h2 style={{ color: "green" }}>Processing Please Wait</h2>
+          ) : null}
           <p>Already Have An Account</p>
           <Link to="/loginProperty">Login Here</Link>
         </div>
