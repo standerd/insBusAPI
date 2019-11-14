@@ -118,7 +118,7 @@ class PropertyDetails extends Component {
               <div className="imgBox">{imgSrc}</div>
               <div className="rates">
                 <hr></hr>
-                <h1>RATES</h1>
+                <h1 style={{margin: "0.1%"}}>RATES</h1>
                 <table>
                   <thead>
                     <tr>
@@ -179,7 +179,7 @@ class PropertyDetails extends Component {
                       borderTop: "0.5px solid white",
                       borderBottom: "0.5px solid white",
                       marginTop: "0",
-                      padding: "0.6rem 0"
+                      padding: "0.3rem 0"
                     }}
                   >
                     Description
@@ -196,7 +196,7 @@ class PropertyDetails extends Component {
                       borderTop: "0.5px solid white",
                       borderBottom: "0.5px solid white",
                       marginTop: "0",
-                      padding: "0.6rem 0"
+                      padding: "0.3rem 0"
                     }}
                   >
                     Main Facilities
