@@ -151,7 +151,7 @@ class LandingPage extends Component {
         <div className="landingContent">
           <div className="overLay">
             <h1 className="heading">
-              Where Ever The Map Takes You We Have You Covered
+              Wherever The Map Takes You We Have You Covered
             </h1>
             <hr></hr>
           </div>

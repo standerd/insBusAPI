@@ -467,6 +467,7 @@ exports.ammendBooking = (req, res, next) => {
   let checkOut = req.body.checkOut;
   let guestCount = req.body.guestCount;
   let entityID = req.body.entityID;
+  let duration = req.body.duration;
 
   Entity.findOne({ _id: entityID })
     .then(result => {
@@ -503,7 +504,8 @@ exports.ammendBooking = (req, res, next) => {
             $set: {
               checkInDate: checkIn,
               checkOutDate: checkOut,
-              guestCount: guestCount
+              guestCount: guestCount,
+              totalBookingCost: result.offPeakRates * duration
             }
           }
         ).catch(err => console.log(err));

@@ -120,6 +120,7 @@ class UserBookings extends Component {
         bookingID: this.state.bookings[this.state.editIndex]._id,
         occupation: occupation,
         currentOcc: currentOcc,
+        duration: duration,
         checkIn: this.state.checkIn,
         checkOut: this.state.checkOut,
         guestCount: this.state.guestCount,
