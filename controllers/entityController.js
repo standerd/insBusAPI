@@ -1,11 +1,9 @@
 const { validationResult } = require("express-validator");
 const Entity = require("../models/enitySchema");
 const KEY = require("../config/keys");
-const bcrypt = require("bcrypt");
 const Booking = require("../models/booking");
-const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 const mongoose = require("mongoose");
-let resultsArray = [];
 
 // Google maps Geocoding api setup, used to get lat and lng from the entity
 // registration adress. Lat, lng is used to display the properties on a map
@@ -15,52 +13,6 @@ const googleMapsClient = require("@google/maps").createClient({
   key: KEY.keys.google,
   Promise: Promise
 });
-
-//entity login function.
-exports.postLogin = (req, res, next) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let loadedEntity;
-
-  Entity.findOne({ email: email })
-    .then(entity => {
-      if (!entity) {
-        const error = new Error("User not Found");
-        error.statusCode = 401;
-        throw error;
-      }
-
-      loadedEntity = entity;
-      return bcrypt.compare(password, entity.password);
-    })
-    .then(isMatch => {
-      if (!isMatch) {
-        const error = new Error("Incorrect Password");
-        error.statusCode = 401;
-        throw error;
-      }
-      const token = jwt.sign(
-        {
-          email: loadedEntity.email,
-          entityId: loadedEntity._id,
-          type: "entity"
-        },
-        "thisBookingsDotComSecretEntity",
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({
-        token: token,
-        entityId: loadedEntity._id,
-        type: "entity"
-      });
-    })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-};
 
 // entity registration handler.
 exports.postRegister = (req, res, next) => {
@@ -77,12 +29,11 @@ exports.postRegister = (req, res, next) => {
     postalCode,
     telNo,
     altNo,
-    userName,
     password,
     facilities,
     description,
-    offPeakRates,
-    peakRates
+    rates,
+    userId
   } = req.body;
 
   // geocode the address entered by the entity
@@ -100,48 +51,43 @@ exports.postRegister = (req, res, next) => {
             throw error;
           } else {
             // if the email was not found a new entity is stored to the database.
-            bcrypt
-              .hash(password, 12)
-              .then(hashedPW => {
-                const newEntity = new Entity({
-                  name,
-                  entityType,
-                  street,
-                  suburb,
-                  city,
-                  country,
-                  postalCode,
-                  long: response.json.results[0].geometry.location.lng,
-                  lat: response.json.results[0].geometry.location.lat,
-                  telNo,
-                  altNo,
-                  email,
-                  userName,
-                  password: hashedPW,
-                  facilities,
-                  offPeakRates,
-                  peakRates,
-                  description
-                });
-                return newEntity.save();
-              })
-              .then(result => {
-                res.status(200).json({ message: "Entity Succesfully Saved" });
-              })
-              .catch(err => res.status(500).json({ message: "Server Error" }));
+
+            const newEntity = new Entity({
+              name,
+              entityType,
+              street,
+              suburb,
+              city,
+              country,
+              postalCode,
+              long: response.json.results[0].geometry.location.lng,
+              lat: response.json.results[0].geometry.location.lat,
+              telNo,
+              altNo,
+              email,
+              facilities,
+              rates,
+              description,
+              userId
+            });
+            return newEntity.save();
           }
         })
-
-        .catch(err => {
-          if (!err.statusCode) {
-            err.statusCode = 500;
-          }
-          next(err);
-        });
+        .then(result => {
+          User.updateOne(
+            { _id: result.userId },
+            { propId: result._id }
+          ).catch(err => console.log(err));
+          res.status(200).json({ message: "Entity Succesfully Saved" });
+        })
+        .catch(err => res.status(500).json({ message: "Server Error" }));
     })
 
     .catch(err => {
-      console.log(err);
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
 };
 
@@ -195,7 +141,8 @@ exports.putAvailability = (req, res, next) => {
 //get the enity bookings from the bookings collection in the database. The Entity ID to collect
 // is contained in the Auth Header sent from the client.
 exports.getBookings = (req, res, next) => {
-  Booking.find({ propertyId: req.entityId })
+  console.log("Got you");
+  Booking.find({ propertyId: req.propId })
     .then(result => {
       if (!result) {
         res.status(500).json({ data: "No Bookings Found for User" });

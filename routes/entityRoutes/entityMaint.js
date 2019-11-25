@@ -1,7 +1,7 @@
 const express = require("express");
 const entityController = require("../../controllers/entityController");
 const router = express.Router();
-const isAuth = require("../../middleware/isAuthEnt");
+const isAuth = require("../../middleware/isAuth");
 
 //entity maintenance and viewing routes
 

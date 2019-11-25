@@ -27,6 +27,7 @@ const fileStorage = multer.diskStorage({
   }
 });
 
+// set type of files allowed
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
@@ -39,6 +40,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// set file upload middleware.
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
@@ -58,7 +60,7 @@ app.use((req, res, next) => {
 
 // Routes setup
 app.use("/entity", entityRegRoute);
-app.use("/entityMaint", entityMaint);
+app.use("/maint", entityMaint);
 app.use("/search", userSearchRoute);
 app.use("/user", userAuth);
 app.use("/admin", admin);

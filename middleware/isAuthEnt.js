@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 //entity ID is set for use to get bookings and also for maintaining property details.
 
 module.exports = (req, res, next) => {
+  console.log("Request received")
   const authHeader = req.get("Authorization");
 
   if (!authHeader) {
@@ -16,7 +17,7 @@ module.exports = (req, res, next) => {
   let decodedToken;
 
   try {
-    decodedToken = jwt.verify(token, "thisBookingsDotComSecretEntity");
+    decodedToken = jwt.verify(token, "thisBookingsDotComSecret");
   } catch (err) {
     console.log(err);
   }
@@ -24,7 +25,8 @@ module.exports = (req, res, next) => {
   if (!decodedToken) {
     console.log("Not Authenticated");
   }
+  console.log(decodedToken);
 
-  req.entityId = decodedToken.entityId;
+  req.entityId = decodedToken.propId;
   next();
 };

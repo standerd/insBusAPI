@@ -16,14 +16,12 @@ const entityReg = new Schema({
   telNo: { type: String, require: true },
   altNo: { type: String, require: true },
   email: { type: String, require: true },
-  userName: { type: String, require: true },
-  password: { type: String, require: true },
   images: { type: Array },
   facilities: { type: Array },
   availability: { type: Array },
-  offPeakRates: { type: String, require: true },
-  peakRates: { type: String, require: true },
-  description: { type: String, require: true }
+  rates: { type: String, require: true },
+  description: { type: String, require: true },
+  userId: { type: String, require: true }
 });
 
 module.exports = mongoose.model("Entity", entityReg);

@@ -7,7 +7,4 @@ const router = express.Router();
 //entity registration route.
 router.post("/register", entityController.postRegister);
 
-//entity login route.
-router.post("/entityLogin", entityController.postLogin);
-
 module.exports = router;

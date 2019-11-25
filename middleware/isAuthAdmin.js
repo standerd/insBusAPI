@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
   let decodedToken;
 
   try {
-    decodedToken = jwt.verify(token, "thisBookingsDotComSecretAdmin");
+    decodedToken = jwt.verify(token, "thisBookingsDotComSecret");
   } catch (err) {
     console.log(err);
   }

@@ -37,6 +37,12 @@ exports.postLogin = (req, res, next) => {
         throw error;
       }
 
+      if (!user.validated) {
+        const error = new Error("Email address not validatec");
+        error.statusCode = 402;
+        throw error;
+      }
+
       loadedUser = user;
       return bcrypt.compare(password, user.password);
     })
@@ -47,14 +53,20 @@ exports.postLogin = (req, res, next) => {
         throw error;
       }
       const token = jwt.sign(
-        { email: loadedUser.email, userId: loadedUser._id, type: "user" },
+        {
+          email: loadedUser.email,
+          userId: loadedUser._id,
+          propId: loadedUser.propId,
+          isAdmin: loadedUser.isAdmin
+        },
         "thisBookingsDotComSecret",
         { expiresIn: "1h" }
       );
       res.status(200).json({
         token: token,
         userId: loadedUser._id,
-        type: "user"
+        isAdmin: loadedUser.isAdmin,
+        propId: loadedUser.propId
       });
     })
     .catch(err => {
@@ -227,7 +239,7 @@ exports.postFacebookLogin = (req, res, next) => {
 // post Register handles the user registration
 exports.postRegister = (req, res, next) => {
   //destructure incoming data from client fetch request
-  const { name, surname, email, password, telNo, altNo } = req.body;
+  const { name, email, password, telNo, validated, isAdmin } = req.body;
 
   // see if the user database already contains a user with the email address, if
   //it exists a error is sent to the user, else the user is registered in the database
@@ -244,11 +256,11 @@ exports.postRegister = (req, res, next) => {
           .then(hashedPW => {
             const newUser = new User({
               name,
-              surname,
               email,
               password: hashedPW,
               telNo,
-              altNo
+              validated,
+              isAdmin
             });
             return newUser.save();
           })
