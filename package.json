@@ -8,9 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run bcrypt && node server.js",
-    "dev": "nodemon server.js",
-    "bcrypt": "npm install bcrypt"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
