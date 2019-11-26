@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const Entity = require("../models/enitySchema");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjsnpm ");
 const User = require("../models/user");
 const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
