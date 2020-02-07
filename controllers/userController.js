@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const Entity = require("../models/enitySchema");
-const bcrypt = require("bcryptjsnpm ");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
@@ -38,8 +38,8 @@ exports.postLogin = (req, res, next) => {
       }
 
       if (!user.validated) {
-        const error = new Error("Email address not validatec");
-        error.statusCode = 402;
+        const error = new Error("Email address not validated");
+        error.statusCode = 422;
         throw error;
       }
 

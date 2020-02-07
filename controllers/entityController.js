@@ -29,7 +29,6 @@ exports.postRegister = (req, res, next) => {
     postalCode,
     telNo,
     altNo,
-    password,
     facilities,
     description,
     rates,
@@ -42,45 +41,37 @@ exports.postRegister = (req, res, next) => {
     .asPromise()
     .then(response => {
       // check if an email exists in the database, if so advise the entity that the email already exists.
-      Entity.findOne({ email: email })
+      const newEntity = new Entity({
+        name,
+        entityType,
+        street,
+        suburb,
+        city,
+        country,
+        postalCode,
+        long: response.json.results[0].geometry.location.lng,
+        lat: response.json.results[0].geometry.location.lat,
+        telNo,
+        altNo,
+        email,
+        facilities,
+        rates,
+        description,
+        userId
+      });
+      return newEntity.save();
+    })
 
-        .then(entity => {
-          if (entity) {
-            const error = new Error("User Already Exists");
-            error.statusCode = 401;
-            throw error;
-          } else {
-            // if the email was not found a new entity is stored to the database.
-
-            const newEntity = new Entity({
-              name,
-              entityType,
-              street,
-              suburb,
-              city,
-              country,
-              postalCode,
-              long: response.json.results[0].geometry.location.lng,
-              lat: response.json.results[0].geometry.location.lat,
-              telNo,
-              altNo,
-              email,
-              facilities,
-              rates,
-              description,
-              userId
-            });
-            return newEntity.save();
-          }
-        })
-        .then(result => {
-          User.updateOne(
-            { _id: result.userId },
-            { propId: result._id }
-          ).catch(err => console.log(err));
-          res.status(200).json({ message: "Entity Succesfully Saved" });
-        })
-        .catch(err => res.status(500).json({ message: "Server Error" }));
+    .then(result => {
+      User.updateOne(
+        { _id: result.userId },
+        { propId: result._id }
+      ).catch(err => console.log(err));
+      res.status(200).json({ message: "Entity Succesfully Saved" });
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Server Error" });
+      console.log(err);
     })
 
     .catch(err => {
@@ -93,7 +84,7 @@ exports.postRegister = (req, res, next) => {
 
 // entity image upload handler
 exports.postUpload = (req, res, next) => {
-  let id = req.entityId;
+  let id = req.propId;
   let file = req.file.path;
 
   Entity.updateOne({ _id: id }, { $push: { images: file } })
@@ -108,7 +99,7 @@ exports.postUpload = (req, res, next) => {
 // maybe a period in which the property will be closed and not available for booking.
 exports.putAvailability = (req, res, next) => {
   let appendRange = req.body.dateRange;
-  let id = req.entityId;
+  let id = req.propId;
 
   Entity.findOne({ _id: id })
     .then(result => {
