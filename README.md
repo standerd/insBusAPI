@@ -1,16 +1,17 @@
-# finalCapstone
+# Booking API
 
-## Note this project uses the HTML5 Date Picker type input, it is only fully supported in Google Chrome, please use the application in Google Chrome only.
+This Repo consists only of the Rest API code, the code is deployed and run on an AWS EC2 instance, and has a React Client connecting to it.
+
+The React Client code is contained in a repo called bookingClient. You can clone that Repo to have it communicate with the live EC2 server instance, alternatively if you would like to work with it locally you would need to ammend the fetch requests to point to a local proxy.
+
+The same project is also available as a full repo, however with the old interface. Please look at the finalCapstone repo and follow the instructions in the repo to use it locally.
 
 # How to Use the Project Locally
 
 Copy the project folder to your local machine.
 
-1. Navigate to the project folder and run NPM Install.
-2. Once the installation is complete navigate to the client directory (cd client) and run NPM Install.
-3. Once the installation is completed run "npm run dev" in the main folder directory this will start the Node JS server.
-4. Once this is started navigate to the client folder in a seperate terminal window run "npm start", this will start the React server.
-5. This should open localhoste:3000, however if it does not open Google Chrome and go to http://localhost:3000.
+1. Navigate to the project folder and run NPM Install..
+2. Once the installation is completed run "npm run dev" in the main folder directory this will start the Node JS server.
 
 # Base testing data
 
