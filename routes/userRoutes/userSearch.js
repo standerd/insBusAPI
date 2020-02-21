@@ -31,4 +31,10 @@ router.post("/removeBooking", userController.deleteBooking);
 //ammend the users booking, only dates and guest count can be edited.
 router.post("/ammendBooking", userController.ammendBooking);
 
+//returns user bookings from the database
+router.get("/user", isAuth, userController.getUser);
+
+//returns user bookings from the database
+router.post("/booking", userController.postSingle);
+
 module.exports = router;

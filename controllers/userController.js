@@ -346,6 +346,7 @@ exports.postSearch = async (req, res, next) => {
 // contains both the user and property id's for ease of future queries
 
 exports.postBooking = (req, res, next) => {
+  let email;
   // destructure the data coming in via the client fetch request
   const {
     userId,
@@ -355,18 +356,15 @@ exports.postBooking = (req, res, next) => {
     guestCount,
     totalBookingCost,
     bookingDate,
-    street,
-    city,
-    country,
-    postal,
     bookingArray,
     destination,
     imageSrc,
-    entityName,
-    email,
-    name,
-    contact
+    entityName
   } = req.body;
+
+  User.findOne({ _id: userId })
+    .then(result => (email = result.email))
+    .catch(err => console.log(err));
 
   // update the entity booked availability array to ensure that it cannot be booked a second time.
   Entity.updateOne(
@@ -383,16 +381,9 @@ exports.postBooking = (req, res, next) => {
     guestCount,
     totalBookingCost,
     bookingDate,
-    street,
-    city,
-    country,
-    postal,
-    destination,
     imageSrc,
-    entityName,
-    name,
-    email,
-    contact
+    destination,
+    entityName
   });
 
   return (
@@ -431,9 +422,38 @@ exports.getBookings = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//get booking function, get Request from the client, finds all bookings for the user in
+//the database and sends the a response containing all the usersbookings.
+exports.postSingle = (req, res, next) => {
+  Booking.find({ _id: req.body.bookID })
+    .then(result => {
+      if (!result) {
+        res.status(500).json({ data: "No Bookings Found for User" });
+      } else {
+        res.status(200).json({ booking: result });
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+// dusplays the users current registration details when clicking on the account page
+exports.getUser = (req, res, next) => {
+  console.log("got request for user Id");
+  User.find({ _id: req.userId })
+    .then(result => {
+      if (!result) {
+        res.status(500).json({ data: "No Bookings Found for User" });
+      } else {
+        res.status(200).json({ user: result });
+      }
+    })
+    .catch(err => console.log(err));
+};
+
 // if the users clicks on booking details from withing his booking manager, a request
 //is sent here to fetch the property details for the user to see displayed.
 exports.getProperty = (req, res, next) => {
+  console.log("got your request");
   let property = req.params.propId;
 
   Entity.findOne({ _id: property })
@@ -517,7 +537,7 @@ exports.ammendBooking = (req, res, next) => {
               checkInDate: checkIn,
               checkOutDate: checkOut,
               guestCount: guestCount,
-              totalBookingCost: result.offPeakRates * duration
+              totalBookingCost: parseInt(result.rates) * parseInt(duration)
             }
           }
         ).catch(err => console.log(err));
@@ -537,7 +557,7 @@ exports.ammendBooking = (req, res, next) => {
 // the user is able to contact the property from within his booking manager, this sends an
 // email to the entity.
 exports.postContact = (req, res, next) => {
-  const { userID, message, email, bookID } = req.body;
+  const { userID, message, bookID } = req.body;
 
   // user is looked up from the database to get the user details for display on the email body,
   User.findOne({ _id: userID })
@@ -552,7 +572,10 @@ exports.postContact = (req, res, next) => {
       });
       res.status(200).json({ data: "Message was sent successfully" });
     })
-    .catch(err => res.status(500).json({ data: "There was an error" }));
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ data: "There was an error" });
+    });
 };
 
 // this has been left on purpose, I want to try and refactor the search functionality

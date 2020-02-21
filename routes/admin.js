@@ -6,7 +6,7 @@ const isAuth = require("../middleware/isAuth");
 // Admin login and views routes. Functionality handled by the admin controller.
 
 // admin view bookings route
-router.get("/bookings", isAuth, adminController.getBookings);
+router.get("/bookings", adminController.getBookings);
 
 // admin view all entities route
 router.get("/entities", isAuth, adminController.getEntities);

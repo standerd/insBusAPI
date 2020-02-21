@@ -143,3 +143,17 @@ exports.getBookings = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+
+exports.getAccount = (req, res, next) => {
+  console.log("Got you");
+  Entity.find({ _id:  req.propId })
+    .then(result => {
+      if (!result) {
+        res.status(500).json({ data: "No Bookings Found for User" });
+      } else {
+        res.status(200).json({ account: result });
+      }
+    })
+    .catch(err => console.log(err));
+};

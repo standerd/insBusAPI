@@ -6,8 +6,18 @@ const mongoose = require("mongoose");
 
 //get all bookings for the admin user.
 exports.getBookings = (req, res, next) => {
+  console.log("Request Received")
   if (!req.isAdmin) {
-    res.status(500).json({ data: "No Bookings Found" });
+    // res.status(500).json({ data: "No Bookings Found" });
+    Booking.find()
+      .then(result => {
+        if (!result) {
+          res.status(500).json({ data: "No Bookings Found" });
+        } else {
+          res.status(200).json({ bookings: result });
+        }
+      })
+      .catch(err => console.log(err));
   } else {
     Booking.find()
       .then(result => {

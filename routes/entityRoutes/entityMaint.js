@@ -14,4 +14,7 @@ router.post("/maintainDates", isAuth, entityController.putAvailability);
 // return the bookings in the database to the entity home page.
 router.get("/bookings", isAuth, entityController.getBookings);
 
+// return the bookings in the database to the entity home page.
+router.get("/account", isAuth, entityController.getAccount);
+
 module.exports = router;
