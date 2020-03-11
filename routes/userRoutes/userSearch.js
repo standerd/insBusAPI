@@ -37,4 +37,10 @@ router.get("/user", isAuth, userController.getUser);
 //returns user bookings from the database
 router.post("/booking", userController.postSingle);
 
+//returns user bookings from the database
+router.post("/push", userController.postNotification);
+
+//returns user bookings from the database
+router.post("/messages", userController.postMessages);
+
 module.exports = router;

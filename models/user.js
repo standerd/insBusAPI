@@ -13,7 +13,8 @@ const user = new Schema({
   fmail: { type: String, required: false },
   validated: { type: Boolean, required: true },
   propId: { type: String, required: false },
-  isAdmin: { type: Boolean, required: true }
+  isAdmin: { type: Boolean, required: true },
+  token: { type: Array, required: false }
 });
 
 module.exports = mongoose.model("User", user);

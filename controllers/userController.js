@@ -11,8 +11,13 @@ const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 const request = require("request");
 const requestPromise = require("request-promise");
+const { Expo } = require("expo-server-sdk");
+const io = require("../socket");
 
 const client = new OAuth2Client(KEY.keys.googleLogin);
+
+// Create a new Expo SDK client
+const expo = new Expo();
 
 //nodemailer client setup.
 const transporter = nodemailer.createTransport(
@@ -28,6 +33,8 @@ exports.postLogin = (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
   let loadedUser;
+
+  console.log(req.body);
 
   User.findOne({ email: email })
     .then(user => {
@@ -275,7 +282,10 @@ exports.postRegister = (req, res, next) => {
             });
             res.status(200).json({ message: "Entity Succesfully Saved" });
           })
-          .catch(err => res.status(500).json({ message: "Server Error" }));
+          .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: "Server Error" });
+          });
       }
     })
 
@@ -576,6 +586,47 @@ exports.postContact = (req, res, next) => {
       console.log(err);
       res.status(500).json({ data: "There was an error" });
     });
+};
+
+const myFunction = () => {
+  io.getIO().emit("message", "message");
+};
+
+exports.postNotification = async (req, res, next) => {
+  const { pushMessage } = req.body;
+
+  // Create the messages that you want to send to clents
+  let notification = [
+    {
+      to: "ExponentPushToken[4V1nucAf1u1GDaSdHFNpuG]",
+      sound: "default",
+      title: "Message from API",
+      body: pushMessage,
+      data: { data: pushMessage }
+    }
+  ];
+
+  const ticket = await expo.sendPushNotificationsAsync(notification);
+
+  Booking.updateOne(
+    { _id: "5e4e42db79f0621cb7ef56aa" },
+    { $push: { messages: { pushMessage } } }
+  )
+    .then(res => myFunction())
+    .catch(err => console.log("Err" + err));
+};
+
+exports.postMessages = (req, res, next) => {
+  const { bookingId } = req.body;
+  io.getIO().on("room", data => {
+    console.log(data);
+  });
+
+  Booking.find({ _id: bookingId })
+    .then(result => {
+      res.status(200).json({ messages: result[0].messages });
+    })
+    .catch(err => console.log(err));
 };
 
 // this has been left on purpose, I want to try and refactor the search functionality

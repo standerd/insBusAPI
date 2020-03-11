@@ -10,6 +10,7 @@ const entityMaint = require("./routes/entityRoutes/entityMaint");
 const userAuth = require("./routes/userRoutes/userAuth");
 const admin = require("./routes/admin");
 const path = require("path");
+const socketIO = require("socket.io");
 
 //intialise express app.
 const app = express();
@@ -93,4 +94,31 @@ mongoose.connect(
 );
 
 //app set to listen of port 3001 if ENV is not used
-app.listen(PORT, () => console.log(`Server is Listening on Port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`Server is Listening on Port ${PORT}`)
+);
+
+const io = require("./socket").init(server);
+
+io.on("connection", socket => {
+  console.log("Client connected");
+  socket.on("room", data => {
+    console.log("GOT IT");
+    console.log("Greetings from RN app", data);
+  });
+});
+
+// const io = socketIO(server);
+
+// io.on('connection', (socket) => {
+//   console.log('new user connected');
+
+//   socket.on('disconnect', () => {
+//       console.log('User was disconnected');
+//   });
+
+//   socket.on('room', (data) => {
+//     console.log("GOT IT")
+//     console.log('Greetings from RN app', data);
+//   })
+// });

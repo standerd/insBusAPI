@@ -147,8 +147,10 @@ exports.getBookings = (req, res, next) => {
 
 exports.getAccount = (req, res, next) => {
   console.log("Got you");
+  console.log(req.propId)
   Entity.find({ _id:  req.propId })
     .then(result => {
+      console.log(result)
       if (!result) {
         res.status(500).json({ data: "No Bookings Found for User" });
       } else {
