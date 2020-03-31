@@ -5,8 +5,8 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const PORT = process.env.PORT || 3001;
 const userSearchRoute = require("./routes/userRoutes/userSearch");
-const entityRegRoute = require("./routes/entityRoutes/entityReg");
-const entityMaint = require("./routes/entityRoutes/entityMaint");
+const ClientRoute = require("./routes/ClientRoute/ClientReg");
+const entityMaint = require("./routes/ClientRoute/entityMaint");
 const userAuth = require("./routes/userRoutes/userAuth");
 const admin = require("./routes/admin");
 const path = require("path");
@@ -60,11 +60,11 @@ app.use((req, res, next) => {
 });
 
 // Routes setup
-app.use("/entity", entityRegRoute);
-app.use("/maint", entityMaint);
-app.use("/search", userSearchRoute);
-app.use("/user", userAuth);
-app.use("/admin", admin);
+app.use("/client", ClientRoute);
+// app.use("/maint", entityMaint);
+// app.use("/search", userSearchRoute);
+// app.use("/user", userAuth);
+// app.use("/admin", admin);
 
 //production setup
 if (process.env.NODE_ENV === "production") {
@@ -94,19 +94,19 @@ mongoose.connect(
 );
 
 //app set to listen of port 3001 if ENV is not used
-const server = app.listen(PORT, () =>
+app.listen(PORT, () =>
   console.log(`Server is Listening on Port ${PORT}`)
 );
 
-const io = require("./socket").init(server);
+// const io = require("./socket").init(server);
 
-io.on("connection", socket => {
-  console.log("Client connected");
-  socket.on("room", data => {
-    console.log("GOT IT");
-    console.log("Greetings from RN app", data);
-  });
-});
+// io.on("connection", socket => {
+//   console.log("Client connected");
+//   socket.on("room", data => {
+//     console.log("GOT IT");
+//     console.log("Greetings from RN app", data);
+//   });
+// });
 
 // const io = socketIO(server);
 
