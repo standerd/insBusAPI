@@ -1,25 +1,44 @@
-const { validationResult } = require("express-validator");
-const Entity = require("../models/enitySchema");
-const KEY = require("../config/keys");
-const Booking = require("../models/booking");
-const User = require("../models/user");
-const mongoose = require("mongoose");
-
-
+const db = require("../models");
+const Client = db.client;
+const Op = db.Sequelize.Op;
 
 // New client registration
 exports.postNewClient = (req, res, next) => {
-  console.log(req.body);
-};
+  // Create a Client
+  const client = {
+    first_name: req.body.name,
+    last_name: req.body.surname,
+    email: req.body.email,
+    tel_no: req.body.telNo,
+    cell_no: req.body.cellNo,
+    id_no: req.body.idNo,
+    street_name: req.body.street,
+    suburb: req.body.suburb,
+    city: req.body.city,
+    postal_code: req.body.postal
+  };
 
-// entity image upload handler
-exports.postUpload = (req, res, next) => {
-  let id = req.propId;
-  let file = req.file.path;
-
-  Entity.updateOne({ _id: id }, { $push: { images: file } })
-    .then(result => {
-      res.status(200).json({ image: file });
+  // Save Client in the database
+  Client.create(client)
+    .then(data => {
+      res.send(data);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
+    });
 };
+
+// // entity image upload handler
+// exports.postUpload = (req, res, next) => {
+//   let id = req.propId;
+//   let file = req.file.path;
+
+//   Entity.updateOne({ _id: id }, { $push: { images: file } })
+//     .then(result => {
+//       res.status(200).json({ image: file });
+//     })
+//     .catch(err => console.log(err));
+// };

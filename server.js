@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const db = require("./models");
 const KEYS = require("./config/keys");
 const bodyParser = require("body-parser");
 const multer = require("multer");
@@ -14,6 +14,9 @@ const socketIO = require("socket.io");
 
 //intialise express app.
 const app = express();
+
+//initialise postgres sequel database.
+db.sequelize.sync({ force: true }).then(() => console.log("Drop and Sync"));
 
 //setup body parser
 app.use(bodyParser.json());
@@ -86,17 +89,8 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-// mongo db connection setup
-mongoose.connect(
-  KEYS.keys.mongoUri,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => console.log("MongoDB Connected")
-);
-
 //app set to listen of port 3001 if ENV is not used
-app.listen(PORT, () =>
-  console.log(`Server is Listening on Port ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server is Listening on Port ${PORT}`));
 
 // const io = require("./socket").init(server);
 

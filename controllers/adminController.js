@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const Entity = require("../models/enitySchema");
-const User = require("../models/user");
+const User = require("../models/client.model");
 const Booking = require("../models/booking");
 const mongoose = require("mongoose");
 
