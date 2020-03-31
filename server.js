@@ -5,23 +5,42 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const PORT = process.env.PORT || 3001;
 const userSearchRoute = require("./routes/userRoutes/userSearch");
-const ClientRoute = require("./routes/ClientRoute/ClientReg");
-const entityMaint = require("./routes/ClientRoute/entityMaint");
+const ClientRoute = require("./routes/ClientRoute/ClientRoute");
 const userAuth = require("./routes/userRoutes/userAuth");
-const admin = require("./routes/admin");
 const path = require("path");
 const socketIO = require("socket.io");
 
-//intialise express app.
+/* 
+-------------------------------
+Intitialise Express App
+-------------------------------
+*/
+
 const app = express();
 
-//initialise postgres sequel database.
+/* 
+-------------------------------------
+Intitialise Postgres SQL Database
+-------------------------------------
+*/
+
 db.sequelize.sync({ force: true }).then(() => console.log("Drop and Sync"));
 
-//setup body parser
+/* 
+-------------------------------
+Setup Body Parser
+-------------------------------
+*/
+
 app.use(bodyParser.json());
 
-// Setup Multer and file access and storage handler for images upload and access
+/* 
+--------------------------------------------------
+Multer Setup for file and image upload handling
+--------------------------------------------------
+*/
+
+// image file handling logic
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -49,9 +68,14 @@ app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
 
+// set folder to store images that are to be uploaded.
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-// set headers to ensure CORRS requests can pass.
+/* 
+-------------------------------
+Set CORS Headers to Allow HTTP
+-------------------------------
+*/
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -62,14 +86,26 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes setup
+/* 
+-------------------------------
+Routes Setup
+-------------------------------
+*/
+
+// client routes
 app.use("/client", ClientRoute);
+
 // app.use("/maint", entityMaint);
 // app.use("/search", userSearchRoute);
 // app.use("/user", userAuth);
 // app.use("/admin", admin);
 
-//production setup
+/* 
+-------------------------------
+Production Setup
+-------------------------------
+*/
+
 if (process.env.NODE_ENV === "production") {
   // Exprees will serve up production assets
   app.use(express.static("client/build"));
@@ -80,7 +116,12 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-//error handler middleware setup.
+/* 
+-------------------------------
+Error Handling Middleware
+-------------------------------
+*/
+
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
@@ -89,8 +130,22 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-//app set to listen of port 3001 if ENV is not used
+
+/* 
+------------------------------------------------------
+App set to listen to port 3001 or ENV in Production
+------------------------------------------------------
+*/
+
 app.listen(PORT, () => console.log(`Server is Listening on Port ${PORT}`));
+
+
+
+/* 
+-------------------------------------------------
+Socket IO Setup Below To be used in app later.
+-------------------------------------------------
+*/
 
 // const io = require("./socket").init(server);
 

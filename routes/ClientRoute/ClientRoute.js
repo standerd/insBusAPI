@@ -2,7 +2,10 @@ const express = require("express");
 const ClientController = require("../../controllers/ClientController");
 const router = express.Router();
 
-//entity registration route.
+//New client registration route.
 router.post("/newClient", ClientController.postNewClient);
+
+//New client registration route.
+router.post("/newPolicy", ClientController.postNewPolicy);
 
 module.exports = router;

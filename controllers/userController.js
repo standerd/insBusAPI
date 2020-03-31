@@ -1,10 +1,7 @@
 const { validationResult } = require("express-validator");
-const Entity = require("../models/enitySchema");
 const bcrypt = require("bcryptjs");
 const User = require("../models/client.model");
-const Booking = require("../models/booking");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const { OAuth2Client } = require("google-auth-library");
 const KEY = require("../config/keys");
 const nodemailer = require("nodemailer");
