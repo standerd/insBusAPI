@@ -5,7 +5,7 @@ Intitialise Express App
 */
 
 module.exports = (sequelize, Sequelize) => {
-  const Client = sequelize.define("client", {
+  const Claim = sequelize.define("claims", {
     first_name: {
       type: Sequelize.STRING
     },
@@ -38,5 +38,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
-  return Client;
+  return Claim;
 };

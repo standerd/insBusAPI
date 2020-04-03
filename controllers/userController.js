@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const User = require("../models/client.model");
+const User = require("../models/Client");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const KEY = require("../config/keys");

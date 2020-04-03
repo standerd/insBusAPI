@@ -24,7 +24,9 @@ Intitialise Postgres SQL Database
 -------------------------------------
 */
 
-db.sequelize.sync({ force: true }).then(() => console.log("Drop and Sync"));
+db.sequelize
+  .sync({ force: false, alter: true })
+  .then(() => console.log("Drop and Sync"));
 
 /* 
 -------------------------------
@@ -130,7 +132,6 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-
 /* 
 ------------------------------------------------------
 App set to listen to port 3001 or ENV in Production
@@ -138,8 +139,6 @@ App set to listen to port 3001 or ENV in Production
 */
 
 app.listen(PORT, () => console.log(`Server is Listening on Port ${PORT}`));
-
-
 
 /* 
 -------------------------------------------------

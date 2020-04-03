@@ -28,8 +28,20 @@ db.sequelize = sequelize;
 
 // model imports
 
-db.client = require("./client.model.js")(sequelize, Sequelize);
-db.policy = require("./policy.model.js")(sequelize, Sequelize);
-db.claim = require("./claim.model.js")(sequelize, Sequelize);
+db.Client = require("./Client.js")(sequelize, Sequelize);
+db.Policy = require("./Policy.js")(sequelize, Sequelize);
+db.ar_general = require("./ar_general.model.js")(sequelize, Sequelize);
+db.ar_spec = require("./ar_spec.model.js")(sequelize, Sequelize);
+db.vehicle = require("./vehicle.model.js")(sequelize, Sequelize);
+db.property = require("./property.model.js")(sequelize, Sequelize);
+
+//setup DB Table Relations
+
+db.Client.hasOne(db.Policy, {foreignKey: "client_id"});
+db.Policy.hasMany(db.vehicle, {sourceKey: "policy_number", foreignKey: "policy_number"});
+db.Policy.hasMany(db.ar_general, {sourceKey: "policy_number", foreignKey: "policy_number"});
+db.Policy.hasMany(db.ar_spec, {sourceKey: "policy_number", foreignKey: "policy_number"});
+db.Policy.hasMany(db.property, {sourceKey: "policy_number", foreignKey: "policy_number"});
+
 
 module.exports = db;
