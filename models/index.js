@@ -34,6 +34,7 @@ db.ar_general = require("./ar_general.model.js")(sequelize, Sequelize);
 db.ar_spec = require("./ar_spec.model.js")(sequelize, Sequelize);
 db.vehicle = require("./vehicle.model.js")(sequelize, Sequelize);
 db.property = require("./property.model.js")(sequelize, Sequelize);
+db.BussUser = require("./BussUser.js")(sequelize, Sequelize);
 
 //setup DB Table Relations
 

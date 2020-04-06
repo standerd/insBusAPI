@@ -10,12 +10,12 @@ module.exports = (req, res, next) => {
     console.log("No Error");
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader;
 
   let decodedToken;
 
   try {
-    decodedToken = jwt.verify(token, "thisBookingsDotComSecret");
+    decodedToken = jwt.verify(token, "businessEmployeeLogin");
   } catch (err) {
     console.log(err);
   }
@@ -24,8 +24,7 @@ module.exports = (req, res, next) => {
     console.log("Not Authenticated");
   }
 
-  req.userId = decodedToken.userId;
-  req.propId = decodedToken.propId;
-  req.isAdmin = decodedToken.isAdmin;
+  req.employeeNo = decodedToken.employeeNo;
+  req.role = decodedToken.role;
   next();
 };

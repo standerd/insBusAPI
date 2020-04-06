@@ -4,9 +4,8 @@ const KEYS = require("./config/keys");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const PORT = process.env.PORT || 3001;
-const userSearchRoute = require("./routes/userRoutes/userSearch");
 const ClientRoute = require("./routes/ClientRoute/ClientRoute");
-const userAuth = require("./routes/userRoutes/userAuth");
+const UserAuth = require("./routes/UserRoute/UserAuth");
 const path = require("path");
 const socketIO = require("socket.io");
 
@@ -96,10 +95,11 @@ Routes Setup
 
 // client routes
 app.use("/client", ClientRoute);
+app.use("/user", UserAuth);
 
 // app.use("/maint", entityMaint);
 // app.use("/search", userSearchRoute);
-// app.use("/user", userAuth);
+
 // app.use("/admin", admin);
 
 /* 
