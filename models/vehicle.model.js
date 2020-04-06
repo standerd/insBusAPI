@@ -41,9 +41,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
-  Vehicle.associate = function(models) {
-    Vehicle.belongsTo(models.policy, { foreignKey: "policy_no" });
-  };
-
   return Vehicle;
 };

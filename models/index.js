@@ -1,6 +1,6 @@
 /* 
 -------------------------------
-Postgres SQL Database Setup
+PostgreSQL Database Setup
 -------------------------------
 */
 
@@ -43,6 +43,5 @@ db.Policy.hasMany(db.vehicle, {sourceKey: "policy_number", foreignKey: "policy_n
 db.Policy.hasMany(db.ar_general, {sourceKey: "policy_number", foreignKey: "policy_number"});
 db.Policy.hasMany(db.ar_spec, {sourceKey: "policy_number", foreignKey: "policy_number"});
 db.Policy.hasMany(db.property, {sourceKey: "policy_number", foreignKey: "policy_number"});
-
 
 module.exports = db;
