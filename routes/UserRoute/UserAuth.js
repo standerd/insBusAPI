@@ -18,10 +18,4 @@ router.post("/login", UserController.postLogin);
 //User Validate.
 router.post("/validate", isAuth, UserController.postActivateAccount);
 
-//user google login route
-// router.post("/googlelogin", userController.postGoogleLogin);
-
-//user facebook login route
-// router.post("/facebookLogin", userController.postFacebookLogin);
-
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require("express");
 const ClientController = require("../../controllers/ClientController");
 const router = express.Router();
+const isAuth = require("../../middleware/isAuth")
 
 //New client registration route.
 router.post("/newClient", ClientController.postNewClient);

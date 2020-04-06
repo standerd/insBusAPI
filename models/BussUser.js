@@ -9,32 +9,32 @@ module.exports = (sequelize, Sequelize) => {
     "bussuser",
     {
       first_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       last_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       id_no: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       employee_no: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       tel_no: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       role: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       validated: {
-        type: Sequelize.STRING
-      }
+        type: Sequelize.STRING,
+      },
     },
     {}
   );

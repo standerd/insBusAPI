@@ -8,15 +8,15 @@ const sendgridTransport = require("nodemailer-sendgrid-transport");
 const { Expo } = require("expo-server-sdk");
 const io = require("../socket");
 
-// Create a new Expo SDK client
+//Create a new Expo SDK client
 const expo = new Expo();
 
 //nodemailer client setup.
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
-      api_key: KEY.keys.mailer
-    }
+      api_key: KEY.keys.mailer,
+    },
   })
 );
 
@@ -26,21 +26,23 @@ Insurance Business User Handler
 ---------------------------------
 */
 
-// Business User Registration
+//Business User Registration
 exports.postRegister = (req, res, next) => {
   //destructure incoming data from client fetch request
   const { name, surname, id, employeeNo, email, telNo, role } = req.body;
 
   BussUser.findAll({ where: { employee_no: employeeNo } })
-    .then(user => {
+    .then((user) => {
+      //if user employee exists, notify the admin trying to create.
       if (user.length > 0) {
         res.send(
           `User with employee no ${employeeNo} already exists in the database`
         );
       } else {
+        //encrypt the default user password and register the user in the database.
         bcrypt
           .hash("password", 12)
-          .then(hashedPwd => {
+          .then((hashedPwd) => {
             return BussUser.create({
               first_name: name,
               last_name: surname,
@@ -50,11 +52,11 @@ exports.postRegister = (req, res, next) => {
               tel_no: telNo,
               role: role,
               password: hashedPwd,
-              validated: "false"
+              validated: "false",
             });
           })
-          .then(data => res.send("User was created successfully"))
-          .catch(err => {
+          .then((data) => res.send("User was created successfully"))
+          .catch((err) => {
             console.log(err);
             res.send(
               "There was an error loading the user in the database, please try again later."
@@ -62,19 +64,21 @@ exports.postRegister = (req, res, next) => {
           });
       }
     })
-    .catch(err =>
+    .catch((err) =>
       res.send(
         "There was an error with trying to find the user in the database"
       )
     );
 };
 
-// Business User Login
+//Business User Login
 exports.postLogin = (req, res, next) => {
+  //destructure incoming request data.
   const { employeeNo, password } = req.body;
   let loadedUser;
 
-  BussUser.findAll({ where: { employee_no: employeeNo } }).then(user => {
+  //find the user in the database, if exists, check password and login.
+  BussUser.findAll({ where: { employee_no: employeeNo } }).then((user) => {
     if (user.length < 1) {
       return res.status(400).send("Incorrect Login Details Supplied");
     }
@@ -82,96 +86,68 @@ exports.postLogin = (req, res, next) => {
 
     bcrypt
       .compare(password, loadedUser.password)
-      .then(isMatch => {
+      .then((isMatch) => {
         if (!isMatch) {
-          res.status(400).send("Incorrect Login Details Supplied - password");
+          res.status(400).send("Incorrect Login Details Supplied");
         } else if (loadedUser.validated === "false") {
           const token = jwt.sign(
             {
               employeeNo: loadedUser.employee_no,
-              role: loadedUser.role
+              role: loadedUser.role,
             },
             "businessEmployeeLogin",
             { expiresIn: "1h" }
           );
+          //if the user account is not active yet, the error message is sent to
+          //the client together with a token so that the user is able to set his
+          //account password and activate his account.
           res.status(401).send({
             message: "User not yet activated, redirect to ammend password",
             token: token,
-            employeeNo: employeeNo
+            employeeNo: employeeNo,
           });
         } else {
           const token = jwt.sign(
             {
               employeeNo: loadedUser.employee_no,
-              role: loadedUser.role
+              role: loadedUser.role,
             },
             "businessEmployeeLogin",
             { expiresIn: "1h" }
           );
           res.status(200).send({
             token: token,
-            role: loadedUser.role
+            role: loadedUser.role,
           });
         }
       })
-      .catch(err =>
+      .catch((err) =>
         res
           .status(404)
           .send("There was an error with the decrypting of the password")
       );
   });
-
-  // return bcrypt.compare(password, user.password);
-  // .then(isMatch => {
-  //   if (!isMatch) {
-  //     const error = new Error("Incorrect Password");
-  //     error.statusCode = 401;
-  //     throw error;
-  //   }
-  //   const token = jwt.sign(
-  //     {
-  //       email: loadedUser.email,
-  //       userId: loadedUser._id,
-  //       propId: loadedUser.propId,
-  //       isAdmin: loadedUser.isAdmin
-  //     },
-  //     "thisBookingsDotComSecret",
-  //     { expiresIn: "1h" }
-  //   );
-  //   res.status(200).json({
-  //     token: token,
-  //     userId: loadedUser._id,
-  //     isAdmin: loadedUser.isAdmin,
-  //     propId: loadedUser.propId
-  //   });
-  // })
-  // .catch(err => {
-  //   if (!err.statusCode) {
-  //     err.statusCode = 500;
-  //   }
-  //   next(err);
-  // });
 };
 
-// Business User Activate Account
+//Business User Account activation and set password.
 exports.postActivateAccount = (req, res, next) => {
   const { password } = req.body;
   const { employeeNo } = req;
 
   bcrypt
     .hash(password, 12)
-    .then(hashedPW => {
+    .then((hashedPW) => {
       return BussUser.update(
         { password: hashedPW, validated: "true" },
         {
           where: {
-            employee_no: employeeNo
-          }
+            employee_no: employeeNo,
+          },
         }
       );
     })
-    .then(data => res.status(200).send("Password Successfully Updated"))
-    .catch(err =>
+    .then((data) => res.status(200).send("Password Successfully Updated"))
+    .catch((err) =>
       res
         .status(400)
         .send("There was an error with the request, please try again later")

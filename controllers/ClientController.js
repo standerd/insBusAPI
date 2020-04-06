@@ -7,8 +7,7 @@ const AR_General = db.ar_general;
 const AR_Spec = db.ar_spec;
 const pdf = require("html-pdf");
 
-const pdfTemplate = require('../documents');
-
+const pdfTemplate = require("../documents");
 
 // const Op = db.Sequelize.Op;
 
@@ -19,30 +18,41 @@ New Client Registration
 */
 
 exports.postNewClient = (req, res, next) => {
-  // Create a Client
+  //Destructure incoming data
+  const [
+    name,
+    surname,
+    email,
+    telNo,
+    cellNo,
+    idNo,
+    street,
+    suburb,
+    city,
+    postal,
+  ] = req.body;
+
+  //Create a Client
   const client = {
-    first_name: req.body.name,
-    last_name: req.body.surname,
-    email: req.body.email,
-    tel_no: req.body.telNo,
-    cell_no: req.body.cellNo,
-    id_no: req.body.idNo,
-    street_name: req.body.street,
-    suburb: req.body.suburb,
-    city: req.body.city,
-    postal_code: req.body.postal
+    first_name: name,
+    last_name: surname,
+    email: email,
+    tel_no: telNo,
+    cell_no: cellNo,
+    id_no: idNo,
+    street_name: street,
+    suburb: suburb,
+    city: city,
+    postal_code: postal,
   };
 
-  // Save Client in the database
+  //Save Client in the database
   Client.create(client)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the user.");
     });
 };
 
@@ -53,23 +63,23 @@ New Client Policy
 */
 
 exports.postNewPolicy = (req, res, next) => {
+  //Destructure incoming request data
+  const [policyNo, clientId, premium] = req.body;
+
   // Create a Policy
   const policy = {
-    policy_number: req.body.policyNo,
-    client_id: req.body.clientId,
-    policy_premium: req.body.premium
+    policy_number: policyNo,
+    client_id: clientId,
+    policy_premium: premium,
   };
 
   // Save Policy in the database
   Policy.create(policy)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the Policy.");
     });
 };
 
@@ -80,30 +90,41 @@ New Policy Vehicle
 */
 
 exports.postNewVehicle = (req, res, next) => {
+  //Destructure incoming request data
+  const [
+    policyNo,
+    reg,
+    value,
+    color,
+    make,
+    model,
+    year,
+    premium,
+    excess,
+    risk,
+  ] = req.body;
+
   // Create a Vehicle Policy Item
   const vehicle = {
-    policy_number: req.body.policyNo,
-    reg_no: req.body.reg,
-    vehicle_value: req.body.value,
-    color: req.body.color,
-    make: req.body.make,
-    model: req.body.model,
-    model_year: req.body.year,
-    premium: req.body.premium,
-    excess: req.body.excess,
-    risk: req.body.risk
+    policy_number: policyNo,
+    reg_no: reg,
+    vehicle_value: value,
+    color: color,
+    make: make,
+    model: model,
+    model_year: year,
+    premium: premium,
+    excess: excess,
+    risk: risk,
   };
 
   // Save Policy Item in the database
   Vehicle.create(vehicle)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the Vehicle.");
     });
 };
 
@@ -114,27 +135,27 @@ New Policy Property
 */
 
 exports.postNewProperty = (req, res, next) => {
+  //Destructure incoming request data
+  const [policyNo, value, type, structure, premium, excess, risk] = req.body;
+
   // Create a Property Policy Item
   const property = {
-    policy_number: req.body.policyNo,
-    risk_value: req.body.value,
-    property_type: req.body.type,
-    property_structure: req.body.structure,
-    premium: req.body.premium,
-    excess: req.body.excess,
-    risk: req.body.risk
+    policy_number: policyNo,
+    risk_value: value,
+    property_type: type,
+    property_structure: structure,
+    premium: premium,
+    excess: excess,
+    risk: risk,
   };
 
   // Save Policy Item in the database
   Property.create(property)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the Property.");
     });
 };
 
@@ -145,25 +166,25 @@ New Policy All Risk General
 */
 
 exports.postNewAllRiskGeneral = (req, res, next) => {
+  //Destructure incoming request data
+  const [policyNo, value, premium, excess, risk] = req.body;
+
   // Create a All Risk General Policy Item
   const arGen = {
-    policy_number: req.body.policyNo,
-    risk_value: req.body.value,
-    premium: req.body.premium,
-    excess: req.body.excess,
-    risk: req.body.risk
+    policy_number: policyNo,
+    risk_value: value,
+    premium: premium,
+    excess: excess,
+    risk: risk,
   };
 
   // Save Policy Item in the database
   AR_General.create(arGen)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the Item.");
     });
 };
 
@@ -174,48 +195,61 @@ New Policy All Risk Specified
 */
 
 exports.postNewAllRiskSpec = (req, res, next) => {
-  // Create a All Risk Specified Policy Item
+  //Destructure incoming request data
+  const [policyNo, value, , type, desc, premium, excess, risk] = req.body;
+
+  //Create a All Risk Specified Policy Item
   const arS = {
-    policy_number: req.body.policyNo,
-    risk_value: req.body.value,
-    item_type: req.body.type,
-    item_description: req.body.desc,
-    premium: req.body.premium,
-    excess: req.body.excess,
-    risk: req.body.risk
+    policy_number: policyNo,
+    risk_value: value,
+    item_type: type,
+    item_description: desc,
+    premium: premium,
+    excess: excess,
+    risk: risk,
   };
 
   // Save Policy Item in the database
   AR_Spec.create(arS)
-    .then(data => {
-      res.send(data);
+    .then((data) => {
+      res.status(200).send(data);
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
-      });
+    .catch((err) => {
+      res.status(500).send("There was an error creating the Item.");
     });
 };
 
+//test controller to be deleted once done
+
 exports.dbTest = (req, res, next) => {
   Policy.findAll({
-		include: [Vehicle, Property, AR_General, AR_Spec]
-	})
-    .then(client => res.send(client))
-    .catch(err => console.log(err));
+    include: [Vehicle, Property, AR_General, AR_Spec],
+  })
+    .then((client) => res.send(client))
+    .catch((err) => console.log(err));
 };
 
-//Insurance Policy PDF Creator, Looks at the PDF HTML Template in the Docs Folder.
+/* 
+--------------------------------
+Insurance Policy PDF Generator
+--------------------------------
+*/
 
 exports.generatePolicy = (req, res, next) => {
-  const params = {name: "Dewald", price1 : 200, price2: 3000, receiptId: "myLollo"}
-  pdf.create(pdfTemplate(params), {}).toFile(`./documents/pdfs/${params.receiptId}.pdf`, (err, result) => {
-    if(err) {
+  const params = {
+    name: "Dewald",
+    price1: 200,
+    price2: 3000,
+    receiptId: "myLollo",
+  };
+  pdf
+    .create(pdfTemplate(params), {})
+    .toFile(`./documents/pdfs/${params.receiptId}.pdf`, (err, result) => {
+      if (err) {
         res.send(err);
-    }
-    res.send("Completed Successfully");
-});
+      }
+      res.send("Completed Successfully");
+    });
 };
 
 // // entity image upload handler

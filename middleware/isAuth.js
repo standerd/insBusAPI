@@ -1,16 +1,18 @@
 const jwt = require("jsonwebtoken");
 
-//user authentication middleware, receives a Authorization header from the client
-//and sets the req.userId to access in the app.
+/* 
+----------------------------------------------------------------------
+Employee Auth Check Middleware, check the authorisation status of the 
+employee and role profile to access only allowed routes
+-----------------------------------------------------------------------
+*/
 
 module.exports = (req, res, next) => {
-  const authHeader = req.get("Authorization");
+  const token = req.get("Authorization");
 
-  if (!authHeader) {
+  if (!token) {
     console.log("No Error");
   }
-
-  const token = authHeader;
 
   let decodedToken;
 
@@ -24,6 +26,7 @@ module.exports = (req, res, next) => {
     console.log("Not Authenticated");
   }
 
+  // set available params to be used inside the auth checked routes
   req.employeeNo = decodedToken.employeeNo;
   req.role = decodedToken.role;
   next();
