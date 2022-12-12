@@ -19,7 +19,7 @@
     "@react-google-maps/api": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "expo-server-sdk": "^3.4.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-validator": "^6.2.0",
     "google-auth-library": "^5.5.1",
     "html-pdf": "^2.2.0",
